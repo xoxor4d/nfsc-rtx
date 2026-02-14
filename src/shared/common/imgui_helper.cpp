@@ -120,6 +120,11 @@ namespace ImGui
 		SetCursorPosX(GetContentRegionAvail().x * 0.5f - text_width * 0.5f);
 	}
 
+	float CalcWidgetWidthForChild(const float label_width)
+	{
+		return GetContentRegionAvail().x - 4.0f - (label_width + GetStyle().ItemInnerSpacing.x + GetStyle().FramePadding.y);
+	}
+
 	void SetItemTooltipWrapper(const char* fmt, ...)
 	{
 		va_list args;

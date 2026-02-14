@@ -53,7 +53,8 @@ namespace comp
 
 			try
 			{
-				auto config = toml::parse("rtx_comp\\comp_settings.toml");
+				const std::string file_path = shared::globals::root_path + "\\rtx_comp\\comp_settings.toml";
+				auto config = toml::parse(file_path);
 
 				if (config.contains("CreatedOnCompVersion"))
 				{

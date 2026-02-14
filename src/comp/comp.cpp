@@ -1,5 +1,6 @@
 #include "std_include.hpp"
 
+#include "modules/comp_settings.hpp"
 #include "modules/imgui.hpp"
 #include "modules/remix_vars.hpp"
 #include "modules/renderer.hpp"
@@ -17,9 +18,10 @@ namespace comp
 			tex_addons::init_texture_addons();
 		}
 
-		// fake camera
-
+		const auto& cs = comp_settings::get();
 		const auto& im = imgui::get();
+
+		// fake camera
 		if (im->m_dbg_use_fake_camera)
 		{
 			D3DXMATRIX view_matrix
@@ -69,13 +71,20 @@ namespace comp
 		{
 			shared::globals::d3d_device->SetTransform(D3DTS_WORLD, &shared::globals::IDENTITY); // does not hurt
 
-			// Example code if you managed to find some kind of matrix struct
-				//if (const auto viewport = game::vp; viewport)
-				//{
-				//	shared::globals::d3d_device->SetTransform(D3DTS_VIEW, &viewport->view);
-				//	shared::globals::d3d_device->SetTransform(D3DTS_PROJECTION, &viewport->proj);
-				//}
+			auto sview = reinterpret_cast<game::eViewPlatInterface*>(0xB4AF90);
+			if (sview && sview->m_pTransform)
+			{
+				if (im->m_dbg_use_game_matrices)
+				{
+					shared::globals::d3d_device->SetTransform(D3DTS_VIEW, &sview->m_pTransform->ViewMatrix);
+					shared::globals::d3d_device->SetTransform(D3DTS_PROJECTION, &sview->m_pTransform->ProjectionMatrix);
+				}
+			}
 		}
+
+		// adjust game variables based on comp settings
+		*game::preculler_mode = cs->nocull_disable_precull._bool() ? 0 : 1;
+		*game::drawscenery_cell_dist_check_02 = cs->nocull_distance._float();
 	}
 
 	
@@ -83,7 +92,7 @@ namespace comp
 	{
 		__asm
 		{
-			mov		g_is_rendering_something, 1
+			mov		g_is_rendering_particle, 1
 			jmp		game::retn_addr__pre_draw_something;
 		}
 	}*/

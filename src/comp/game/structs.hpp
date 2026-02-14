@@ -20,4 +20,18 @@ namespace comp::game
 		int unk10;
 	};
 
+	struct ViewTransform
+	{
+	    D3DXMATRIX ViewMatrix;
+	    D3DXMATRIX ProjectionMatrix;
+	    D3DXMATRIX ProjectionZBiasMatrix;
+	    D3DXMATRIX ViewProjectionMatrix;
+	    D3DXMATRIX ViewProjectionZBiasMatrix;
+	};
+
+	struct eViewPlatInterface
+	{      
+	    ViewTransform* m_pTransform;
+	};
+
 }

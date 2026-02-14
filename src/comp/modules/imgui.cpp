@@ -18,6 +18,9 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
 
 #define TT(TXT) ImGui::SetItemTooltipWrapper((TXT));
 
+#define SET_CHILD_WIDGET_WIDTH			ImGui::SetNextItemWidth(ImGui::CalcWidgetWidthForChild(80.0f));
+#define SET_CHILD_WIDGET_WIDTH_MAN(V)	ImGui::SetNextItemWidth(ImGui::CalcWidgetWidthForChild((V)));
+
 #define SPACEY16 ImGui::Spacing(0.0f, 16.0f);
 #define SPACEY12 ImGui::Spacing(0.0f, 12.0f);
 #define SPACEY8 ImGui::Spacing(0.0f, 8.0f);
@@ -166,12 +169,12 @@ namespace comp
 
 	void dev_debug_container()
 	{
-		SPACEY16;
+		//SPACEY8;
 		const auto& im = imgui::get();
 
 		if (ImGui::CollapsingHeader("Temp Debug Values"))
 		{
-			SPACEY8;
+			SPACEY4;
 			ImGui::DragFloat3("Debug Vector", &im->m_debug_vector.x, 0.01f, 0, 0, "%.6f");
 			ImGui::DragFloat3("Debug Vector 2", &im->m_debug_vector2.x, 0.1f, 0, 0, "%.6f");
 			ImGui::DragFloat3("Debug Vector 3", &im->m_debug_vector3.x, 0.1f, 0, 0, "%.6f");
@@ -196,9 +199,35 @@ namespace comp
 			SPACEY8;
 		}
 
-		if (ImGui::CollapsingHeader("Fake Camera"))
+		if (ImGui::CollapsingHeader("Enable / Disable Functions"))
 		{
+			SPACEY4;
+
+			ImGui::Checkbox("Force FF PrimUp", &im->m_dbg_force_ff_prim_up);
+			ImGui::Checkbox("Force FF IndexedPrim", &im->m_dbg_force_ff_indexed_prim);
+			ImGui::Checkbox("Force FF IndexedPrim Up", &im->m_dbg_force_ff_indexed_prim_up);
+
+			ImGui::Checkbox("Ignore Prim Drawcalls", &im->m_dbg_disable_prim_draw);
+			ImGui::Checkbox("Ignore PrimUp Drawcalls", &im->m_dbg_disable_prim_up_draw);
+			ImGui::Checkbox("Ignore IndexedPrim Drawcalls", &im->m_dbg_disable_indexed_prim_draw);
+			ImGui::Checkbox("Ignore IndexedPrimUp Drawcalls", &im->m_dbg_disable_indexed_prim_up_draw);
+
+			ImGui::Checkbox("Disable World Drawcalls", &im->m_dbg_disable_world);
+			ImGui::Checkbox("Disable WorldNormal Drawcalls", &im->m_dbg_disable_world_normalmap);
+			ImGui::Checkbox("Disable Car Drawcalls", &im->m_dbg_disable_car);
+			ImGui::Checkbox("Disable CarNormal Drawcalls", &im->m_dbg_disable_car_normalmap);
+			ImGui::Checkbox("Disable Glass Drawcalls", &im->m_dbg_disable_glass);
+			ImGui::Checkbox("Disable Sky Drawcalls", &im->m_dbg_disable_sky);
+
 			SPACEY8;
+		}
+
+		if (ImGui::CollapsingHeader("Camera"))
+		{
+			SPACEY4;
+
+			ImGui::Checkbox("Use Game Camera Matrices", &im->m_dbg_use_game_matrices);
+
 			ImGui::Checkbox("Use Fake Camera", &im->m_dbg_use_fake_camera);
 			ImGui::BeginDisabled(!im->m_dbg_use_fake_camera);
 			{
@@ -214,12 +243,13 @@ namespace comp
 
 				ImGui::EndDisabled();
 			}
+
 			SPACEY8;
 		}
 
 		if (ImGui::CollapsingHeader("Culling"))
 		{
-			SPACEY8;
+			SPACEY4;
 
 			if (game::preculler_mode)
 			{
@@ -256,13 +286,54 @@ namespace comp
 
 		if (ImGui::CollapsingHeader("Statistics ..."))
 		{
-			SPACEY8;
+			SPACEY4;
 			im->m_stats.enable_tracking(true);
 			im->m_stats.draw_stats();
 			SPACEY8;
 		} else {
 			im->m_stats.enable_tracking(false);
 		}
+
+		if (ImGui::CollapsingHeader("ImGui"))
+		{
+			SPACEY4;
+			const auto coloredit_flags = ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_PickerHueBar | ImGuiColorEditFlags_Float;
+			ImGui::ColorEdit4("ContainerBg", &im->ImGuiCol_ContainerBackground.x, coloredit_flags);
+			ImGui::ColorEdit4("ContainerBorder", &im->ImGuiCol_ContainerBorder.x, coloredit_flags);
+			ImGui::ColorEdit4("FadeContainerBg Start", &im->ImGuiCol_VerticalFadeContainerBackgroundStart.x, coloredit_flags);
+			ImGui::ColorEdit4("FadeContainerBg End", &im->ImGuiCol_VerticalFadeContainerBackgroundEnd.x, coloredit_flags);
+			SPACEY8;
+		}
+
+		if (ImGui::CollapsingHeader("Vis States"))
+		{
+			SPACEY4;
+
+			ImGui::Text("cvDiffuseMin: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_cvDiffuseMin.x, im->m_vis_cvDiffuseMin.y, im->m_vis_cvDiffuseMin.z, im->m_vis_cvDiffuseMin.w);
+
+			ImGui::Text("cvDiffuseRange: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_cvDiffuseRange.x, im->m_vis_cvDiffuseRange.y, im->m_vis_cvDiffuseRange.z, im->m_vis_cvDiffuseRange.w);
+
+			ImGui::Text("cvPowers: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_cvPowers.x, im->m_vis_cvPowers.y, im->m_vis_cvPowers.z, im->m_vis_cvPowers.w);
+
+			ImGui::Text("cvClampAndScales: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_cvClampAndScales.x, im->m_vis_cvClampAndScales.y, im->m_vis_cvClampAndScales.z, im->m_vis_cvClampAndScales.w);
+			
+			SPACEY4;
+
+			ImGui::Text("== Paint Color: %.2f, %.2f, %.2f",
+				im->m_vis_paint_color.x, im->m_vis_paint_color.y, im->m_vis_paint_color.z);
+
+			ImGui::Text("== Paint Color Post: %.2f, %.2f, %.2f",
+				im->m_vis_paint_color_post.x, im->m_vis_paint_color_post.y, im->m_vis_paint_color_post.z);
+
+			im->m_vis_drawcall01 = false;
+
+			SPACEY8;
+		}
+		// m_vis_cvDiffuseMin
 	}
 
 	void imgui::tab_dev()
@@ -345,14 +416,14 @@ namespace comp
 
 	void compsettings_culling_container()
 	{
-		static const auto& cs = comp_settings::get();
+		const auto& cs = comp_settings::get();
 
 		SPACEY4;
 		ImGui::SeparatorText(" Anti Culling ");
 		SPACEY4;
 
 		compsettings_bool_widget("Disable Preculling", cs->nocull_disable_precull);
-		compsettings_float_widget("No Culling Until Distance", cs->nocull_distance, 0.0f, FLT_MAX, 0.5f);
+		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("No Culling Until Distance", cs->nocull_distance, 0.0f, FLT_MAX, 0.5f);
 
 		SPACEY4;
 	}
@@ -365,7 +436,7 @@ namespace comp
 		ImGui::SeparatorText(" Remix ");
 		SPACEY4;
 
-		ImGui::DragInt("RTXDI Initial Sample Count Override", cs->remix_override_rtxdi_samplecount.get_as<int*>(), 0.01f);
+		SET_CHILD_WIDGET_WIDTH; ImGui::DragInt("RTXDI Initial Sample Count Override", cs->remix_override_rtxdi_samplecount.get_as<int*>(), 0.01f);
 		TT(cs->remix_override_rtxdi_samplecount.get_tooltip_string().c_str());
 
 		SPACEY4;
@@ -450,6 +521,7 @@ namespace comp
 		{
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar(1);
+			ADD_TAB("Comp Settings", tab_compsettings);
 			ADD_TAB("Dev", tab_dev);
 			ADD_TAB("About", tab_about);
 			ImGui::EndTabBar();
@@ -461,32 +533,21 @@ namespace comp
 #undef ADD_TAB
 
 		{
+			ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2(0, 16.0f));
+
 			ImGui::Separator();
-			const char* movement_hint_str = "Hold Right Mouse to enable Game Input ";
-			const auto avail_width = ImGui::GetContentRegionAvail().x;
-			float cur_pos = avail_width - 54.0f;
-
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-			{
-				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + ImGui::GetStyle().ItemSpacing.y);
-				const auto spos = ImGui::GetCursorScreenPos();
-				ImGui::TextUnformatted(m_devgui_custom_footer_content.c_str());
-				ImGui::SetCursorScreenPos(spos);
-				m_devgui_custom_footer_content.clear();
-			}
-			
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 
-			ImGui::SetCursorPos(ImVec2(cur_pos, ImGui::GetCursorPosY() + 2.0f));
 			if (ImGui::Button("Demo", ImVec2(50, 0))) {
 				im_demo_menu = !im_demo_menu;
 			}
 
 			ImGui::SameLine();
-			cur_pos = cur_pos - ImGui::CalcTextSize(movement_hint_str).x - 6.0f;
-			ImGui::SetCursorPosX(cur_pos);
-			ImGui::TextUnformatted(movement_hint_str);
+			ImGui::TextUnformatted("Hold Right Mouse to enable Game Input");
+			ImGui::PopStyleVar(2);
 		}
-		ImGui::PopStyleVar(1);
+		
 		ImGui::End();
 	}
 
@@ -590,7 +651,7 @@ namespace comp
 		style.DisabledAlpha = 0.5f;
 
 		style.WindowPadding = ImVec2(8.0f, 10.0f);
-		style.FramePadding = ImVec2(14.0f, 6.0f);
+		style.FramePadding = ImVec2(8.0f, 6.0f);
 		style.ItemSpacing = ImVec2(10.0f, 5.0f);
 		style.ItemInnerSpacing = ImVec2(4.0f, 8.0f);
 		style.IndentSpacing = 16.0f;
@@ -622,7 +683,7 @@ namespace comp
 		colors[ImGuiCol_FrameBgHovered] = ImVec4(0.16f, 0.48f, 0.36f, 1.00f);
 		colors[ImGuiCol_FrameBgActive] = ImVec4(0.21f, 0.61f, 0.46f, 1.00f);
 		colors[ImGuiCol_TitleBgActive] = ImVec4(0.20f, 0.20f, 0.20f, 1.00f);
-		colors[ImGuiCol_CheckMark] = ImVec4(0.16f, 0.48f, 0.36f, 1.00f);
+		colors[ImGuiCol_CheckMark] = ImVec4(0.135f, 0.680f, 0.476f, 1.000f);
 		colors[ImGuiCol_SliderGrab] = ImVec4(0.16f, 0.48f, 0.36f, 1.00f);
 		colors[ImGuiCol_SliderGrabActive] = ImVec4(0.21f, 0.60f, 0.45f, 1.00f);
 		colors[ImGuiCol_Button] = ImVec4(0.09f, 0.09f, 0.09f, 1.00f);
@@ -644,7 +705,7 @@ namespace comp
 		colors[ImGuiCol_TabDimmedSelected] = ImVec4(0.12f, 0.33f, 0.24f, 1.00f);
 
 		ImGuiCol_ContainerBackground = ImVec4(0.17f, 0.17f, 0.17f, 0.875f);
-		ImGuiCol_ContainerBorder = ImVec4(0.477f, 0.39f, 0.25f, 0.90f);
+		ImGuiCol_ContainerBorder = ImVec4(0.370f, 0.612f, 0.520f, 0.369f);
 		ImGuiCol_VerticalFadeContainerBackgroundStart = ImVec4(0.0f, 0.0f, 0.0f, 0.65f);
 		ImGuiCol_VerticalFadeContainerBackgroundEnd = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
 	}

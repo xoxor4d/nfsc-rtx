@@ -10,7 +10,7 @@ namespace ImGui
 	void AddUnterline(ImColor col);
 	void TextURL(const char* name, const char* url, bool use_are_you_sure_popup = false);
 	void SetCursorForCenteredText(const char* text);
-
+	float CalcWidgetWidthForChild(float label_width);
 	void SetItemTooltipWrapper(const char* fmt, ...);
 
 	bool Widget_WrappedCollapsingHeader(const char* title_text, float height, const ImVec4& border_color, bool default_open = true, bool pre_spacing = false);

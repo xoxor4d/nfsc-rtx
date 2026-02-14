@@ -2,7 +2,10 @@
 
 namespace comp
 {
-	extern int g_is_rendering_something;
+	extern int g_is_rendering_particle;
+	extern int g_is_rendering_car;
+	extern int g_is_rendering_car_normalmap;
+	extern int g_is_rendering_world;
 
 	extern bool g_rendered_first_primitive;
 	extern bool g_applied_hud_hack;
@@ -12,6 +15,8 @@ namespace comp
 	{
 		extern bool initialized;
 		extern LPDIRECT3DTEXTURE9 berry;
+		extern LPDIRECT3DTEXTURE9 white;
+		extern LPDIRECT3DTEXTURE9 red;
 		extern void init_texture_addons(bool release = false);
 	}
 
@@ -279,9 +284,18 @@ namespace comp
 		{
 			bool do_not_render = false;
 
+			bool dual_render = false;
+			bool dual_render_mode_blend_add = false;
+			bool dual_render_mode_blend_diffuse = false;
+			IDirect3DBaseTexture9* dual_render_texture = nullptr;
+
 			void reset()
 			{
 				do_not_render = false;
+				dual_render = false;
+				dual_render_mode_blend_add = false;
+				dual_render_mode_blend_diffuse = false;
+				dual_render_texture = nullptr;
 			}
 		};
 
@@ -296,10 +310,16 @@ namespace comp
 			//std::string_view shader_name;
 			IDirect3DDevice9* device_ptr = nullptr;
 			
+			Vector cvDiffuseMin;
+			Vector cvDiffuseRange;
+
 			void reset()
 			{
 				//shader_name = "";
 				device_ptr = nullptr;
+
+				cvDiffuseMin.Zero();
+				cvDiffuseRange.Zero();
 			}
 		};
 
@@ -359,8 +379,10 @@ namespace comp
 
 		void manually_trigger_remix_injection(IDirect3DDevice9* dev);
 		HRESULT on_draw_primitive(IDirect3DDevice9* dev, const D3DPRIMITIVETYPE& PrimitiveType, const UINT& StartVertex, const UINT& PrimitiveCount);
+		HRESULT on_draw_primitive_up(IDirect3DDevice9* dev, D3DPRIMITIVETYPE PrimitiveType, UINT PrimitiveCount, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride);
 		HRESULT on_draw_indexed_prim(IDirect3DDevice9* dev, const D3DPRIMITIVETYPE& PrimitiveType, const INT& BaseVertexIndex, const UINT& MinVertexIndex, const UINT& NumVertices, const UINT& startIndex, const UINT& primCount);
-
+		HRESULT on_draw_indexed_prim_up(IDirect3DDevice9* dev, D3DPRIMITIVETYPE PrimitiveType, UINT MinVertexIndex, UINT NumVertices, UINT PrimitiveCount, CONST void* pIndexData, D3DFORMAT IndexDataFormat, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride);
+		
 		bool m_triggered_remix_injection = false;
 		bool m_modified_draw_prim = false;
 		static inline drawcall_mod_context dc_ctx {};

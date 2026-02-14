@@ -47,6 +47,25 @@ namespace comp
 
 		// ---
 
+		bool m_dbg_force_ff_prim_up = false;
+		bool m_dbg_force_ff_indexed_prim = true;
+		bool m_dbg_force_ff_indexed_prim_up = false;
+		bool m_dbg_use_game_matrices = false;
+
+		bool m_dbg_disable_prim_draw = false;
+		bool m_dbg_disable_prim_up_draw = false;
+		bool m_dbg_disable_indexed_prim_draw = false;
+		bool m_dbg_disable_indexed_prim_up_draw = false;
+
+		bool m_dbg_disable_world = false;
+		bool m_dbg_disable_world_normalmap = false;
+		bool m_dbg_disable_car = false;
+		bool m_dbg_disable_car_normalmap = false;
+		bool m_dbg_disable_glass = false;
+		bool m_dbg_disable_sky = false;
+
+		// ---
+
 		bool m_dbg_use_fake_camera = false;
 
 		// View matrix parameters
@@ -69,6 +88,14 @@ namespace comp
 		float m_dbg_compute_vis_out_distance_offset = 0.0f;
 
 		// -----
+
+		bool m_vis_drawcall01 = false;
+		Vector4D m_vis_cvDiffuseMin;
+		Vector4D m_vis_cvDiffuseRange;
+		Vector4D m_vis_cvPowers;
+		Vector4D m_vis_cvClampAndScales;
+		Vector m_vis_paint_color;
+		Vector m_vis_paint_color_post;
 
 		class ImGuiStats
 		{
@@ -140,33 +167,34 @@ namespace comp
 				std::uint32_t m_num_successful{ 0 };
 			};
 
-			StatObj _water_shader_name_checks = { StatObj::Mode::ConditionalCheck };
-			StatObj _gta_rmptfx_litsprite_shader_name_checks = { StatObj::Mode::ConditionalCheck };
-
 			StatObj _drawcall_prim = { StatObj::Mode::Single };
 			StatObj _drawcall_prim_incl_ignored = { StatObj::Mode::Single };
-			StatObj _drawcall_using_vs = { StatObj::Mode::Single };
+
+			StatObj _drawcall_prim_up = { StatObj::Mode::Single };
+			StatObj _drawcall_prim_up_incl_ignored = { StatObj::Mode::Single };
 
 			StatObj _drawcall_indexed_prim{ StatObj::Mode::Single };
 			StatObj _drawcall_indexed_prim_incl_ignored = { StatObj::Mode::Single };
 
-			StatObj _drawcall_indexed_prim_using_vs = { StatObj::Mode::Single };
-
+			StatObj _drawcall_indexed_prim_up{ StatObj::Mode::Single };
+			StatObj _drawcall_indexed_prim_up_incl_ignored = { StatObj::Mode::Single };
 
 			ImGuiStats()
 			{
-				m_stat_list.emplace_back("Water Shader Name Checks", &_water_shader_name_checks);
-				m_stat_list.emplace_back("RMPTFX Litsprite Shader Name Checks", &_gta_rmptfx_litsprite_shader_name_checks);
-
-				m_stat_list.emplace_back();
 				m_stat_list.emplace_back("DrawPrim Calls", &_drawcall_prim);
 				m_stat_list.emplace_back("DrawPrim +Ignored", &_drawcall_prim_incl_ignored);
-				m_stat_list.emplace_back("DrawPrim VS", &_drawcall_using_vs);
+
+				m_stat_list.emplace_back();
+				m_stat_list.emplace_back("DrawPrim UP Calls", &_drawcall_prim_up);
+				m_stat_list.emplace_back("DrawPrim UP +Ignored", &_drawcall_prim_up_incl_ignored);
 
 				m_stat_list.emplace_back();
 				m_stat_list.emplace_back("DrawIndexedPrim Calls", &_drawcall_indexed_prim);
 				m_stat_list.emplace_back("DrawIndexedPrim +Ignored", &_drawcall_indexed_prim_incl_ignored);
-				m_stat_list.emplace_back("DrawIndexedPrim VS", &_drawcall_indexed_prim_using_vs);
+
+				m_stat_list.emplace_back();
+				m_stat_list.emplace_back("DrawIndexedPrimUP Calls", &_drawcall_indexed_prim_up);
+				m_stat_list.emplace_back("DrawIndexedPrimUP +Ignored", &_drawcall_indexed_prim_up_incl_ignored);
 			}
 
 			void draw_stats();

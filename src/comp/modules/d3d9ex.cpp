@@ -465,23 +465,16 @@ namespace comp
 
 	HRESULT d3d9ex::D3D9Device::DrawPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT PrimitiveCount, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride)
 	{
-		// You might want to wrap this if your game uses this
-		const auto hr = m_pIDirect3DDevice9->DrawPrimitiveUP(PrimitiveType, PrimitiveCount, pVertexStreamZeroData, VertexStreamZeroStride);
+		// m_pIDirect3DDevice9->DrawPrimitiveUP(PrimitiveType, PrimitiveCount, pVertexStreamZeroData, VertexStreamZeroStride);
+		const auto hr = renderer::get()->on_draw_primitive_up(m_pIDirect3DDevice9, PrimitiveType, PrimitiveCount, pVertexStreamZeroData, VertexStreamZeroStride);
 		return hr;
 	}
 
-	HRESULT d3d9ex::D3D9Device::DrawIndexedPrimitiveUP(
-		[[maybe_unused]] D3DPRIMITIVETYPE PrimitiveType, 
-		[[maybe_unused]] UINT MinVertexIndex, 
-		[[maybe_unused]] UINT NumVertices, 
-		[[maybe_unused]] UINT PrimitiveCount, 
-		[[maybe_unused]] CONST void* pIndexData, 
-		[[maybe_unused]] D3DFORMAT IndexDataFormat,
-		[[maybe_unused]] CONST void* pVertexStreamZeroData,
-		[[maybe_unused]] UINT VertexStreamZeroStride)
+	HRESULT d3d9ex::D3D9Device::DrawIndexedPrimitiveUP(D3DPRIMITIVETYPE PrimitiveType, UINT MinVertexIndex, UINT NumVertices, UINT PrimitiveCount, CONST void* pIndexData, D3DFORMAT IndexDataFormat, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride)
 	{
-		// You might want to wrap this if your game uses this
-		return m_pIDirect3DDevice9->DrawIndexedPrimitiveUP(PrimitiveType, MinVertexIndex, NumVertices, PrimitiveCount, pIndexData, IndexDataFormat, pVertexStreamZeroData, VertexStreamZeroStride);
+		// m_pIDirect3DDevice9->DrawIndexedPrimitiveUP(PrimitiveType, MinVertexIndex, NumVertices, PrimitiveCount, pIndexData, IndexDataFormat, pVertexStreamZeroData, VertexStreamZeroStride);
+		const auto hr = renderer::get()->on_draw_indexed_prim_up(m_pIDirect3DDevice9, PrimitiveType, MinVertexIndex, NumVertices, PrimitiveCount, pIndexData, IndexDataFormat, pVertexStreamZeroData, VertexStreamZeroStride);
+		return hr;
 	}
 
 	HRESULT d3d9ex::D3D9Device::ProcessVertices(UINT SrcStartIndex, UINT DestIndex, UINT VertexCount, IDirect3DVertexBuffer9* pDestBuffer, IDirect3DVertexDeclaration9* pVertexDecl, DWORD Flags)
@@ -531,6 +524,11 @@ namespace comp
 
 	HRESULT d3d9ex::D3D9Device::SetVertexShaderConstantF(UINT StartRegister, CONST float* pConstantData, UINT Vector4fCount)
 	{
+		if (StartRegister == 21 && g_is_rendering_car)
+		{
+			int x = 1;
+		}
+
 		return m_pIDirect3DDevice9->SetVertexShaderConstantF(StartRegister, pConstantData, Vector4fCount);
 	}
 
@@ -740,7 +738,15 @@ namespace comp
 
 	HRESULT __stdcall d3d9ex::_d3d9::GetDeviceCaps(UINT Adapter, D3DDEVTYPE DeviceType, D3DCAPS9* pCaps)
 	{
-		return m_pIDirect3D9->GetDeviceCaps(Adapter, DeviceType, pCaps);
+		const auto hr = m_pIDirect3D9->GetDeviceCaps(Adapter, DeviceType, pCaps);
+
+		/*if (SUCCEEDED(hr))
+		{
+			pCaps->VertexShaderVersion = D3DVS_VERSION(0, 0);
+			pCaps->PixelShaderVersion = D3DPS_VERSION(0, 0);
+		}*/
+
+		return hr;
 	}
 
 	HMONITOR __stdcall d3d9ex::_d3d9::GetAdapterMonitor(UINT Adapter)
