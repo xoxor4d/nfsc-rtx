@@ -87,15 +87,34 @@ namespace comp
 		float m_dbg_compute_vis_bounding_rad_offset = 55.0f;
 		float m_dbg_compute_vis_out_distance_offset = 0.0f;
 
+		// ---
+
+		bool m_dbg_vehshader_color_override_enabled = false;
+		Vector m_dbg_vehshader_color_override;
+
+		bool m_dbg_vehshader_roughness_override_enabled = false;
+		float m_dbg_vehshader_roughness_override = 0.0f;
+
+		bool m_dbg_vehshader_metalness_override_enabled = false;
+		float m_dbg_vehshader_metalness_override = 0.0f;
+
+		bool m_dbg_vehshader_vinylscale_override_enabled = false;
+		float m_dbg_vehshader_vinylscale_override = 0.0f;
+
 		// -----
 
 		bool m_vis_drawcall01 = false;
 		Vector4D m_vis_cvDiffuseMin;
 		Vector4D m_vis_cvDiffuseRange;
+		Vector4D m_vis_cvEnvmapMin;
+		Vector4D m_vis_cvEnvmapRange;
 		Vector4D m_vis_cvPowers;
 		Vector4D m_vis_cvClampAndScales;
-		Vector m_vis_paint_color;
-		Vector m_vis_paint_color_post;
+		Vector4D m_vis_paint_color;
+		Vector4D m_vis_paint_color_post;
+
+		float m_vis_out_roughness = 0.0f;
+		float m_vis_out_metalness = 0.0f;
 
 		class ImGuiStats
 		{

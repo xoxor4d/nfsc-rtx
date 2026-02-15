@@ -20,6 +20,115 @@ namespace comp
 		extern void init_texture_addons(bool release = false);
 	}
 
+	enum class RemixModifier : std::uint16_t
+	{
+		None = 0,
+		EmissiveScalar = 1 << 0,
+		Roughness = 1 << 1,
+		EnableVertexColor = 1 << 2,
+		Free03 = 1 << 3,
+		RemoveVertexColorKeepAlpha = 1 << 4,
+		VehicleShader = 1 << 5,
+		Free06 = 1 << 6,
+		Free07 = 1 << 7,
+		Free08 = 1 << 8,
+		Free09 = 1 << 9,
+		Free10 = 1 << 10,
+		Free11 = 1 << 11,
+		Free12 = 1 << 12,
+		Free13 = 1 << 13,
+		Free14 = 1 << 14,
+		Free15 = 1 << 15,
+	};
+
+	enum remix_custom_rs
+	{
+		RS_42_TEXTURE_CATEGORY = 42,
+		RS_149_REMIX_MODIFIER = 149,
+		RS_150_TEXTURE_HASH = 150,
+		RS_169_EMISSIVE_SCALE = 169,
+		RS_177_FREE = 177,
+		RS_210_WETNESS_PARAMS_PACKED = 210,
+		RS_211_VEHSHADER_PARAMS_PACKED1 = 211,
+		RS_212_VEHSHADER_PARAMS_PACKED2 = 212,
+		RS_213_FREE = 213,
+		RS_214_FREE = 214,
+		RS_215_FREE = 215,
+		RS_216_FREE = 216,
+		RS_217_FREE = 217,
+		RS_218_FREE = 218,
+		RS_219_FREE = 219,
+		RS_220_FREE = 220,
+	};
+
+	constexpr RemixModifier operator|(RemixModifier lhs, RemixModifier rhs) {
+		return static_cast<RemixModifier>(static_cast<std::uint32_t>(lhs) | static_cast<std::uint32_t>(rhs));
+	}
+
+	constexpr RemixModifier& operator|=(RemixModifier& lhs, RemixModifier rhs) {
+		lhs = static_cast<RemixModifier>(static_cast<std::uint32_t>(lhs) | static_cast<std::uint32_t>(rhs));
+		return lhs;
+	}
+
+	constexpr RemixModifier operator&(RemixModifier lhs, RemixModifier rhs) {
+		return static_cast<RemixModifier>(static_cast<std::uint32_t>(lhs) & static_cast<std::uint32_t>(rhs));
+	}
+
+	constexpr RemixModifier& operator&=(RemixModifier& lhs, RemixModifier rhs) {
+		lhs = static_cast<RemixModifier>(static_cast<std::uint32_t>(lhs) & static_cast<std::uint32_t>(rhs));
+		return lhs;
+	}
+
+	// can't use remixapi_InstanceCategoryFlags as they don't match up with InstanceCategories
+	enum class InstanceCategories : uint32_t
+	{
+		WorldUI = 1 << 0,
+		WorldMatte = 1 << 1, // Background Offset
+		Sky = 1 << 2,
+		Ignore = 1 << 3,
+		IgnoreLights = 1 << 4,
+		IgnoreAntiCulling = 1 << 5,
+		IgnoreMotionBlur = 1 << 6,
+		IgnoreOpacityMicromap = 1 << 7,
+		IgnoreAlphaChannel = 1 << 8,
+		Hidden = 1 << 9,
+		Particle = 1 << 10,
+		Beam = 1 << 11,
+		DecalStatic = 1 << 12,
+		DecalDynamic = 1 << 13,
+		DecalSingleOffset = 1 << 14,
+		DecalNoOffset = 1 << 15,
+		AlphaBlendToCutout = 1 << 16,
+		Terrain = 1 << 17,
+		AnimatedWater = 1 << 18,
+		ThirdPersonPlayerModel = 1 << 19,
+		ThirdPersonPlayerBody = 1 << 20,
+		IgnoreBakedLighting = 1 << 21,
+		IgnoreTransparencyLayer = 1 << 22,
+		ParticleEmitter = 1 << 23,
+		DisableBackfaceCulling = 1 << 24,
+		Count = 24,
+		None = 0u
+	};
+
+	constexpr InstanceCategories operator|(InstanceCategories lhs, InstanceCategories rhs) {
+		return static_cast<InstanceCategories>(static_cast<std::uint32_t>(lhs) | static_cast<std::uint32_t>(rhs));
+	}
+
+	constexpr InstanceCategories& operator|=(InstanceCategories& lhs, InstanceCategories rhs) {
+		lhs = static_cast<InstanceCategories>(static_cast<std::uint32_t>(lhs) | static_cast<std::uint32_t>(rhs));
+		return lhs;
+	}
+
+	constexpr InstanceCategories operator&(InstanceCategories lhs, InstanceCategories rhs) {
+		return static_cast<InstanceCategories>(static_cast<std::uint32_t>(lhs) & static_cast<std::uint32_t>(rhs));
+	}
+
+	constexpr InstanceCategories& operator&=(InstanceCategories& lhs, InstanceCategories rhs) {
+		lhs = static_cast<InstanceCategories>(static_cast<std::uint32_t>(lhs) & static_cast<std::uint32_t>(rhs));
+		return lhs;
+	}
+
 	class drawcall_mod_context
 	{
 	public:
@@ -289,6 +398,9 @@ namespace comp
 			bool dual_render_mode_blend_diffuse = false;
 			IDirect3DBaseTexture9* dual_render_texture = nullptr;
 
+			InstanceCategories remix_instance_categories = InstanceCategories::None;
+			RemixModifier remix_modifier = RemixModifier::None;
+
 			void reset()
 			{
 				do_not_render = false;
@@ -296,6 +408,9 @@ namespace comp
 				dual_render_mode_blend_add = false;
 				dual_render_mode_blend_diffuse = false;
 				dual_render_texture = nullptr;
+
+				remix_instance_categories = InstanceCategories::None;
+				remix_modifier = RemixModifier::None;
 			}
 		};
 
@@ -310,6 +425,8 @@ namespace comp
 			//std::string_view shader_name;
 			IDirect3DDevice9* device_ptr = nullptr;
 			
+			float shaderconst_emissive_intensity = -1.0f;
+
 			Vector cvDiffuseMin;
 			Vector cvDiffuseRange;
 
@@ -317,6 +434,8 @@ namespace comp
 			{
 				//shader_name = "";
 				device_ptr = nullptr;
+
+				shaderconst_emissive_intensity = -1.0f;
 
 				cvDiffuseMin.Zero();
 				cvDiffuseRange.Zero();
@@ -383,6 +502,48 @@ namespace comp
 		HRESULT on_draw_indexed_prim(IDirect3DDevice9* dev, const D3DPRIMITIVETYPE& PrimitiveType, const INT& BaseVertexIndex, const UINT& MinVertexIndex, const UINT& NumVertices, const UINT& startIndex, const UINT& primCount);
 		HRESULT on_draw_indexed_prim_up(IDirect3DDevice9* dev, D3DPRIMITIVETYPE PrimitiveType, UINT MinVertexIndex, UINT NumVertices, UINT PrimitiveCount, CONST void* pIndexData, D3DFORMAT IndexDataFormat, CONST void* pVertexStreamZeroData, UINT VertexStreamZeroStride);
 		
+
+		static void set_remix_modifier(IDirect3DDevice9* dev, RemixModifier mod);
+		static void set_remix_emissive_intensity(IDirect3DDevice9* dev, float intensity, bool no_overrides = false);
+
+		enum eWetnessFlags : uint8_t
+		{
+			WETNESS_FLAG_ENABLE_VARIATION = 1 << 0,
+			WETNESS_FLAG_ENABLE_RAINDROPS = 1 << 1,				// either expensive or normal raindrops
+			WETNESS_FLAG_USE_LOCAL_COORDINATES = 1 << 2,		// uses world position but transformed to object local space
+			WETNESS_FLAG_ENABLE_EXP_RAINDROPS = 1 << 3,			// either expensive or normal raindrops
+			WETNESS_FLAG_RAINDROPS_HALF_DENSITY = 1 << 4,		// raindrops with half density
+			WETNESS_FLAG_ENABLE_PUDDLE_LAYER = 1 << 5,			// adds a puddle layer to wet surfaces 
+			WETNESS_FLAG_ENABLE_OCCLUSION_TEST = 1 << 6,		// test if something is covering this surface
+			WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING = 1 << 7,	// smooth occlusion edges - needs DLSS RR
+			WETNESS_FLAG_NONE = 0u
+		};
+
+		static void set_remix_roughness_settings(IDirect3DDevice9* dev, float roughness_scalar, float max_z = 0.35f, float blend_width = 0.65f, float raindrop_scale = 0.0f, uint8_t flags = WETNESS_FLAG_NONE);
+		
+		
+		enum eVehicleShaderFlags : uint8_t
+		{
+			VEHSHADER_FLAG_FREE01 = 1 << 0,
+			VEHSHADER_FLAG_FREE02 = 1 << 1,
+			VEHSHADER_FLAG_FREE03 = 1 << 2,
+			VEHSHADER_FLAG_FREE04 = 1 << 3,
+			VEHSHADER_FLAG_FREE05 = 1 << 4,
+			VEHSHADER_FLAG_FREE06 = 1 << 5,
+			VEHSHADER_FLAG_FREE07 = 1 << 6,
+			VEHSHADER_FLAG_FREE08 = 1 << 7,
+			VEHSHADER_FLAG_NONE = 0u
+		};
+
+		static void set_remix_vehicle_shader_settings(IDirect3DDevice9* dev, const Vector4D& color, float roughness, float metalness, float free2, uint8_t flags = VEHSHADER_FLAG_NONE);
+		
+		static void set_remix_temp_float01(IDirect3DDevice9* dev, float value);
+		static void set_remix_temp_float02(IDirect3DDevice9* dev, float value);
+		static void set_remix_temp_float03(IDirect3DDevice9* dev, float value);
+		static void set_remix_temp_float04(IDirect3DDevice9* dev, float value);
+		static void set_remix_texture_categories(IDirect3DDevice9* dev, const InstanceCategories& cat);
+		static void set_remix_texture_hash(IDirect3DDevice9* dev, const std::uint32_t& hash);
+
 		bool m_triggered_remix_injection = false;
 		bool m_modified_draw_prim = false;
 		static inline drawcall_mod_context dc_ctx {};

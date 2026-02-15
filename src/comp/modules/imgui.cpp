@@ -315,6 +315,16 @@ namespace comp
 			ImGui::Text("cvDiffuseRange: %.2f, %.2f, %.2f, %.2f",
 				im->m_vis_cvDiffuseRange.x, im->m_vis_cvDiffuseRange.y, im->m_vis_cvDiffuseRange.z, im->m_vis_cvDiffuseRange.w);
 
+			SPACEY4;
+
+			ImGui::Text("cvEnvmapMin: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_cvEnvmapMin.x, im->m_vis_cvEnvmapMin.y, im->m_vis_cvEnvmapMin.z, im->m_vis_cvEnvmapMin.w);
+
+			ImGui::Text("cvEnvmapRange: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_cvEnvmapRange.x, im->m_vis_cvEnvmapRange.y, im->m_vis_cvEnvmapRange.z, im->m_vis_cvEnvmapRange.w);
+
+			SPACEY4;
+
 			ImGui::Text("cvPowers: %.2f, %.2f, %.2f, %.2f",
 				im->m_vis_cvPowers.x, im->m_vis_cvPowers.y, im->m_vis_cvPowers.z, im->m_vis_cvPowers.w);
 
@@ -323,11 +333,40 @@ namespace comp
 			
 			SPACEY4;
 
-			ImGui::Text("== Paint Color: %.2f, %.2f, %.2f",
-				im->m_vis_paint_color.x, im->m_vis_paint_color.y, im->m_vis_paint_color.z);
+			ImGui::Text("Paint Color: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_paint_color.x, im->m_vis_paint_color.y, im->m_vis_paint_color.z, im->m_vis_paint_color.w);
 
-			ImGui::Text("== Paint Color Post: %.2f, %.2f, %.2f",
-				im->m_vis_paint_color_post.x, im->m_vis_paint_color_post.y, im->m_vis_paint_color_post.z);
+			ImGui::Text("= Diffuse: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_paint_color_post.x, im->m_vis_paint_color_post.y, im->m_vis_paint_color_post.z, im->m_vis_paint_color_post.w);
+
+			ImGui::Text("= Roughness: %.2f", im->m_vis_out_roughness);
+			ImGui::Text("= Metalness: %.2f", im->m_vis_out_metalness);
+
+			SPACEY4;
+			ImGui::Separator();
+			SPACEY4;
+
+			ImGui::Checkbox("##ovcolor", &im->m_dbg_vehshader_color_override_enabled);
+			ImGui::SameLine();
+			ImGui::ColorEdit3("Color Overwrite", &im->m_dbg_vehshader_color_override.x, ImGuiColorEditFlags_Float);
+
+			SPACEY4;
+
+			ImGui::Checkbox("##ovroughness", &im->m_dbg_vehshader_roughness_override_enabled);
+			ImGui::SameLine();
+			ImGui::SliderFloat("Roughness Overwrite", &im->m_dbg_vehshader_roughness_override, 0, 1);
+
+			SPACEY4;
+
+			ImGui::Checkbox("##ovmetal", &im->m_dbg_vehshader_metalness_override_enabled);
+			ImGui::SameLine();
+			ImGui::SliderFloat("Metalness Overwrite", &im->m_dbg_vehshader_metalness_override, 0, 1);
+
+			SPACEY4;
+
+			ImGui::Checkbox("##ovvinylscale", &im->m_dbg_vehshader_vinylscale_override_enabled);
+			ImGui::SameLine();
+			ImGui::SliderFloat("Vinylscale Overwrite", &im->m_dbg_vehshader_vinylscale_override, 0, 1);
 
 			im->m_vis_drawcall01 = false;
 
