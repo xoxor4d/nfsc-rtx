@@ -1,4 +1,5 @@
 #pragma once
+#include "../game/structs.hpp"
 
 namespace comp
 {
@@ -112,6 +113,10 @@ namespace comp
 		Vector4D m_vis_cvClampAndScales;
 		Vector4D m_vis_paint_color;
 		Vector4D m_vis_paint_color_post;
+
+		game::material_data m_vis_mat_data;
+		std::string m_vis_mat_name;
+		std::string m_vis_detected_mat_type;
 
 		float m_vis_out_roughness = 0.0f;
 		float m_vis_out_metalness = 0.0f;

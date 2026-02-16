@@ -153,7 +153,26 @@ namespace comp
 				// culling related settings
 				ASSIGN(nocull_distance);
 				ASSIGN(nocull_disable_precull);
+
+				// material related settings
 				
+#define MAT_OPTIONS_ASSIGN(VAR)						\
+	ASSIGN(VAR##_roughness);						\
+	ASSIGN(VAR##_metalness);						\
+	ASSIGN(VAR##_view_scalar);						\
+	ASSIGN(VAR##_view_primary_color_scalar);		\
+	ASSIGN(VAR##_view_primary_color_blend_scalar);	\
+
+				MAT_OPTIONS_ASSIGN(mat_perl);
+				MAT_OPTIONS_ASSIGN(mat_matte);
+				MAT_OPTIONS_ASSIGN(mat_metallic);
+				MAT_OPTIONS_ASSIGN(mat_high_gloss);
+				MAT_OPTIONS_ASSIGN(mat_iridiance);
+				MAT_OPTIONS_ASSIGN(mat_candy);
+				MAT_OPTIONS_ASSIGN(mat_chrome);
+
+#undef MAT_OPTIONS_ASSIGN
+
 				// light translation related settings
 				
 				// emissive related settings

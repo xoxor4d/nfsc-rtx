@@ -333,11 +333,51 @@ namespace comp
 			
 			SPACEY4;
 
-			ImGui::Text("Paint Color: %.2f, %.2f, %.2f, %.2f",
-				im->m_vis_paint_color.x, im->m_vis_paint_color.y, im->m_vis_paint_color.z, im->m_vis_paint_color.w);
+#define VIS_VEC3(NAME, VAR) {	\
+		auto& v = (VAR);		\
+			ImGui::Text("FX: " #NAME ": %.2f, %.2f, %.2f,", v.x, v.y, v.z); } \
 
-			ImGui::Text("= Diffuse: %.2f, %.2f, %.2f, %.2f",
-				im->m_vis_paint_color_post.x, im->m_vis_paint_color_post.y, im->m_vis_paint_color_post.z, im->m_vis_paint_color_post.w);
+			ImGui::Text("FX: EnvMinLevel: %.2f", im->m_vis_mat_data.envmap_min_scale);
+			VIS_VEC3("EnvMin", im->m_vis_mat_data.envmap_min);
+
+			ImGui::Spacing(0.0f, 2.0f);
+
+			ImGui::Text("FX: EnvMaxLevel: %.2f", im->m_vis_mat_data.envmap_max_scale);
+			VIS_VEC3("EnvMax", im->m_vis_mat_data.envmap_max);
+
+			ImGui::Spacing(0.0f, 2.0f);
+
+			ImGui::Text("FX: EnvMapClamp: %.2f", im->m_vis_mat_data.envmap_clamp);
+			ImGui::Text("FX: EnvMapPower: %.2f", im->m_vis_mat_data.envmap_power);
+
+			SPACEY8;
+
+			ImGui::Text("FX: SpecularMinLevel: %.2f", im->m_vis_mat_data.specular_min_scale);
+			VIS_VEC3("SpecularMin", im->m_vis_mat_data.specular_min);
+
+			ImGui::Spacing(0.0f, 2.0f);
+
+			ImGui::Text("FX: SpecularMaxLevel: %.2f", im->m_vis_mat_data.specular_max_scale);
+			VIS_VEC3("SpecularMax", im->m_vis_mat_data.specular_max);
+
+			ImGui::Spacing(0.0f, 2.0f);
+
+			ImGui::Text("FX: SpecularPower: %.2f", im->m_vis_mat_data.specular_power);
+			ImGui::Text("FX: SpecularFlakes: %.2f", im->m_vis_mat_data.specular_flakes);
+
+			ImGui::Spacing(0.0f, 2.0f);
+
+			ImGui::Text("FX: Name: %s", im->m_vis_mat_name.c_str());
+
+			ImGui::Text("DETECTED Paint Name: %s", im->m_vis_detected_mat_type.c_str());
+
+			SPACEY4;
+	
+			/*ImGui::Text("Paint Color: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_paint_color.x, im->m_vis_paint_color.y, im->m_vis_paint_color.z, im->m_vis_paint_color.w);*/
+
+			/*ImGui::Text("= Diffuse: %.2f, %.2f, %.2f, %.2f",
+				im->m_vis_paint_color_post.x, im->m_vis_paint_color_post.y, im->m_vis_paint_color_post.z, im->m_vis_paint_color_post.w);*/
 
 			ImGui::Text("= Roughness: %.2f", im->m_vis_out_roughness);
 			ImGui::Text("= Metalness: %.2f", im->m_vis_out_metalness);
@@ -467,6 +507,37 @@ namespace comp
 		SPACEY4;
 	}
 
+
+	void compsettings_material_container()
+	{
+		const auto& cs = comp_settings::get();
+
+		SPACEY4;
+		ImGui::SeparatorText(" Paint Settings ");
+		SPACEY4;
+
+#define MAT_OPTIONS(NAME, VAR) { \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " Roughness", cs->VAR##_roughness, 0.0f, 1.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " Metalness", cs->VAR##_metalness, 0.0f, 1.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " View Scalar", cs->VAR##_view_scalar, 0.0f, 4.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " View Primary Diffuse Scalar", cs->VAR##_view_primary_color_scalar, 0.0f, 4.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " View Primary Diffuse Blend", cs->VAR##_view_primary_color_blend_scalar, 0.0f, 4.0f, 0.001f); \
+			SPACEY4; }
+
+		MAT_OPTIONS("Perl", mat_perl);
+		MAT_OPTIONS("Matte", mat_matte);
+		MAT_OPTIONS("Metallic", mat_metallic);
+		MAT_OPTIONS("HighGloss", mat_high_gloss);
+		MAT_OPTIONS("Iridiance", mat_iridiance);
+		MAT_OPTIONS("Candy", mat_candy);
+		MAT_OPTIONS("Chrome", mat_chrome);
+
+#undef MAT_OPTIONS
+
+		SPACEY4;
+	}
+
+
 	void compsettings_other_container()
 	{
 		static const auto& cs = comp_settings::get();
@@ -497,6 +568,13 @@ namespace comp
 			static float cont_cs_renderer_height = 0.0f;
 			cont_cs_renderer_height = ImGui::Widget_ContainerWithCollapsingTitle("Culling Settings", cont_cs_renderer_height,
 				compsettings_culling_container, false, ICON_FA_TV, &im->ImGuiCol_ContainerBackground, &im->ImGuiCol_ContainerBorder);
+		}
+
+		// material related
+		{
+			static float cont_cs_material_height = 0.0f;
+			cont_cs_material_height = ImGui::Widget_ContainerWithCollapsingTitle("Material Settings", cont_cs_material_height,
+				compsettings_material_container, false, ICON_FA_MAP, &im->ImGuiCol_ContainerBackground, &im->ImGuiCol_ContainerBorder);
 		}
 
 		// other

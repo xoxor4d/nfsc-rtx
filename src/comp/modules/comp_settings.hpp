@@ -361,6 +361,165 @@ namespace comp
 				true
 			};
 
+			// ----------------------------------
+			// material related settings
+
+			variable mat_perl_roughness = {
+				"mat_perl_roughness", ("Roughness used for perl materials (0-1)"),
+				0.10f
+			};
+
+			variable mat_perl_metalness = {
+				"mat_perl_metalness", ("Metalness used for perl materials (0-1)"),
+				0.10f
+			};
+
+			variable mat_perl_view_scalar = {
+				"mat_perl_view_scalar", ("Scales view depended min/max color influence value"),
+				1.20f
+			};
+
+			variable mat_perl_view_primary_color_scalar = {
+				"mat_perl_view_primary_color_scalar", ("Scales view depended primary color influence value"),
+				1.20f
+			};
+
+			variable mat_perl_view_primary_color_blend_scalar = {
+				"mat_perl_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
+				2.00f
+			};
+
+
+			// --------------------------------------
+			variable mat_matte_roughness = {
+				"mat_matte_roughness", ("Roughness used for matte materials (0-1)"),
+				0.50f };
+
+			variable mat_matte_metalness = {
+				"mat_matte_metalness", ("Metalness used for matte materials (0-1)"),
+				0.05f };
+
+			variable mat_matte_view_scalar = {
+				"mat_matte_view_scalar", ("Scales view depended min/max color influence value"),
+				1.15f };
+
+			variable mat_matte_view_primary_color_scalar = {
+				"mat_matte_view_primary_color_scalar", ("Scales view depended primary color influence value"),
+				0.70f };
+
+			variable mat_matte_view_primary_color_blend_scalar = {
+				"mat_matte_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
+				1.00f };
+
+
+			// --------------------------------------
+			variable mat_metallic_roughness = {
+				"mat_metallic_roughness", ("Roughness used for metallic materials (0-1)"),
+				0.07f };
+
+			variable mat_metallic_metalness = {
+				"mat_metallic_metalness", ("Metalness used for metallic materials (0-1)"),
+				0.30f };
+
+			variable mat_metallic_view_scalar = {
+				"mat_metallic_view_scalar", ("Scales view depended min/max color influence value"),
+				1.00f };
+
+			variable mat_metallic_view_primary_color_scalar = {
+				"mat_metallic_view_primary_color_scalar", ("Scales view depended primary color influence value"),
+				1.00f };
+
+			variable mat_metallic_view_primary_color_blend_scalar = {
+				"mat_metallic_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
+				1.00f };
+
+
+			// --------------------------------------
+			variable mat_high_gloss_roughness = {
+				"mat_high_gloss_roughness", ("Roughness used for high_gloss materials (0-1)"),
+				0.05f };
+
+			variable mat_high_gloss_metalness = {
+				"mat_high_gloss_metalness", ("Metalness used for high_gloss materials (0-1)"),
+				0.05f };
+
+			variable mat_high_gloss_view_scalar = {
+				"mat_high_gloss_view_scalar", ("Scales view depended min/max color influence value"),
+				0.65f };
+
+			variable mat_high_gloss_view_primary_color_scalar = {
+				"mat_high_gloss_view_primary_color_scalar", ("Scales view depended primary color influence value"),
+				0.80f };
+
+			variable mat_high_gloss_view_primary_color_blend_scalar = {
+				"mat_high_gloss_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
+				0.85f };
+
+
+			// --------------------------------------
+			variable mat_iridiance_roughness = {
+				"mat_iridiance_roughness", ("Roughness used for iridiance materials (0-1)"),
+				0.25f };
+
+			variable mat_iridiance_metalness = {
+				"mat_iridiance_metalness", ("Metalness used for iridiance materials (0-1)"),
+				0.75f };
+
+			variable mat_iridiance_view_scalar = {
+				"mat_iridiance_view_scalar", ("Scales view depended min/max color influence value"),
+				0.20f };
+
+			variable mat_iridiance_view_primary_color_scalar = {
+				"mat_iridiance_view_primary_color_scalar", ("Scales view depended primary color influence value"),
+				0.70f };
+
+			variable mat_iridiance_view_primary_color_blend_scalar = {
+				"mat_iridiance_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
+				0.80f };
+
+
+			// --------------------------------------
+			variable mat_candy_roughness = {
+				"mat_candy_roughness", ("Roughness used for candy materials (0-1)"),
+				0.10f };
+
+			variable mat_candy_metalness = {
+				"mat_candy_metalness", ("Metalness used for candy materials (0-1)"),
+				0.20f };
+
+			variable mat_candy_view_scalar = {
+				"mat_candy_view_scalar", ("Scales view depended min/max color influence value"),
+				0.75f };
+
+			variable mat_candy_view_primary_color_scalar = {
+				"mat_candy_view_primary_color_scalar", ("Scales view depended primary color influence value"),
+				0.75f };
+
+			variable mat_candy_view_primary_color_blend_scalar = {
+				"mat_candy_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
+				1.3f };
+
+
+			// --------------------------------------
+			variable mat_chrome_roughness = {
+				"mat_chrome_roughness", ("Roughness used for chrome materials (0-1)"),
+				0.05f };
+
+			variable mat_chrome_metalness = {
+				"mat_chrome_metalness", ("Metalness used for chrome materials (0-1)"),
+				0.85f };
+
+			variable mat_chrome_view_scalar = {
+				"mat_chrome_view_scalar", ("Scales view depended min/max color influence value"),
+				0.70f };
+
+			variable mat_chrome_view_primary_color_scalar = {
+				"mat_chrome_view_primary_color_scalar", ("Scales view depended primary color influence value"),
+				0.90f };
+
+			variable mat_chrome_view_primary_color_blend_scalar = {
+				"mat_chrome_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
+				1.50f };
 
 			// ----------------------------------
 			// light translation related settings

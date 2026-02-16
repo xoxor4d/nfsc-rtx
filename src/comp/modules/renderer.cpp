@@ -1,6 +1,7 @@
 #include "std_include.hpp"
 #include "renderer.hpp"
 
+#include "comp_settings.hpp"
 #include "imgui.hpp"
 
 namespace comp
@@ -10,12 +11,15 @@ namespace comp
 	int g_is_rendering_car_normalmap = 0;
 	int g_is_rendering_world = 0;
 
+	int g_is_rendering_dry_road = 0;
 	int g_is_rendering_world_normalmap = 0;
 	int g_is_rendering_glass_reflect = 0;
 	int g_is_rendering_sky = 0;
 
 	bool g_rendered_first_primitive = false;
 	bool g_applied_hud_hack = false; // was hud "injection" applied this frame
+
+	game::material_instance g_current_material_data = {};
 
 	namespace tex_addons
 	{
@@ -212,6 +216,151 @@ namespace comp
 		dev->SetRenderState((D3DRENDERSTATETYPE)RS_150_TEXTURE_HASH, hash);
 	}
 
+	enum class paint_type
+	{
+		unknown,
+		perl,
+		matte,
+		metallic,
+		high_gloss,
+		iridiance,
+		candy,
+		chrome
+	};
+
+	inline bool approx(float a, float b, float eps = 0.02f) {
+		return std::abs(a - b) <= eps;
+	}
+
+	inline float avg(Vector v) {
+		return (v.x + v.y + v.z) / 3.0f;
+	}
+
+	inline bool is_one_vector(const Vector& v) {
+		return approx(v.x, 1.0f) && approx(v.y, 1.0f) && approx(v.z, 1.0f);
+	}
+
+	paint_type detect_paint_type(const game::material_data& m)
+	{
+		// differentiate between dynamic + hardcoded materials
+		const bool hardcoded_mode = is_one_vector(m.envmap_min) && is_one_vector(m.envmap_max);
+		const float env_min = hardcoded_mode ? m.envmap_min_scale : avg(m.envmap_min);
+		const float env_max = hardcoded_mode ? m.envmap_max_scale : avg(m.envmap_max);
+
+		const bool env_equal = approx(env_min, env_max);
+		const float& flakes = m.specular_flakes;
+
+		// -------------------------------------------------
+		// Chrome (most unique)
+		// EnvMin == EnvMax AND flakes = 0.1
+		// -------------------------------------------------
+		if (env_equal && approx(flakes, 0.1f)) {
+			return paint_type::chrome;
+		}
+
+		// -------------------------------------------------
+		// High Gloss
+		// Only type with specular > 40
+		// -------------------------------------------------
+		if (m.specular_power >= 40.0f) {
+			return paint_type::high_gloss;
+		}
+
+		// -------------------------------------------------
+		// Matte
+		// No env contribution
+		// -------------------------------------------------
+		if (approx(env_min, 0.0f) && approx(env_max, 0.0f)) {
+			return paint_type::matte;
+		}
+
+		// -------------------------------------------------
+		// Candy
+		// Very high flakes (2 - 3.5)
+		// -------------------------------------------------
+		if (flakes >= 2.0f && approx(env_max, 0.5f)) {
+			return paint_type::candy;
+		}
+
+		// -------------------------------------------------
+		// PERL
+		// EnvMapPower fixed at 0.15 AND no flakes
+		// -------------------------------------------------
+		if (approx(m.envmap_power, 0.15f) && approx(flakes, 0.0f)) {
+			return paint_type::perl;
+		}
+
+		// -------------------------------------------------
+		// Iridiance
+		// Mid spec range remaining
+		// -------------------------------------------------
+		if (m.specular_power >= 13.0f && m.specular_power <= 20.0f) {
+			return paint_type::iridiance;
+		}
+
+		// -------------------------------------------------
+		// Metallic
+		// -------------------------------------------------
+		if (approx(env_min, 1.75f) && approx(m.envmap_power, 1.0f)
+			&& (m.envmap_clamp >= 0.95f && m.envmap_clamp <= 1.0f)
+			&& (flakes >= 0.49f && flakes <= 0.76f))
+		{
+			return paint_type::metallic;
+		}
+
+		return paint_type::unknown;
+	}
+
+	bool get_pbr_values_for_paint(
+		paint_type paint, 
+		float& out_roughness, float& out_metalness, 
+		float& out_powerx, float& out_diffuse_clamp, float& out_diffuse_clamp_range)
+	{
+		const auto& cs = comp_settings::get();
+
+#define ASSIGN_MAT_SETTINGS(VAR) \
+	out_roughness = cs->VAR##_roughness._float(); \
+	out_metalness = cs->VAR##_metalness._float(); \
+	out_powerx = cs->VAR##_view_scalar._float(); \
+	out_diffuse_clamp = cs->VAR##_view_primary_color_scalar._float(); \
+	out_diffuse_clamp_range = cs->VAR##_view_primary_color_blend_scalar._float();
+
+		switch (paint)
+		{
+		case paint_type::perl:
+			ASSIGN_MAT_SETTINGS(mat_perl);
+			return true;
+
+		case paint_type::matte: 
+			ASSIGN_MAT_SETTINGS(mat_matte);
+			return true;
+
+		case paint_type::metallic:
+			ASSIGN_MAT_SETTINGS(mat_metallic);
+			return true;
+
+		case paint_type::high_gloss: 
+			ASSIGN_MAT_SETTINGS(mat_high_gloss);
+			return true;
+
+		case paint_type::iridiance: 
+			ASSIGN_MAT_SETTINGS(mat_iridiance);
+			return true;
+
+		case paint_type::candy: 
+			ASSIGN_MAT_SETTINGS(mat_candy);
+			return true;
+
+		case paint_type::chrome: 
+			ASSIGN_MAT_SETTINGS(mat_chrome);
+			return true;
+
+		default: 
+			break;
+		}
+
+		return false;
+	}
 
 	// ----
 
@@ -386,6 +535,9 @@ namespace comp
 				return S_OK;
 			}
 
+			auto& mat = g_current_material_data;
+			const auto mat_name = std::string_view(g_current_material_data.name);
+
 			if (im->m_dbg_force_ff_indexed_prim) {
 				render_with_ff = true;
 			}
@@ -401,6 +553,18 @@ namespace comp
 			{
 				if (im->m_dbg_disable_world_normalmap) {
 					ctx.modifiers.do_not_render = true;
+				}
+			}
+
+			if (g_is_rendering_world || g_is_rendering_dry_road)
+			{
+				if (im->m_dbg_debug_bool01)
+				{
+					set_remix_roughness_settings(dev, im->m_debug_vector5.x,
+						0.35f + im->m_debug_vector5.y,
+						0.65f + im->m_debug_vector5.z,
+						im->m_debug_vector4.z,
+						WETNESS_FLAG_ENABLE_VARIATION | WETNESS_FLAG_ENABLE_PUDDLE_LAYER | WETNESS_FLAG_ENABLE_OCCLUSION_TEST | WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING | WETNESS_FLAG_ENABLE_RAINDROPS);
 				}
 			}
 
@@ -434,33 +598,9 @@ namespace comp
 
 			if (g_is_rendering_car)
 			{
-				/*if (im->m_dbg_debug_bool03)
-				{
-					ctx.save_texture(dev, 0);
-					dev->SetTexture(0, tex_addons::red);
-				}
-
-				if (im->m_dbg_debug_bool02) 
-				{
-					ctx.save_texture(dev, 0);
-
-					IDirect3DBaseTexture9* base_tex = nullptr;
-					dev->GetTexture(1, &base_tex);
-					dev->SetTexture(0, base_tex);
-				}*/
-
-				//if (!im->m_dbg_debug_bool03)
 				{
 					if (ctx.info.cvDiffuseMin.x == 1.0f)
 					{
-						if (im->m_dbg_debug_bool01) {
-							ctx.modifiers.do_not_render = true;
-						}
-
-						/*if (im->m_dbg_debug_bool02) {
-							set_remix_texture_categories(dev, InstanceCategories::WorldUI);
-						}*/
-
 						Vector4D v4_cvDiffuseMin;
 						Vector4D v4_cvDiffuseRange;
 						Vector4D v4_cvEnvmapMin;
@@ -490,32 +630,12 @@ namespace comp
 						dev->GetVertexShaderConstantF(27, &v4_cvVinylScales.x, 1);
 						//Vector cvVinylScales = v4_cvVinylScales;
 
-						// NOW: -0.810000 im->m_debug_vector.x fixes vinyls but breaks car paint
-						float r0w = std::min(1.0f + im->m_debug_vector.x, v4_cvClampAndScales.x);
-						float r1w = r0w * v4_cvClampAndScales.z * (1.0f + im->m_debug_vector.y);
-
 						Vector4D col;
 
-						/*if (im->m_dbg_debug_bool04) {
-							col = cvDiffuseRange + cvDiffuseMin;
-						}
-						else*/ {
-							///col = r1w * cvDiffuseRange + cvDiffuseMin;
-							col = r1w * v4_cvDiffuseRange + v4_cvDiffuseMin;
-						}
-
-						/*if (im->m_dbg_debug_bool05)
-						{
-							float vdotn_diffuse = pow(im->m_debug_vector.x, im->m_vis_cvPowers.x);
-
-							if (im->m_dbg_debug_bool06)
-							{
-								vdotn_diffuse = std::min(vdotn_diffuse, v4_cvClampAndScales.x);
-								vdotn_diffuse = vdotn_diffuse * v4_cvClampAndScales.z;
-							}
-
-							col = cvDiffuseMin + vdotn_diffuse * cvDiffuseRange;
-						}*/
+						// this was color approximation for earlier TFACTOR tests
+						//float r0w = std::min(1.0f + im->m_debug_vector.x, v4_cvClampAndScales.x);
+						//float r1w = r0w * v4_cvClampAndScales.z * (1.0f + im->m_debug_vector.y);
+						//col = r1w * v4_cvDiffuseRange + v4_cvDiffuseMin;
 
 #if 0
 						float spec_power = cvPowers.y;
@@ -532,46 +652,81 @@ namespace comp
 						float metallic = pow(cvClampAndScales.y, 2.0f);
 						metallic = std::clamp(metallic, 0.0f, 1.0f);
 #endif
-						float specPower = cvPowers.y;
 
-						float avgEnvMin = (cvEnvmapMin.x + cvEnvmapMin.y + cvEnvmapMin.z) / 3.0;
-						float avgEnvRange = (cvEnvmapRange.x + cvEnvmapRange.y + cvEnvmapRange.z) / 3.0;
-
-						float roughness;
-						if (abs(avgEnvRange) < 0.01)  // constant env (or none)
-						{
-							if (avgEnvMin < 0.2)       // matte/no reflection
-								roughness = 0.98;
-							else                       // chrome/mirror
-								roughness = 0.0;
+						if (im->m_dbg_debug_bool02 && mat_name == "DULLPLASTIC") {
+							ctx.modifiers.do_not_render = true;
 						}
-						else                               // view-dependent env
-						{
-							roughness = 0.63 / sqrt(specPower);  // fits ~0.2 at power=10, ~0.1 at power=40/13-14
-							roughness = std::clamp(roughness, 0.05f, 1.0f);  // small floor
+						else if (im->m_dbg_debug_bool06 && mat_name == "INTERIOR") {
+							ctx.modifiers.do_not_render = true;
+						}
+						else if (im->m_dbg_debug_bool07 && mat_name == "MAGMATTE") {
+							ctx.modifiers.do_not_render = true;
+						}
+						else if (im->m_dbg_debug_bool08 && mat_name.empty()) {
+							ctx.modifiers.do_not_render = true;
 						}
 
-						// Check if env tint is colored (non-monochrome)
-						float varMin = std::max(std::max(abs(cvEnvmapMin.x - avgEnvMin), abs(cvEnvmapMin.y - avgEnvMin)), abs(cvEnvmapMin.z - avgEnvMin));
-						float varRange = std::max(std::max(abs(cvEnvmapRange.x - avgEnvRange), abs(cvEnvmapRange.y - avgEnvRange)), abs(cvEnvmapRange.z - avgEnvRange));
+						// ------
 
-						float metallic;
-						if (varMin > 0.15 || varRange > 0.15)  // tinted like chrome teal
-							metallic = 1.0;
-						else  // monochrome (gray/white)
+						// Notes:
+						// - empty mat name => dynamic car paint
+
+						float roughness = 1.0f;
+						float metallic = 0.0f;
+						float powerx_scale = 1.0f;
+						float diffuse_clamp_scale = 1.0f;
+						float diffuse_clamp_range = 1.0f;
+
+						auto paint_type = detect_paint_type(mat.material);
+
+						// try to detect paint type -> return hardcoded values
+						// approximate dynamically otherwise
+						if (!get_pbr_values_for_paint( paint_type, 
+								roughness, metallic, powerx_scale, diffuse_clamp_scale, diffuse_clamp_range))
 						{
-							if (abs(avgEnvRange) < 0.01)       // constant
+							// no settings found -> approximate dynamically
+
+							const float spec_power = cvPowers.y;
+							float avg_env_min = (cvEnvmapMin.x + cvEnvmapMin.y + cvEnvmapMin.z) / 3.0;
+							float avg_env_range = (cvEnvmapRange.x + cvEnvmapRange.y + cvEnvmapRange.z) / 3.0;
+
+							if (!im->m_dbg_debug_bool03 && abs(avg_env_range) < 0.01f + im->m_debug_vector3.x)  // constant env (or none)
 							{
-								metallic = (avgEnvMin > 0.2) ? 1.0 : 0.0;
+								if (avg_env_min < (0.2f + im->m_debug_vector.y)) {
+									roughness = 0.98;
+								} else {
+									roughness = 0.0;
+								}
 							}
-							else                               // view-dep
+							else
 							{
-								float base = 1.0f - avgEnvMin;
-								metallic = std::clamp(base * 2.5f, 0.0f, 1.0f);  // 0.88→0.3, 0.75→0.625≈0.8, 1.0→0
+								roughness = (0.63f + im->m_debug_vector.x) / sqrtf(spec_power);  // fits ~0.2 at power=10, ~0.1 at power=40/13-14
+								roughness = std::clamp(roughness, 0.05f, 1.0f);  // small floor
+								roughness *= (1.0f + im->m_debug_vector.z);
+							}
+
+							// Check if env tint is colored (non-monochrome)
+							float var_min = std::max(std::max(abs(cvEnvmapMin.x - avg_env_min), abs(cvEnvmapMin.y - avg_env_min)), abs(cvEnvmapMin.z - avg_env_min));
+							float var_range = std::max(std::max(abs(cvEnvmapRange.x - avg_env_range), abs(cvEnvmapRange.y - avg_env_range)), abs(cvEnvmapRange.z - avg_env_range));
+
+							if (!im->m_dbg_debug_bool04 && (var_min > 0.15 + im->m_debug_vector3.y || var_range > 0.15 + im->m_debug_vector3.y)) {
+								metallic = 1.0;
+							}
+							else  // monochrome (gray/white)
+							{
+								if (!im->m_dbg_debug_bool05 && abs(avg_env_range) < 0.01f) {
+									metallic = (avg_env_min > (0.2f + im->m_debug_vector2.y)) ? 1.0f : 0.0f;
+								}
+								else
+								{
+									float base = 1.0f - avg_env_min;
+									metallic = std::clamp(base * (2.5f + im->m_debug_vector2.x), 0.0f, 1.0f);  // 0.88→0.3, 0.75→0.625≈0.8, 1.0→0
+									metallic *= (1.0f + im->m_debug_vector2.z);
+								}
 							}
 						}
 
-
+						// imgui debug
 						bool was_vis = false;
 						if (!im->m_vis_drawcall01)
 						{
@@ -583,64 +738,26 @@ namespace comp
 							im->m_vis_cvPowers = v4_cvPowers;
 							im->m_vis_cvClampAndScales = v4_cvClampAndScales;
 							im->m_vis_paint_color = col;
-
-
-							/*auto luminance = [](const Vector& c)
-								{
-									return	c.x * 0.2126f +
-											c.y * 0.7152f +
-											c.z * 0.0722f;
-								};*/
-
-/*							Vector diffuse_max = cvDiffuseMin + cvDiffuseRange;
-							Vector envmap_max = cvEnvmapMin + cvEnvmapRange;
-
-							float diff_lum = luminance(diffuse_max);
-							float spec_lum = luminance(envmap_max);
-
-							float envmap_clamp = cvClampAndScales.y;
-
-							// --------------------------------------------------
-							// METALLIC
-							// --------------------------------------------------
-
-							float energy_ratio = spec_lum / (diff_lum + spec_lum + 1e-5f);
-
-							// Clamp strongly influences metallic perception
-							float metallic = energy_ratio * envmap_clamp;
-
-							// Boost when exponent is mid/high (iridescent case)
-							metallic *= std::clamp(cvPowers.y / 15.0f, 0.0f, 1.0f);
-
-							metallic = std::clamp(metallic, 0.0f, 1.0f);
-
-							// --------------------------------------------------
-							// ROUGHNESS
-							// --------------------------------------------------
-
-							// Convert exponent to base roughness
-							float phong_r = std::sqrt(2.0f / (cvPowers.y + 2.0f));
-
-							// envmap_clamp strongly sharpens reflections
-							float clamp_sharpness = 1.0f - envmap_clamp;
-
-							float roughness = phong_r;
-
-							// High clamp → sharper → reduce roughness
-							roughness *= (1.0f - 0.7f * envmap_clamp);
-
-							// Very small clamp (chrome case) → mirror
-							if (envmap_clamp < 0.05f)
-								roughness = 0.02f;
-
-							roughness = std::clamp(roughness, 0.02f, 1.0f);*/
-
-							// -----
-
-							
-
 							im->m_vis_out_metalness = metallic;
 							im->m_vis_out_roughness = roughness;
+
+							im->m_vis_mat_data = mat.material;
+							im->m_vis_mat_name = mat_name;
+
+							std::string dmt;
+							switch (paint_type)
+							{
+							case paint_type::perl: dmt = "perl"; break;
+							case paint_type::matte: dmt = "matte"; break;
+							case paint_type::metallic: dmt = "metallic"; break;
+							case paint_type::high_gloss: dmt = "high_gloss"; break;
+							case paint_type::iridiance: dmt = "iridiance"; break;
+							case paint_type::candy: dmt = "candy"; break;
+							case paint_type::chrome: dmt = "chrome"; break;
+							default: dmt = "unkown - using approximation!"; break;
+							}
+
+							im->m_vis_detected_mat_type = std::move(dmt);
 
 							was_vis = true;
 						}
@@ -651,14 +768,18 @@ namespace comp
 						ctx.save_tss(dev, D3DTSS_COLORARG2);
 
 						// some car paints really go way above 1.0 .. so we should use that info somewhere ..
-						col.x = std::clamp(col.x, 0.0f, 1.0f);
-						col.y = std::clamp(col.y, 0.0f, 1.0f);
-						col.z = std::clamp(col.z, 0.0f, 1.0f);
-						col.w = std::clamp(col.w, 0.0f, 1.0f);
+						// we now div by 2 so we do not have to clamp, then rescale in opaque shader
+						//col.x = std::clamp(col.x, 0.0f, 1.0f);
+						//col.y = std::clamp(col.y, 0.0f, 1.0f);
+						//col.z = std::clamp(col.z, 0.0f, 1.0f);
+						//col.w = std::clamp(col.w, 0.0f, 1.0f);
 
 						if (was_vis) {
 							im->m_vis_paint_color_post = col;
 						}
+
+						// -------------------
+						// debug overwrites
 
 						if (im->m_dbg_vehshader_color_override_enabled)
 						{
@@ -679,16 +800,16 @@ namespace comp
 							v4_cvVinylScales.x = im->m_dbg_vehshader_vinylscale_override;
 						}
 
-						col.x = v4_cvDiffuseRange.x;
-						col.y = v4_cvDiffuseRange.y;
-						col.z = v4_cvDiffuseRange.z;
+						// -----------------------
+						// setup paint shader vars
+
+						col.x = std::clamp(std::clamp(v4_cvDiffuseRange.x, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f); // color can be above 1 so we scale to 0-1 and back to 0-2 in the opaque shader
+						col.y = std::clamp(std::clamp(v4_cvDiffuseRange.y, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
+						col.z = std::clamp(std::clamp(v4_cvDiffuseRange.z, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
 						col.w = v4_cvPowers.x;
 
-						//ClampScales.x
-						//ClampScales.z
-
-						set_remix_temp_float03(dev, v4_cvClampAndScales.x);
-						set_remix_temp_float04(dev, v4_cvClampAndScales.z);
+						set_remix_temp_float03(dev, v4_cvPowers.x * powerx_scale); // use powers.x here because it v4_cvClampAndScales.x mostly stays below 1
+						set_remix_temp_float04(dev, v4_cvClampAndScales.z * diffuse_clamp_range);
 
 						set_remix_vehicle_shader_settings(dev, col, roughness, metallic, v4_cvVinylScales.x, VEHSHADER_FLAG_NONE);
 						//set_remix_modifier(dev, RemixModifier::EnableVertexColor); // vertex colors do not work for some reason
@@ -700,7 +821,7 @@ namespace comp
 							std::clamp(v4_cvDiffuseMin.x, 0.0f, 1.0f),
 							std::clamp(v4_cvDiffuseMin.y, 0.0f, 1.0f),
 							std::clamp(v4_cvDiffuseMin.z, 0.0f, 1.0f),
-							1.0f));
+							std::clamp(v4_cvClampAndScales.x * diffuse_clamp_scale, 0.0f, 1.0f)));
 
 						dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE); 
 						dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
@@ -1069,8 +1190,10 @@ namespace comp
 				}
 				else if (std::string_view(tech_desc.Name) == "sky") {
 					g_is_rendering_sky = 1;
-				}
-				else
+				} else if (std::string_view(tech_desc.Name) == "dryroad") {
+					g_is_rendering_dry_road = 1;
+				} 
+				else 
 				{
 					int x = 1;
 				}
@@ -1190,6 +1313,29 @@ namespace comp
 
 	// ---
 
+	void on_handle_material_data(game::material_instance* data)
+	{
+		if (data) {
+			g_current_material_data = *data;
+		}
+	}
+
+	__declspec (naked) void on_handle_material_data_stub()
+	{
+		static uint32_t retn_addr = 0x71E06B;
+		__asm
+		{
+			pushad;
+			push	esi;
+			call	on_handle_material_data;
+			add		esp, 4;
+			popad;
+
+			mov		[edi + 0x1780], esi;
+			jmp		retn_addr;
+		}
+	}
+
 	renderer::renderer()
 	{
 		p_this = this;
@@ -1220,6 +1366,10 @@ namespace comp
 
 		// 71EE18
 		shared::utils::hook(0x71EE18, pre_effect_commit_changes, HOOK_JUMP).install()->quick();
+
+		shared::utils::hook::nop(0x71E065, 6);
+		shared::utils::hook(0x71E065, on_handle_material_data_stub, HOOK_JUMP).install()->quick();
+		// 71E065
 
 		//shared::utils::hook(game::retn_addr__pre_draw_something - 5u, pre_render_something_stub, HOOK_JUMP).install()->quick();
 		//shared::utils::hook(game::hk_addr__post_draw_something, post_render__something_stub, HOOK_JUMP).install()->quick();
