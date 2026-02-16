@@ -15,6 +15,7 @@ namespace comp
 	int g_is_rendering_world_normalmap = 0;
 	int g_is_rendering_glass_reflect = 0;
 	int g_is_rendering_sky = 0;
+	int g_is_rendering_water = 0;
 
 	bool g_rendered_first_primitive = false;
 	bool g_applied_hud_hack = false; // was hud "injection" applied this frame
@@ -114,8 +115,8 @@ namespace comp
 		// pack into DWORD: lower 16 bits = wetness_params1, upper 16 bits = wetness_params2
 		uint32_t packedDword = (uint32_t(wetness_params2) << 16) | uint32_t(wetness_params1);
 
-		dc_ctx.save_rs(dev, RS_210_WETNESS_PARAMS_PACKED);
-		dev->SetRenderState((D3DRENDERSTATETYPE)RS_210_WETNESS_PARAMS_PACKED, packedDword);
+		dc_ctx.save_rs(dev, RS_215_WETNESS_PARAMS_PACKED);
+		dev->SetRenderState((D3DRENDERSTATETYPE)RS_215_WETNESS_PARAMS_PACKED, packedDword);
 	}
 
 	void renderer::set_remix_vehicle_shader_settings(IDirect3DDevice9* dev, const Vector4D& color, float roughness, float metalness, float free2, uint8_t flags)
@@ -560,11 +561,11 @@ namespace comp
 			{
 				if (im->m_dbg_debug_bool01)
 				{
-					set_remix_roughness_settings(dev, im->m_debug_vector5.x,
-						0.35f + im->m_debug_vector5.y,
-						0.65f + im->m_debug_vector5.z,
-						im->m_debug_vector4.z,
-						WETNESS_FLAG_ENABLE_VARIATION | WETNESS_FLAG_ENABLE_PUDDLE_LAYER | WETNESS_FLAG_ENABLE_OCCLUSION_TEST | WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING | WETNESS_FLAG_ENABLE_RAINDROPS);
+					set_remix_roughness_settings(dev, im->m_debug_vector5.x, // TODO: wetness
+						0.35f,
+						0.65f,
+						0.1f,
+						WETNESS_FLAG_ENABLE_VARIATION | WETNESS_FLAG_ENABLE_PUDDLE_LAYER | WETNESS_FLAG_ENABLE_OCCLUSION_TEST | WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING /*| WETNESS_FLAG_ENABLE_RAINDROPS*/);
 				}
 			}
 
@@ -594,10 +595,21 @@ namespace comp
 				if (im->m_dbg_disable_sky) {
 					ctx.modifiers.do_not_render = true;
 				}
+
+				render_with_ff = false;
 			}
 
 			if (g_is_rendering_car)
 			{
+				if (im->m_dbg_debug_bool01)
+				{
+					set_remix_roughness_settings(dev, im->m_debug_vector5.x, // TODO: wetness
+						0.60f,
+						0.65f,
+						0.1f,
+						WETNESS_FLAG_ENABLE_EXP_RAINDROPS | WETNESS_FLAG_USE_LOCAL_COORDINATES);
+				}
+
 				{
 					if (ctx.info.cvDiffuseMin.x == 1.0f)
 					{
@@ -1192,7 +1204,9 @@ namespace comp
 					g_is_rendering_sky = 1;
 				} else if (std::string_view(tech_desc.Name) == "dryroad") {
 					g_is_rendering_dry_road = 1;
-				} 
+				} else if (std::string_view(tech_desc.Name) == "water") {
+					g_is_rendering_water = 1;
+				}
 				else 
 				{
 					int x = 1;
