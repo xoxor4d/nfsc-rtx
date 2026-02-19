@@ -21,6 +21,7 @@ namespace comp
 	bool g_applied_hud_hack = false; // was hud "injection" applied this frame
 
 	game::material_instance g_current_material_data = {};
+	game::effect* g_curr_effect_ptr = nullptr;
 
 	namespace tex_addons
 	{
@@ -28,6 +29,13 @@ namespace comp
 		LPDIRECT3DTEXTURE9 berry = nullptr;
 		LPDIRECT3DTEXTURE9 white = nullptr;
 		LPDIRECT3DTEXTURE9 red = nullptr;
+
+		LPDIRECT3DTEXTURE9 w0 = nullptr;
+		LPDIRECT3DTEXTURE9 w1 = nullptr;
+		LPDIRECT3DTEXTURE9 w2 = nullptr;
+		LPDIRECT3DTEXTURE9 w3 = nullptr;
+		LPDIRECT3DTEXTURE9 w4 = nullptr;
+		LPDIRECT3DTEXTURE9 w5 = nullptr;
 
 		void init_texture_addons(bool release)
 		{
@@ -52,6 +60,12 @@ namespace comp
 			load_texture(dev, "rtx_comp\\textures\\berry.png", &tex_addons::berry);
 			load_texture(dev, "rtx_comp\\textures\\white.png", &tex_addons::white);
 			load_texture(dev, "rtx_comp\\textures\\red.png", &tex_addons::red);
+			load_texture(dev, "rtx_comp\\textures\\w0.png", &tex_addons::w0);
+			load_texture(dev, "rtx_comp\\textures\\w1.png", &tex_addons::w1);
+			load_texture(dev, "rtx_comp\\textures\\w2.png", &tex_addons::w2);
+			load_texture(dev, "rtx_comp\\textures\\w3.png", &tex_addons::w3);
+			load_texture(dev, "rtx_comp\\textures\\w4.png", &tex_addons::w4);
+			load_texture(dev, "rtx_comp\\textures\\w5.png", &tex_addons::w5);
 			tex_addons::initialized = true;
 		}
 	}
@@ -665,7 +679,7 @@ namespace comp
 						metallic = std::clamp(metallic, 0.0f, 1.0f);
 #endif
 
-						if (im->m_dbg_debug_bool02 && mat_name == "DULLPLASTIC") {
+						/*if (im->m_dbg_debug_bool02 && mat_name == "DULLPLASTIC") {
 							ctx.modifiers.do_not_render = true;
 						}
 						else if (im->m_dbg_debug_bool06 && mat_name == "INTERIOR") {
@@ -676,7 +690,7 @@ namespace comp
 						}
 						else if (im->m_dbg_debug_bool08 && mat_name.empty()) {
 							ctx.modifiers.do_not_render = true;
-						}
+						}*/
 
 						// ------
 
@@ -689,11 +703,22 @@ namespace comp
 						float diffuse_clamp_scale = 1.0f;
 						float diffuse_clamp_range = 1.0f;
 
-						auto paint_type = detect_paint_type(mat.material);
+						if (!g_curr_effect_ptr)
+						{
+							int x = 1;
+						}
+
+						game::material_data& m = mat.material;
+
+						if (g_curr_effect_ptr && g_curr_effect_ptr->last_used_light_material_) {
+							m = g_curr_effect_ptr->last_used_light_material_->material;
+						}
+
+						auto paint_type = detect_paint_type(m);
 
 						// try to detect paint type -> return hardcoded values
 						// approximate dynamically otherwise
-						if (!get_pbr_values_for_paint( paint_type, 
+						if (!get_pbr_values_for_paint(paint_type, 
 								roughness, metallic, powerx_scale, diffuse_clamp_scale, diffuse_clamp_range))
 						{
 							// no settings found -> approximate dynamically
@@ -738,6 +763,119 @@ namespace comp
 							}
 						}
 
+						if (g_curr_effect_ptr)
+						{
+							if (g_curr_effect_ptr->last_used_light_material_)
+							{
+								auto lm = g_curr_effect_ptr->last_used_light_material_;
+	
+								if (!shared::utils::float_equal((lm->material.diffuse_min.x * lm->material.diffuse_min_scale), v4_cvDiffuseMin.x, 0.01f)) {
+									int x = 1;
+								}
+
+								if (!shared::utils::float_equal(lm->material.diffuse_power, v4_cvPowers.x)) {
+									int x = 1;
+								}
+							}
+							else
+							{
+								int x = 1;
+							}
+						}
+						else
+						{
+							int x = 1;
+						}
+
+						
+
+/*						if (g_curr_effect_ptr && g_curr_effect_ptr->fx)
+						{
+							ID3DXEffect* fx = nullptr;
+							HRESULT hr = g_curr_effect_ptr->fx->QueryInterface(IID_ID3DXEffect, (void**)&fx);
+
+							//auto fx = g_curr_effect_ptr->fx;
+
+							D3DXHANDLE cvDiffuseMin = fx->GetParameterByName(nullptr, "cvDiffuseMin");
+							D3DXVECTOR4 value = { 0.5f, 0.7f, 1.0f, 1.0f };   // or your Vector type if it's exactly 4 floats
+
+							fx->SetValue(cvDiffuseMin, &value, sizeof(D3DXVECTOR4));
+							fx->CommitChanges();
+
+							D3DXEFFECT_DESC d = {};
+							fx->GetDesc(&d);
+
+							if (auto htech = fx->GetTechnique(0); htech)
+							{
+								D3DXTECHNIQUE_DESC tech_desc;
+								fx->GetTechniqueDesc(htech, &tech_desc);
+
+								{
+									//   cavHarmonicCoeff   c0      10
+									//   WorldViewProj      c10      4
+									//   cmWorldView        c14      3
+									//   cvFogValue         c17      1
+									//   cfFogEnable        c18      1
+									//   cvLocalEyePos      c19      1
+									//   cfEnvmapPullAmount c20      1
+									//   cvDiffuseMin       c21      1
+									//   cvDiffuseRange     c22      1
+									//   cvEnvmapMin        c23      1
+									//   cvEnvmapRange      c24      1
+									//   cvPowers           c25      1
+									//   cvClampAndScales   c26      1
+									//   cvFlakes           c27      1
+
+									if (tech_desc.Passes > 0)
+									{
+										auto second_pass = fx->GetPass(htech, 0);
+										if (second_pass)
+										{
+											D3DXPASS_DESC pass_desc;
+											fx->GetPassDesc(second_pass, &pass_desc);
+
+											//effect->GetParameterByName()
+											//D3DXPARAMETER_DESC param_desc;
+											//effect->GetParameterDesc(d, &param_desc);
+
+											for (UINT i = 0; i < d.Parameters; ++i)
+											{
+												D3DXHANDLE param = fx->GetParameter(nullptr, i);
+
+												D3DXPARAMETER_DESC desc = {};
+												fx->GetParameterDesc(param, &desc);
+
+												if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
+												{
+													Vector value = {};
+													fx->GetValue(param, &value.x, sizeof(value));
+													int asd = 0;
+												}
+											}
+
+											D3DXHANDLE cvDiffuseMin = fx->GetParameterByName(nullptr, "cvDiffuseMin");
+											if (cvDiffuseMin)
+											{
+												D3DXPARAMETER_DESC desc = {};
+												fx->GetParameterDesc(cvDiffuseMin, &desc);
+
+												if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
+												{
+													Vector value = {};
+													fx->GetValue(cvDiffuseMin, &value.x, sizeof(value));
+													ctx.info.cvDiffuseMin = value;
+													ctx.info.cvDiffuseMin.x = 1.0f;
+												}
+
+												int y = 0;
+											}
+										}
+									}
+								}
+							}
+						}*/
+
+
 						// imgui debug
 						bool was_vis = false;
 						if (!im->m_vis_drawcall01)
@@ -753,7 +891,7 @@ namespace comp
 							im->m_vis_out_metalness = metallic;
 							im->m_vis_out_roughness = roughness;
 
-							im->m_vis_mat_data = mat.material;
+							im->m_vis_mat_data = m;
 							im->m_vis_mat_name = mat_name;
 
 							std::string dmt;
@@ -793,13 +931,6 @@ namespace comp
 						// -------------------
 						// debug overwrites
 
-						if (im->m_dbg_vehshader_color_override_enabled)
-						{
-							col.x = im->m_dbg_vehshader_color_override.x;
-							col.y = im->m_dbg_vehshader_color_override.y;
-							col.z = im->m_dbg_vehshader_color_override.z;
-						}
-
 						if (im->m_dbg_vehshader_roughness_override_enabled) {
 							roughness = im->m_dbg_vehshader_roughness_override;
 						}
@@ -815,10 +946,85 @@ namespace comp
 						// -----------------------
 						// setup paint shader vars
 
-						col.x = std::clamp(std::clamp(v4_cvDiffuseRange.x, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f); // color can be above 1 so we scale to 0-1 and back to 0-2 in the opaque shader
-						col.y = std::clamp(std::clamp(v4_cvDiffuseRange.y, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
-						col.z = std::clamp(std::clamp(v4_cvDiffuseRange.z, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
+
+						// calculate custom hash for this paint type because raw paint always uses a fully black, 0% alpha texture
+						// which results in the same mat_HASH on each car that has raw-paint -> same color on all cars
+
+						uint32_t paint_hash = 0u;
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvPowers.x);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.x);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.z);
+						paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_scale);
+						paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_range);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.x);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.y);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.z);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.x);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.y);
+						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.z);
+						set_remix_texture_hash(dev, paint_hash);
+
+						/*uint32_t bits = (paint_hash >> 9) | 0x3f800000;
+						float rnd = reinterpret_cast<float&>(bits) - 1.0f;*/
+
+
+						col.x = std::clamp(std::clamp(v4_cvDiffuseRange.x /** rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f); // color can be above 1 so we scale to 0-1 and back to 0-2 in the opaque shader
+						col.y = std::clamp(std::clamp(v4_cvDiffuseRange.y /*+ rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
+						col.z = std::clamp(std::clamp(v4_cvDiffuseRange.z /*- rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
 						col.w = v4_cvPowers.x;
+
+						if (im->m_dbg_vehshader_color_override_enabled)
+						{
+							if (was_vis || im->m_dbg_debug_bool03)
+							{
+								col.x = im->m_dbg_vehshader_color_override.x;
+								col.y = im->m_dbg_vehshader_color_override.y;
+								col.z = im->m_dbg_vehshader_color_override.z;
+							}
+						}
+
+						if (im->m_dbg_debug_bool08)
+						{
+
+							// debug
+							uint32_t xi = static_cast<uint32_t>(col.x * 1024.0f);
+							uint32_t yi = static_cast<uint32_t>(col.y * 1024.0f);
+							uint32_t zi = static_cast<uint32_t>(col.z * 1024.0f);
+
+							uint32_t hash = xi * 73856093u ^
+								yi * 19349663u ^
+								zi * 83492791u;
+
+							int id = hash % 6;
+							ctx.save_texture(dev, 0);
+
+							switch (id)
+							{
+							case 0:
+								dev->SetTexture(0, tex_addons::w0);
+								break;
+
+							case 1:
+								dev->SetTexture(0, tex_addons::w1);
+								break;
+
+							case 2:
+								dev->SetTexture(0, tex_addons::w2);
+								break;
+
+							case 3:
+								dev->SetTexture(0, tex_addons::w3);
+								break;
+
+							case 4:
+								dev->SetTexture(0, tex_addons::w4);
+								break;
+
+							case 5:
+								dev->SetTexture(0, tex_addons::w5);
+								break;
+							}
+						}
 
 						set_remix_temp_float03(dev, v4_cvPowers.x * powerx_scale); // use powers.x here because it v4_cvClampAndScales.x mostly stays below 1
 						set_remix_temp_float04(dev, v4_cvClampAndScales.z * diffuse_clamp_range);
@@ -834,6 +1040,8 @@ namespace comp
 							std::clamp(v4_cvDiffuseMin.y, 0.0f, 1.0f),
 							std::clamp(v4_cvDiffuseMin.z, 0.0f, 1.0f),
 							std::clamp(v4_cvClampAndScales.x * diffuse_clamp_scale, 0.0f, 1.0f)));
+
+						
 
 						dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE); 
 						dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
@@ -945,7 +1153,7 @@ namespace comp
 			}
 
 			// re-draw surface
-			dev->DrawIndexedPrimitive(PrimitiveType, BaseVertexIndex, MinVertexIndex, NumVertices, startIndex, primCount-1);
+			dev->DrawIndexedPrimitive(PrimitiveType, BaseVertexIndex, MinVertexIndex, NumVertices, startIndex, primCount);
 
 			if (ctx.modifiers.dual_render_texture) {
 				ctx.restore_texture(dev, 0);
@@ -959,6 +1167,8 @@ namespace comp
 		ctx.restore_all(dev);
 		ctx.reset_context();
 		
+		g_curr_effect_ptr = nullptr;
+
 		return hr;
 	}
 
@@ -1303,13 +1513,14 @@ namespace comp
 		int x = 1;
 	}
 
-	ID3DXEffect* g_curr_effect_ptr = nullptr;
+	
 
 	__declspec (naked) void pre_effect_commit_changes()
 	{
 		static uint32_t retn_addr = 0x71EE24;
 		__asm
 		{
+			mov		g_curr_effect_ptr, edi;
 			mov     edi, [edi + 0x44];
 			mov     eax, [edi];
 			push    edi;
@@ -1330,7 +1541,7 @@ namespace comp
 	void on_handle_material_data(game::material_instance* data)
 	{
 		if (data) {
-			g_current_material_data = *data;
+			memcpy(&g_current_material_data, data, sizeof(game::material_instance));
 		}
 	}
 
@@ -1339,13 +1550,14 @@ namespace comp
 		static uint32_t retn_addr = 0x71E06B;
 		__asm
 		{
+			mov		[edi + 0x1780], esi;
+
 			pushad;
 			push	esi;
 			call	on_handle_material_data;
 			add		esp, 4;
 			popad;
 
-			mov		[edi + 0x1780], esi;
 			jmp		retn_addr;
 		}
 	}

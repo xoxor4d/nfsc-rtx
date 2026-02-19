@@ -151,8 +151,9 @@ namespace comp
 				ASSIGN(remix_override_rtxdi_samplecount);
 				
 				// culling related settings
-				ASSIGN(nocull_distance);
-				ASSIGN(nocull_disable_precull);
+				ASSIGN(nocull_distance_scenery);
+				ASSIGN(nocull_distance_meshes);
+				//ASSIGN(nocull_disable_precull);
 
 				// material related settings
 				

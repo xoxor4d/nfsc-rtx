@@ -75,4 +75,27 @@ namespace comp::game
 		char name[64];
 		material_data material;
 	};
+
+	struct effect
+	{
+		DWORD dword0;
+		int unk1;
+		int unk2;
+		int unk3;
+		int unk4;
+		DWORD dword14;
+		BYTE gap18[44];
+		ID3DXBaseEffect* fx;
+		IDirect3DVertexDeclaration9* pidirect3dvertexdeclaration948;
+		BYTE gap4C[5896];
+		DWORD dword1754;
+		DWORD dword1758;
+		BYTE gap175C[24];
+		DWORD dword1774;
+		int unk5;
+		int unk6;
+		material_instance* last_used_light_material_;
+		int unk8;
+	};
+	STATIC_ASSERT_OFFSET(effect, last_used_light_material_, 0x1780);
 }

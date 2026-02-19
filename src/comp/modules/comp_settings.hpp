@@ -348,18 +348,25 @@ namespace comp
 			// ----------------------------------
 			// culling related settings
 
-			variable nocull_distance =
+			variable nocull_distance_scenery =
 			{
-				"nocull_distance",
-				("Distance (radius around player) where culling of static objects is disabled"),
-				60.0f
+				"nocull_distance_scenery",
+				("Distance (radius around player) where culling of level areas is disabled."),
+				80.0f
 			};
 
-			variable nocull_disable_precull = {
+			variable nocull_distance_meshes =
+			{
+				"nocull_distance_meshes",
+				("Distance (radius around player) where culling of objects is disabled"),
+				150.0f
+			};
+
+			/*variable nocull_disable_precull = {
 				"nocull_disable_precull",
 				("Disables the preculling system (occlusion)"),
-				true
-			};
+				false
+			};*/
 
 			// ----------------------------------
 			// material related settings

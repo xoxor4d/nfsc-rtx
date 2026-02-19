@@ -501,8 +501,9 @@ namespace comp
 		ImGui::SeparatorText(" Anti Culling ");
 		SPACEY4;
 
-		compsettings_bool_widget("Disable Preculling", cs->nocull_disable_precull);
-		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("No Culling Until Distance", cs->nocull_distance, 0.0f, FLT_MAX, 0.5f);
+		//compsettings_bool_widget("Disable Preculling", cs->nocull_disable_precull);
+		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Scenery No Culling Distance", cs->nocull_distance_scenery, 0.0f, FLT_MAX, 0.5f);
+		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Mesh No Culling Distance", cs->nocull_distance_meshes, 0.0f, FLT_MAX, 0.5f);
 
 		SPACEY4;
 	}

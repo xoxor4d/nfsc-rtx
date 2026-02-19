@@ -56,7 +56,15 @@ namespace comp
 
 	HRESULT d3d9ex::D3D9Device::GetDeviceCaps(D3DCAPS9* pCaps)
 	{
-		return m_pIDirect3DDevice9->GetDeviceCaps(pCaps);
+		const auto hr = m_pIDirect3DDevice9->GetDeviceCaps(pCaps);
+
+		/*if (SUCCEEDED(hr))
+		{
+			pCaps->VertexShaderVersion = D3DVS_VERSION(1, 0);
+			pCaps->PixelShaderVersion = D3DPS_VERSION(1, 0);
+		}*/
+
+		return hr;
 	}
 
 	HRESULT d3d9ex::D3D9Device::GetDisplayMode(UINT iSwapChain, D3DDISPLAYMODE* pMode)
@@ -742,8 +750,8 @@ namespace comp
 
 		/*if (SUCCEEDED(hr))
 		{
-			pCaps->VertexShaderVersion = D3DVS_VERSION(0, 0);
-			pCaps->PixelShaderVersion = D3DPS_VERSION(0, 0);
+			pCaps->VertexShaderVersion = D3DVS_VERSION(1, 0);
+			pCaps->PixelShaderVersion = D3DPS_VERSION(1, 0);
 		}*/
 
 		return hr;
@@ -850,7 +858,15 @@ namespace comp
 
 	HRESULT __stdcall d3d9ex::_d3d9ex::GetDeviceCaps(UINT Adapter, D3DDEVTYPE DeviceType, D3DCAPS9* pCaps)
 	{
-		return m_pIDirect3D9Ex->GetDeviceCaps(Adapter, DeviceType, pCaps);
+		const auto hr = m_pIDirect3D9Ex->GetDeviceCaps(Adapter, DeviceType, pCaps);
+
+		/*if (SUCCEEDED(hr))
+		{
+			pCaps->VertexShaderVersion = D3DVS_VERSION(1, 0);
+			pCaps->PixelShaderVersion = D3DPS_VERSION(1, 0);
+		}*/
+
+		return hr;
 	}
 
 	HMONITOR __stdcall d3d9ex::_d3d9ex::GetAdapterMonitor(UINT Adapter)

@@ -83,8 +83,9 @@ namespace comp
 		}
 
 		// adjust game variables based on comp settings
-		*game::preculler_mode = cs->nocull_disable_precull._bool() ? 0 : 1;
-		*game::drawscenery_cell_dist_check_02 = cs->nocull_distance._float();
+		//*game::preculler_mode = cs->nocull_disable_precull._bool() ? 0 : 1;
+		*game::drawscenery_cell_dist_check_01 = cs->nocull_distance_scenery._float();
+		*game::drawscenery_cell_dist_check_02 = cs->nocull_distance_meshes._float();
 	}
 
 	
@@ -146,6 +147,7 @@ namespace comp
 
 		// ---
 
+#if 0
 		// let GetVisibleStateSB always return 1 - 0x71B630
 		shared::utils::hook::set(game::mem_addr__get_vis_state_sb, 
 			0xB8, 0x01, 0x00, 0x00, 0x00,  // mov eax, 1
@@ -157,7 +159,7 @@ namespace comp
 		// 'DrawAScenery' - if vis check fn returned less than 18 and viewmode < 3, cull? -> disable that
 		shared::utils::hook::nop(game::nop_addr__draw_scenery_chk01, 2); // 0x79FC1C
 		//shared::utils::hook::nop(game::nop_addr__draw_scenery_chk02, 6); // draw all no matter what 'compute_visibility_of_cell' returned // 0x79FB3F
-
+#endif
 
 		//shared::utils::hook(game::retn_addr__pre_draw_something - 5u, pre_render_something_stub, HOOK_JUMP).install()->quick();
 

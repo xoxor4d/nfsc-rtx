@@ -17,6 +17,14 @@ namespace comp
 		extern LPDIRECT3DTEXTURE9 berry;
 		extern LPDIRECT3DTEXTURE9 white;
 		extern LPDIRECT3DTEXTURE9 red;
+
+		extern LPDIRECT3DTEXTURE9 w0;
+		extern LPDIRECT3DTEXTURE9 w1;
+		extern LPDIRECT3DTEXTURE9 w2;
+		extern LPDIRECT3DTEXTURE9 w3;
+		extern LPDIRECT3DTEXTURE9 w4;
+		extern LPDIRECT3DTEXTURE9 w5;
+
 		extern void init_texture_addons(bool release = false);
 	}
 
