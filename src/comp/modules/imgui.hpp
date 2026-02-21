@@ -80,6 +80,7 @@ namespace comp
 		bool m_dbg_enable_world_wetness_occlusion = true;
 		bool m_dbg_enable_world_wetness_occlusion_smoothing = true;
 		bool m_dbg_enable_world_wetness_raindrops = false;
+		float m_dbg_enable_world_wetness_raindrop_scale = 0.2f;
 
 		bool m_dbg_disable_car_raindrops = false;
 
@@ -137,6 +138,9 @@ namespace comp
 		game::material_data m_vis_mat_data;
 		std::string m_vis_mat_name;
 		std::string m_vis_detected_mat_type;
+
+		bool m_vis_imgui_open = false;
+		std::unordered_set<std::string> m_vis_used_mat_names;
 
 		float m_vis_out_roughness = 0.0f;
 		float m_vis_out_metalness = 0.0f;

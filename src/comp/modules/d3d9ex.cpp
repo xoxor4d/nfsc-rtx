@@ -263,7 +263,10 @@ namespace comp
 		shared::globals::last_frame_time = current_time;
 		remix_vars::on_client_frame();
 
-		return m_pIDirect3DDevice9->EndScene();
+		g_is_in_endscene = true;
+		const auto hr = m_pIDirect3DDevice9->EndScene();
+		g_is_in_endscene = false;
+		return hr;
 	}
 
 	HRESULT d3d9ex::D3D9Device::Clear(DWORD Count, CONST D3DRECT* pRects, DWORD Flags, D3DCOLOR Color, float Z, DWORD Stencil)

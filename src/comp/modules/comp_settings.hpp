@@ -341,7 +341,7 @@ namespace comp
 				"remix_override_rtxdi_samplecount",
 				("Remix sets 'rtx.di.initialSampleCount' to hardcoded values on start.\n"
 				 "Setting this value to anything greater 0 constantly sets the remix variable with this value."),
-				30
+				60
 			};
 
 

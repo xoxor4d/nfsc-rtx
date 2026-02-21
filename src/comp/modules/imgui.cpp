@@ -174,31 +174,16 @@ namespace comp
 		//SPACEY8;
 		const auto& im = imgui::get();
 
-		if (ImGui::CollapsingHeader("Temp Debug Values"))
+		if (ImGui::CollapsingHeader("General", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			SPACEY4;
-			ImGui::DragFloat3("Debug Vector", &im->m_debug_vector.x, 0.01f, 0, 0, "%.6f");
-			ImGui::DragFloat3("Debug Vector 2", &im->m_debug_vector2.x, 0.1f, 0, 0, "%.6f");
-			ImGui::DragFloat3("Debug Vector 3", &im->m_debug_vector3.x, 0.1f, 0, 0, "%.6f");
-			ImGui::DragFloat3("Debug Vector 4", &im->m_debug_vector4.x, 0.1f, 0, 0, "%.6f");
-			ImGui::DragFloat3("Debug Vector 5", &im->m_debug_vector5.x, 0.1f, 0, 0, "%.6f");
 
-			ImGui::Checkbox("Debug Bool 1", &im->m_dbg_debug_bool01);
-			ImGui::Checkbox("Debug Bool 2", &im->m_dbg_debug_bool02);
-			ImGui::Checkbox("Debug Bool 3", &im->m_dbg_debug_bool03);
-			ImGui::Checkbox("Debug Bool 4", &im->m_dbg_debug_bool04);
-			ImGui::Checkbox("Debug Bool 5", &im->m_dbg_debug_bool05);
-			ImGui::Checkbox("Debug Bool 6", &im->m_dbg_debug_bool06);
-			ImGui::Checkbox("Debug Bool 7", &im->m_dbg_debug_bool07);
-			ImGui::Checkbox("Debug Bool 8", &im->m_dbg_debug_bool08);
-			ImGui::Checkbox("Debug Bool 9", &im->m_dbg_debug_bool09);
+			bool temp_rain = *game::always_rain;
+			if (ImGui::Checkbox("Always Raining", &temp_rain)) {
+				*game::always_rain = temp_rain;
+			}
 
-			ImGui::DragInt("Debug Int 1", &im->m_dbg_int_01, 0.01f);
-			ImGui::DragInt("Debug Int 2", &im->m_dbg_int_02, 0.01f);
-			ImGui::DragInt("Debug Int 3", &im->m_dbg_int_03, 0.01f);
-			ImGui::DragInt("Debug Int 4", &im->m_dbg_int_04, 0.01f);
-			ImGui::DragInt("Debug Int 5", &im->m_dbg_int_05, 0.01f);
-			SPACEY8;
+			SPACEY4;
 		}
 
 		if (ImGui::CollapsingHeader("Enable / Disable Functions"))
@@ -227,17 +212,15 @@ namespace comp
 
 			SPACEY8;
 
-			bool temp_rain = *game::always_rain;
-			if (ImGui::Checkbox("Always Raining", &temp_rain)) {
-				*game::always_rain = temp_rain;
-			}
+			
 
 			ImGui::Checkbox("Disable World Wetness", &im->m_dbg_disable_world_wetness);
 			ImGui::Checkbox("World Wetness Variation", &im->m_dbg_enable_world_wetness_variation);
 			ImGui::Checkbox("World Wetness Puddles", &im->m_dbg_enable_world_wetness_puddles);
 			ImGui::Checkbox("World Wetness Occlusion Test", &im->m_dbg_enable_world_wetness_occlusion);
 			ImGui::Checkbox("World Wetness Occlusion Smoothing", &im->m_dbg_enable_world_wetness_occlusion_smoothing);
-			ImGui::Checkbox("World Wetness Occlusion Raindrops", &im->m_dbg_enable_world_wetness_raindrops);
+			ImGui::Checkbox("World Wetness Raindrops", &im->m_dbg_enable_world_wetness_raindrops);
+			ImGui::DragFloat("World Wetness Raindrop Scale", &im->m_dbg_enable_world_wetness_raindrop_scale, 0.01f, 0.0f, 10.0f);
 
 			SPACEY4;
 
@@ -246,6 +229,7 @@ namespace comp
 			SPACEY4;
 
 			ImGui::Checkbox("Disable Camera Raindrops", &im->m_dbg_disable_camera_raindrops);
+			TT("Needs translucent cutout function to look good so disabled for now.");
 
 			SPACEY8;
 		}
@@ -277,7 +261,7 @@ namespace comp
 		}
 #endif
 
-		if (ImGui::CollapsingHeader("Culling"))
+		if (ImGui::CollapsingHeader("Culling Debug"))
 		{
 			SPACEY4;
 
@@ -322,6 +306,33 @@ namespace comp
 			SPACEY8;
 		}
 
+		if (ImGui::CollapsingHeader("Temp Debug Values"))
+		{
+			SPACEY4;
+			ImGui::DragFloat3("Debug Vector", &im->m_debug_vector.x, 0.01f, 0, 0, "%.6f");
+			ImGui::DragFloat3("Debug Vector 2", &im->m_debug_vector2.x, 0.1f, 0, 0, "%.6f");
+			ImGui::DragFloat3("Debug Vector 3", &im->m_debug_vector3.x, 0.1f, 0, 0, "%.6f");
+			ImGui::DragFloat3("Debug Vector 4", &im->m_debug_vector4.x, 0.1f, 0, 0, "%.6f");
+			ImGui::DragFloat3("Debug Vector 5", &im->m_debug_vector5.x, 0.1f, 0, 0, "%.6f");
+
+			ImGui::Checkbox("Debug Bool 1", &im->m_dbg_debug_bool01);
+			ImGui::Checkbox("Debug Bool 2", &im->m_dbg_debug_bool02);
+			ImGui::Checkbox("Debug Bool 3", &im->m_dbg_debug_bool03);
+			ImGui::Checkbox("Debug Bool 4", &im->m_dbg_debug_bool04);
+			ImGui::Checkbox("Debug Bool 5", &im->m_dbg_debug_bool05);
+			ImGui::Checkbox("Debug Bool 6", &im->m_dbg_debug_bool06);
+			ImGui::Checkbox("Debug Bool 7", &im->m_dbg_debug_bool07);
+			ImGui::Checkbox("Debug Bool 8", &im->m_dbg_debug_bool08);
+			ImGui::Checkbox("Debug Bool 9", &im->m_dbg_debug_bool09);
+
+			ImGui::DragInt("Debug Int 1", &im->m_dbg_int_01, 0.01f);
+			ImGui::DragInt("Debug Int 2", &im->m_dbg_int_02, 0.01f);
+			ImGui::DragInt("Debug Int 3", &im->m_dbg_int_03, 0.01f);
+			ImGui::DragInt("Debug Int 4", &im->m_dbg_int_04, 0.01f);
+			ImGui::DragInt("Debug Int 5", &im->m_dbg_int_05, 0.01f);
+			SPACEY8;
+		}
+
 		if (ImGui::CollapsingHeader("Statistics ..."))
 		{
 			SPACEY4;
@@ -343,8 +354,9 @@ namespace comp
 			SPACEY8;
 		}
 
-		if (ImGui::CollapsingHeader("Vis States"))
+		if (ImGui::CollapsingHeader("First Material Info (Paint)"))
 		{
+			im->m_vis_imgui_open = true;
 			SPACEY4;
 
 			ImGui::Text("cvDiffuseMin: %.2f, %.2f, %.2f, %.2f",
@@ -446,6 +458,14 @@ namespace comp
 			ImGui::SameLine();
 			ImGui::SliderFloat("Vinylscale Overwrite", &im->m_dbg_vehshader_vinylscale_override, 0, 1);
 
+			SPACEY4;
+
+			ImGui::SeparatorText("  Currently used Materials  ");
+			for (auto& s : im->m_vis_used_mat_names) {
+				ImGui::Text("%s", s.c_str());
+			}
+
+			im->m_vis_used_mat_names.clear();
 			im->m_vis_drawcall01 = false;
 
 			SPACEY8;
@@ -1059,7 +1079,7 @@ namespace comp
 		{
 			static float cont_anticull_height = 0.0f;
 			cont_anticull_height = ImGui::Widget_ContainerWithCollapsingTitle("Anti Cull Meshes", cont_anticull_height, 
-				cont_mapsettings_anticull_meshes, false, ICON_FA_EYE, &ImGuiCol_ContainerBackground, &ImGuiCol_ContainerBorder);
+				cont_mapsettings_anticull_meshes, true, ICON_FA_EYE, &ImGuiCol_ContainerBackground, &ImGuiCol_ContainerBorder);
 		}
 	}
 
@@ -1263,6 +1283,8 @@ namespace comp
 					}
 
 					shared::globals::imgui_wants_text_input = ImGui::GetIO().WantTextInput;
+
+					im->m_vis_imgui_open = false;
 
 					if (shared::globals::imgui_menu_open) 
 					{

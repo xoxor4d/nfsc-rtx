@@ -16,11 +16,11 @@ namespace comp
 	int g_is_rendering_glass_reflect = 0;
 	int g_is_rendering_sky = 0;
 	int g_is_rendering_water = 0;
+	int g_is_rendering_rain = 0;
 
 	bool g_rendered_first_primitive = false;
 	bool g_applied_hud_hack = false; // was hud "injection" applied this frame
-
-	int g_is_rendering_rain = 0;
+	bool g_is_in_endscene = false;
 
 	game::material_instance g_current_material_data = {};
 	game::effect* g_curr_effect_ptr = nullptr;
@@ -428,6 +428,11 @@ namespace comp
 		// use any logic to conditionally set this to disable the vertex shader and use fixed function fallback
 		bool render_with_ff = false;
 
+/*		if (g_is_rendering_particle)
+		{
+			int x = 1;
+		}*/
+
 		/*if (g_is_rendering_something)
 		{
 			// do stuff here, eg:
@@ -605,20 +610,28 @@ namespace comp
 				}
 			}
 
+			/*if (g_is_rendering_particle)
+			{
+				
+			}*/
+
 			if (g_is_rendering_world || g_is_rendering_dry_road)
 			{
-				const auto wetness = get_world_wetness_amount();
-				if (wetness > 0.0f)
+				if (!g_is_in_endscene)
 				{
-					if (!im->m_dbg_disable_world_wetness)
+					const auto wetness = get_world_wetness_amount();
+					if (wetness > 0.0f)
 					{
-						uint8_t wetflags = WETNESS_FLAG_NONE;
-						wetflags |= im->m_dbg_enable_world_wetness_variation ? WETNESS_FLAG_ENABLE_VARIATION : 0u;
-						wetflags |= im->m_dbg_enable_world_wetness_puddles ? WETNESS_FLAG_ENABLE_PUDDLE_LAYER : 0u;
-						wetflags |= im->m_dbg_enable_world_wetness_occlusion ? WETNESS_FLAG_ENABLE_OCCLUSION_TEST : 0u;
-						wetflags |= im->m_dbg_enable_world_wetness_occlusion_smoothing ? WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING : 0u;
-						wetflags |= im->m_dbg_enable_world_wetness_raindrops ? WETNESS_FLAG_ENABLE_RAINDROPS : 0u;
-						set_remix_roughness_settings(dev, 1.0f - wetness, 0.35f, 0.65f, 0.1f, wetflags);
+						if (!im->m_dbg_disable_world_wetness)
+						{
+							uint8_t wetflags = WETNESS_FLAG_NONE;
+							wetflags |= im->m_dbg_enable_world_wetness_variation ? WETNESS_FLAG_ENABLE_VARIATION : 0u;
+							wetflags |= im->m_dbg_enable_world_wetness_puddles ? WETNESS_FLAG_ENABLE_PUDDLE_LAYER : 0u;
+							wetflags |= im->m_dbg_enable_world_wetness_occlusion ? WETNESS_FLAG_ENABLE_OCCLUSION_TEST : 0u;
+							wetflags |= im->m_dbg_enable_world_wetness_occlusion_smoothing ? WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING : 0u;
+							wetflags |= im->m_dbg_enable_world_wetness_raindrops ? WETNESS_FLAG_ENABLE_RAINDROPS : 0u;
+							set_remix_roughness_settings(dev, 1.0f - wetness, 0.35f, 0.65f, im->m_dbg_enable_world_wetness_raindrop_scale, wetflags);
+						}
 					}
 				}
 			}
@@ -653,446 +666,502 @@ namespace comp
 				render_with_ff = false;
 			}
 
-			if (g_is_rendering_car)
+#if 1
+			if (g_is_rendering_car && !g_is_in_endscene)
 			{
-				const auto wetness = get_world_wetness_amount();
-				if (wetness > 0.0f)
+				D3DXMATRIX proj;
+				dev->GetTransform(D3DTS_PROJECTION, &proj);
+
+				bool is_2d = false;
+				if (proj.m[3][3] == 1.0f)
 				{
-					if (!im->m_dbg_disable_car_raindrops)
-					{
-						uint8_t wetflags = WETNESS_FLAG_ENABLE_EXP_RAINDROPS | WETNESS_FLAG_USE_LOCAL_COORDINATES;
-						set_remix_roughness_settings(dev, wetness, 0.6f, 0.65f, 0.1f, wetflags);
+					is_2d = true;
+
+					/*Direct3DBaseTexture9* tex = nullptr;
+					dev->GetTexture(0, &tex);
+
+					DWORD colorop, colorarg1, colorarg2;
+					DWORD alpha, blend, colwrite, zenable, zwrite;
+
+					dev->GetTextureStageState(0, D3DTSS_COLOROP, &colorop);
+					dev->GetTextureStageState(0, D3DTSS_COLORARG1, &colorarg1);
+					dev->GetTextureStageState(0, D3DTSS_COLORARG2, &colorarg2);
+
+					dev->GetRenderState(D3DRS_ALPHABLENDENABLE, &alpha);
+					dev->GetRenderState(D3DRS_BLENDOP, &blend);
+					dev->GetRenderState(D3DRS_COLORWRITEENABLE, &colwrite);
+					dev->GetRenderState(D3DRS_ZENABLE, &zenable);
+					dev->GetRenderState(D3DRS_ZWRITEENABLE, &zwrite);
+
+					DWORD sampu, sampv;
+					dev->GetSamplerState(0, D3DSAMP_ADDRESSU, &sampu);
+					dev->GetSamplerState(0, D3DSAMP_ADDRESSV, &sampv);
+
+					if (im->m_dbg_debug_bool03) {
+						ctx.modifiers.do_not_render = true;
 					}
+
+					if (im->m_dbg_debug_bool04)
+					{
+						ctx.save_tss(dev, D3DTSS_COLOROP);
+						ctx.save_tss(dev, D3DTSS_COLORARG1);
+						dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+						dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+
+						ctx.save_texture(dev, 0);
+						dev->SetTexture(0, tex_addons::white);
+					}*/
 				}
 
+				if (!is_2d)
 				{
-					//if (ctx.info.cvDiffuseMin.x == 1.0f)
+					const auto wetness = get_world_wetness_amount();
+					if (wetness > 0.0f)
 					{
-						Vector4D v4_cvDiffuseMin;
-						Vector4D v4_cvDiffuseRange;
-						Vector4D v4_cvEnvmapMin;
-						Vector4D v4_cvEnvmapRange;
-						Vector4D v4_cvPowers;
-						Vector4D v4_cvClampAndScales;
-						Vector4D v4_cvVinylScales;
+						if (!im->m_dbg_disable_car_raindrops)
+						{
+							uint8_t wetflags = WETNESS_FLAG_ENABLE_EXP_RAINDROPS | WETNESS_FLAG_USE_LOCAL_COORDINATES;
+							set_remix_roughness_settings(dev, wetness, 0.6f, 0.65f, 0.1f, wetflags);
+						}
+					}
 
-						dev->GetVertexShaderConstantF(21, &v4_cvDiffuseMin.x, 1);
-						//Vector cvDiffuseMin = v4_cvDiffuseMin;
+					{
+						//if (ctx.info.cvDiffuseMin.x == 1.0f)
+						{
+							Vector4D v4_cvDiffuseMin;
+							Vector4D v4_cvDiffuseRange;
+							Vector4D v4_cvEnvmapMin;
+							Vector4D v4_cvEnvmapRange;
+							Vector4D v4_cvPowers;
+							Vector4D v4_cvClampAndScales;
+							Vector4D v4_cvVinylScales;
 
-						dev->GetVertexShaderConstantF(22, &v4_cvDiffuseRange.x, 1);
-						//Vector cvDiffuseRange = v4_cvDiffuseRange;
+							dev->GetVertexShaderConstantF(21, &v4_cvDiffuseMin.x, 1);
+							//Vector cvDiffuseMin = v4_cvDiffuseMin;
 
-						dev->GetVertexShaderConstantF(23, &v4_cvEnvmapMin.x, 1);
-						Vector cvEnvmapMin = v4_cvEnvmapMin;
+							dev->GetVertexShaderConstantF(22, &v4_cvDiffuseRange.x, 1);
+							//Vector cvDiffuseRange = v4_cvDiffuseRange;
 
-						dev->GetVertexShaderConstantF(24, &v4_cvEnvmapRange.x, 1);
-						Vector cvEnvmapRange = v4_cvEnvmapRange;
+							dev->GetVertexShaderConstantF(23, &v4_cvEnvmapMin.x, 1);
+							Vector cvEnvmapMin = v4_cvEnvmapMin;
 
-						dev->GetVertexShaderConstantF(25, &v4_cvPowers.x, 1);
-						Vector cvPowers = v4_cvPowers;
+							dev->GetVertexShaderConstantF(24, &v4_cvEnvmapRange.x, 1);
+							Vector cvEnvmapRange = v4_cvEnvmapRange;
 
-						dev->GetVertexShaderConstantF(26, &v4_cvClampAndScales.x, 1);
-						Vector cvClampAndScales = v4_cvClampAndScales;
+							dev->GetVertexShaderConstantF(25, &v4_cvPowers.x, 1);
+							Vector cvPowers = v4_cvPowers;
 
-						dev->GetVertexShaderConstantF(27, &v4_cvVinylScales.x, 1);
-						//Vector cvVinylScales = v4_cvVinylScales;
+							dev->GetVertexShaderConstantF(26, &v4_cvClampAndScales.x, 1);
+							Vector cvClampAndScales = v4_cvClampAndScales;
 
-						Vector4D col;
+							dev->GetVertexShaderConstantF(27, &v4_cvVinylScales.x, 1);
+							//Vector cvVinylScales = v4_cvVinylScales;
 
-						// this was color approximation for earlier TFACTOR tests
-						//float r0w = std::min(1.0f + im->m_debug_vector.x, v4_cvClampAndScales.x);
-						//float r1w = r0w * v4_cvClampAndScales.z * (1.0f + im->m_debug_vector.y);
-						//col = r1w * v4_cvDiffuseRange + v4_cvDiffuseMin;
+							Vector4D col;
+
+							// this was color approximation for earlier TFACTOR tests
+							//float r0w = std::min(1.0f + im->m_debug_vector.x, v4_cvClampAndScales.x);
+							//float r1w = r0w * v4_cvClampAndScales.z * (1.0f + im->m_debug_vector.y);
+							//col = r1w * v4_cvDiffuseRange + v4_cvDiffuseMin;
 
 #if 0
-						float spec_power = cvPowers.y;
-						float spec_term = sqrt(2.0f / (spec_power + 2.0f));
-						float roughness = spec_term * spec_term;
-						roughness *= cvClampAndScales.y;
+							float spec_power = cvPowers.y;
+							float spec_term = sqrt(2.0f / (spec_power + 2.0f));
+							float roughness = spec_term * spec_term;
+							roughness *= cvClampAndScales.y;
 
-						if (cvEnvmapRange.x == 0.0f && cvEnvmapRange.y == 0.0f && cvEnvmapRange.z == 0.0f) {
-							roughness = 1.0f;
-						}
+							if (cvEnvmapRange.x == 0.0f && cvEnvmapRange.y == 0.0f && cvEnvmapRange.z == 0.0f) {
+								roughness = 1.0f;
+							}
 
-						roughness = std::clamp(roughness, 0.0f, 1.0f);
+							roughness = std::clamp(roughness, 0.0f, 1.0f);
 
-						float metallic = pow(cvClampAndScales.y, 2.0f);
-						metallic = std::clamp(metallic, 0.0f, 1.0f);
+							float metallic = pow(cvClampAndScales.y, 2.0f);
+							metallic = std::clamp(metallic, 0.0f, 1.0f);
 #endif
 
-						/*if (im->m_dbg_debug_bool02 && mat_name == "DULLPLASTIC") {
-							ctx.modifiers.do_not_render = true;
-						}
-						else if (im->m_dbg_debug_bool06 && mat_name == "INTERIOR") {
-							ctx.modifiers.do_not_render = true;
-						}
-						else if (im->m_dbg_debug_bool07 && mat_name == "MAGMATTE") {
-							ctx.modifiers.do_not_render = true;
-						}
-						else if (im->m_dbg_debug_bool08 && mat_name.empty()) {
-							ctx.modifiers.do_not_render = true;
-						}*/
+							/*if (im->m_dbg_debug_bool02 && mat_name == "DULLPLASTIC") {
+								ctx.modifiers.do_not_render = true;
+							}
+							else if (im->m_dbg_debug_bool06 && mat_name == "INTERIOR") {
+								ctx.modifiers.do_not_render = true;
+							}
+							else if (im->m_dbg_debug_bool07 && mat_name == "MAGMATTE") {
+								ctx.modifiers.do_not_render = true;
+							}
+							else if (im->m_dbg_debug_bool08 && mat_name.empty()) {
+								ctx.modifiers.do_not_render = true;
+							}*/
 
-						// ------
+							// ------
 
-						// Notes:
-						// - empty mat name => dynamic car paint
+							// Notes:
+							// - empty mat name => dynamic car paint
 
-						float roughness = 1.0f;
-						float metallic = 0.0f;
-						float powerx_scale = 1.0f;
-						float diffuse_clamp_scale = 1.0f;
-						float diffuse_clamp_range = 1.0f;
+							float roughness = 1.0f;
+							float metallic = 0.0f;
+							float powerx_scale = 1.0f;
+							float diffuse_clamp_scale = 1.0f;
+							float diffuse_clamp_range = 1.0f;
 
-						/*if (!g_curr_effect_ptr)
-						{
-							int x = 1;
-						}*/
+							/*if (!g_curr_effect_ptr)
+							{
+								int x = 1;
+							}*/
 
-						game::material_data& m = mat.material;
+							game::material_data& m = mat.material;
 
-						if (g_curr_effect_ptr && g_curr_effect_ptr->last_used_light_material_) {
-							m = g_curr_effect_ptr->last_used_light_material_->material;
-						}
+							if (g_curr_effect_ptr && g_curr_effect_ptr->last_used_light_material_) {
+								m = g_curr_effect_ptr->last_used_light_material_->material;
+							}
 
-						auto paint_type = detect_paint_type(m);
+							auto paint_type = detect_paint_type(m);
 
-						// try to detect paint type -> return hardcoded values
-						// approximate dynamically otherwise
-						if (!get_pbr_values_for_paint(paint_type, 
+							// try to detect paint type -> return hardcoded values
+							// approximate dynamically otherwise
+							if (!get_pbr_values_for_paint(paint_type,
 								roughness, metallic, powerx_scale, diffuse_clamp_scale, diffuse_clamp_range))
-						{
-							// no settings found -> approximate dynamically
-
-							const float spec_power = cvPowers.y;
-							float avg_env_min = (cvEnvmapMin.x + cvEnvmapMin.y + cvEnvmapMin.z) / 3.0f;
-							float avg_env_range = (cvEnvmapRange.x + cvEnvmapRange.y + cvEnvmapRange.z) / 3.0f;
-
-/*							if (!im->m_dbg_debug_bool03 && abs(avg_env_range) < 0.01f + im->m_debug_vector3.x)  // constant env (or none)
 							{
-								if (avg_env_min < (0.2f + im->m_debug_vector.y)) {
-									roughness = 0.98f;
-								} else {
-									roughness = 0.0f;
-								}
-							}
-							else*/
-							{
-								roughness = (0.63f /*+ im->m_debug_vector.x*/) / sqrtf(spec_power);  // fits ~0.2 at power=10, ~0.1 at power=40/13-14
-								roughness = std::clamp(roughness, 0.05f, 1.0f);  // small floor
-								//roughness *= (1.0f + im->m_debug_vector.z);
-							}
+								// no settings found -> approximate dynamically
 
-							// Check if env tint is colored (non-monochrome)
-							float var_min = std::max(std::max(abs(cvEnvmapMin.x - avg_env_min), abs(cvEnvmapMin.y - avg_env_min)), abs(cvEnvmapMin.z - avg_env_min));
-							float var_range = std::max(std::max(abs(cvEnvmapRange.x - avg_env_range), abs(cvEnvmapRange.y - avg_env_range)), abs(cvEnvmapRange.z - avg_env_range));
+								const float spec_power = cvPowers.y;
+								float avg_env_min = (cvEnvmapMin.x + cvEnvmapMin.y + cvEnvmapMin.z) / 3.0f;
+								float avg_env_range = (cvEnvmapRange.x + cvEnvmapRange.y + cvEnvmapRange.z) / 3.0f;
 
-							if (/*!im->m_dbg_debug_bool04 &&*/ (var_min > 0.15 /*+ im->m_debug_vector3.y*/ || var_range > 0.15 /*+ im->m_debug_vector3.y*/)) {
-								metallic = 1.0;
-							}
-							else  // monochrome (gray/white)
-							{
-								/*if (!im->m_dbg_debug_bool05 && abs(avg_env_range) < 0.01f) {
-									metallic = (avg_env_min > (0.2f + im->m_debug_vector2.y)) ? 1.0f : 0.0f;
-								}
-								else*/
+								/*							if (!im->m_dbg_debug_bool03 && abs(avg_env_range) < 0.01f + im->m_debug_vector3.x)  // constant env (or none)
+															{
+																if (avg_env_min < (0.2f + im->m_debug_vector.y)) {
+																	roughness = 0.98f;
+																} else {
+																	roughness = 0.0f;
+																}
+															}
+															else*/
 								{
-									float base = 1.0f - avg_env_min;
-									metallic = std::clamp(base * (2.5f /*+ im->m_debug_vector2.x*/), 0.0f, 1.0f);  // 0.88→0.3, 0.75→0.625≈0.8, 1.0→0
-									//metallic *= (1.0f + im->m_debug_vector2.z);
-									metallic *= (1.0f + -0.9f);
+									roughness = (0.63f /*+ im->m_debug_vector.x*/) / sqrtf(spec_power);  // fits ~0.2 at power=10, ~0.1 at power=40/13-14
+									roughness = std::clamp(roughness, 0.05f, 1.0f);  // small floor
+									//roughness *= (1.0f + im->m_debug_vector.z);
+								}
+
+								// Check if env tint is colored (non-monochrome)
+								float var_min = std::max(std::max(abs(cvEnvmapMin.x - avg_env_min), abs(cvEnvmapMin.y - avg_env_min)), abs(cvEnvmapMin.z - avg_env_min));
+								float var_range = std::max(std::max(abs(cvEnvmapRange.x - avg_env_range), abs(cvEnvmapRange.y - avg_env_range)), abs(cvEnvmapRange.z - avg_env_range));
+
+								if (/*!im->m_dbg_debug_bool04 &&*/ (var_min > 0.15 /*+ im->m_debug_vector3.y*/ || var_range > 0.15 /*+ im->m_debug_vector3.y*/)) {
+									metallic = 1.0;
+								}
+								else  // monochrome (gray/white)
+								{
+									/*if (!im->m_dbg_debug_bool05 && abs(avg_env_range) < 0.01f) {
+										metallic = (avg_env_min > (0.2f + im->m_debug_vector2.y)) ? 1.0f : 0.0f;
+									}
+									else*/
+									{
+										float base = 1.0f - avg_env_min;
+										metallic = std::clamp(base * (2.5f /*+ im->m_debug_vector2.x*/), 0.0f, 1.0f);  // 0.88→0.3, 0.75→0.625≈0.8, 1.0→0
+										//metallic *= (1.0f + im->m_debug_vector2.z);
+										metallic *= (1.0f + -0.9f);
+									}
 								}
 							}
-						}
 
-						/*if (g_curr_effect_ptr)
-						{
-							if (g_curr_effect_ptr->last_used_light_material_)
+							/*if (g_curr_effect_ptr)
 							{
-								auto lm = g_curr_effect_ptr->last_used_light_material_;
-	
-								if (!shared::utils::float_equal((lm->material.diffuse_min.x * lm->material.diffuse_min_scale), v4_cvDiffuseMin.x, 0.01f)) {
-									int x = 1;
-								}
+								if (g_curr_effect_ptr->last_used_light_material_)
+								{
+									auto lm = g_curr_effect_ptr->last_used_light_material_;
 
-								if (!shared::utils::float_equal(lm->material.diffuse_power, v4_cvPowers.x)) {
+									if (!shared::utils::float_equal((lm->material.diffuse_min.x * lm->material.diffuse_min_scale), v4_cvDiffuseMin.x, 0.01f)) {
+										int x = 1;
+									}
+
+									if (!shared::utils::float_equal(lm->material.diffuse_power, v4_cvPowers.x)) {
+										int x = 1;
+									}
+								}
+								else
+								{
 									int x = 1;
 								}
 							}
 							else
 							{
 								int x = 1;
-							}
-						}
-						else
-						{
-							int x = 1;
-						}*/
+							}*/
 
-						
 
-/*						if (g_curr_effect_ptr && g_curr_effect_ptr->fx)
-						{
-							ID3DXEffect* fx = nullptr;
-							HRESULT hr = g_curr_effect_ptr->fx->QueryInterface(IID_ID3DXEffect, (void**)&fx);
 
-							//auto fx = g_curr_effect_ptr->fx;
+							/*						if (g_curr_effect_ptr && g_curr_effect_ptr->fx)
+													{
+														ID3DXEffect* fx = nullptr;
+														HRESULT hr = g_curr_effect_ptr->fx->QueryInterface(IID_ID3DXEffect, (void**)&fx);
 
-							D3DXHANDLE cvDiffuseMin = fx->GetParameterByName(nullptr, "cvDiffuseMin");
-							D3DXVECTOR4 value = { 0.5f, 0.7f, 1.0f, 1.0f };   // or your Vector type if it's exactly 4 floats
+														//auto fx = g_curr_effect_ptr->fx;
 
-							fx->SetValue(cvDiffuseMin, &value, sizeof(D3DXVECTOR4));
-							fx->CommitChanges();
+														D3DXHANDLE cvDiffuseMin = fx->GetParameterByName(nullptr, "cvDiffuseMin");
+														D3DXVECTOR4 value = { 0.5f, 0.7f, 1.0f, 1.0f };   // or your Vector type if it's exactly 4 floats
 
-							D3DXEFFECT_DESC d = {};
-							fx->GetDesc(&d);
+														fx->SetValue(cvDiffuseMin, &value, sizeof(D3DXVECTOR4));
+														fx->CommitChanges();
 
-							if (auto htech = fx->GetTechnique(0); htech)
+														D3DXEFFECT_DESC d = {};
+														fx->GetDesc(&d);
+
+														if (auto htech = fx->GetTechnique(0); htech)
+														{
+															D3DXTECHNIQUE_DESC tech_desc;
+															fx->GetTechniqueDesc(htech, &tech_desc);
+
+															{
+																//   cavHarmonicCoeff   c0      10
+																//   WorldViewProj      c10      4
+																//   cmWorldView        c14      3
+																//   cvFogValue         c17      1
+																//   cfFogEnable        c18      1
+																//   cvLocalEyePos      c19      1
+																//   cfEnvmapPullAmount c20      1
+																//   cvDiffuseMin       c21      1
+																//   cvDiffuseRange     c22      1
+																//   cvEnvmapMin        c23      1
+																//   cvEnvmapRange      c24      1
+																//   cvPowers           c25      1
+																//   cvClampAndScales   c26      1
+																//   cvFlakes           c27      1
+
+																if (tech_desc.Passes > 0)
+																{
+																	auto second_pass = fx->GetPass(htech, 0);
+																	if (second_pass)
+																	{
+																		D3DXPASS_DESC pass_desc;
+																		fx->GetPassDesc(second_pass, &pass_desc);
+
+																		//effect->GetParameterByName()
+																		//D3DXPARAMETER_DESC param_desc;
+																		//effect->GetParameterDesc(d, &param_desc);
+
+																		for (UINT i = 0; i < d.Parameters; ++i)
+																		{
+																			D3DXHANDLE param = fx->GetParameter(nullptr, i);
+
+																			D3DXPARAMETER_DESC desc = {};
+																			fx->GetParameterDesc(param, &desc);
+
+																			if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
+																			{
+																				Vector value = {};
+																				fx->GetValue(param, &value.x, sizeof(value));
+																				int asd = 0;
+																			}
+																		}
+
+																		D3DXHANDLE cvDiffuseMin = fx->GetParameterByName(nullptr, "cvDiffuseMin");
+																		if (cvDiffuseMin)
+																		{
+																			D3DXPARAMETER_DESC desc = {};
+																			fx->GetParameterDesc(cvDiffuseMin, &desc);
+
+																			if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
+																			{
+																				Vector value = {};
+																				fx->GetValue(cvDiffuseMin, &value.x, sizeof(value));
+																				ctx.info.cvDiffuseMin = value;
+																				ctx.info.cvDiffuseMin.x = 1.0f;
+																			}
+
+																			int y = 0;
+																		}
+																	}
+																}
+															}
+														}
+													}*/
+
+
+													// imgui debug
+							bool was_vis = false;
+							if (!im->m_vis_drawcall01)
 							{
-								D3DXTECHNIQUE_DESC tech_desc;
-								fx->GetTechniqueDesc(htech, &tech_desc);
+								im->m_vis_drawcall01 = true;
+								im->m_vis_cvDiffuseMin = v4_cvDiffuseMin;
+								im->m_vis_cvDiffuseRange = v4_cvDiffuseRange;
+								im->m_vis_cvEnvmapMin = v4_cvEnvmapMin;
+								im->m_vis_cvEnvmapRange = v4_cvEnvmapRange;
+								im->m_vis_cvPowers = v4_cvPowers;
+								im->m_vis_cvClampAndScales = v4_cvClampAndScales;
+								im->m_vis_paint_color = col;
+								im->m_vis_out_metalness = metallic;
+								im->m_vis_out_roughness = roughness;
 
+								im->m_vis_mat_data = m;
+								im->m_vis_mat_name = mat_name;
+
+								std::string dmt;
+								switch (paint_type)
 								{
-									//   cavHarmonicCoeff   c0      10
-									//   WorldViewProj      c10      4
-									//   cmWorldView        c14      3
-									//   cvFogValue         c17      1
-									//   cfFogEnable        c18      1
-									//   cvLocalEyePos      c19      1
-									//   cfEnvmapPullAmount c20      1
-									//   cvDiffuseMin       c21      1
-									//   cvDiffuseRange     c22      1
-									//   cvEnvmapMin        c23      1
-									//   cvEnvmapRange      c24      1
-									//   cvPowers           c25      1
-									//   cvClampAndScales   c26      1
-									//   cvFlakes           c27      1
+								case paint_type::perl: dmt = "perl"; break;
+								case paint_type::matte: dmt = "matte"; break;
+								case paint_type::metallic: dmt = "metallic"; break;
+								case paint_type::high_gloss: dmt = "high_gloss"; break;
+								case paint_type::iridiance: dmt = "iridiance"; break;
+								case paint_type::candy: dmt = "candy"; break;
+								case paint_type::chrome: dmt = "chrome"; break;
+								default: dmt = "unkown - using approximation!"; break;
+								}
 
-									if (tech_desc.Passes > 0)
-									{
-										auto second_pass = fx->GetPass(htech, 0);
-										if (second_pass)
-										{
-											D3DXPASS_DESC pass_desc;
-											fx->GetPassDesc(second_pass, &pass_desc);
+								im->m_vis_detected_mat_type = std::move(dmt);
 
-											//effect->GetParameterByName()
-											//D3DXPARAMETER_DESC param_desc;
-											//effect->GetParameterDesc(d, &param_desc);
+								was_vis = true;
+							}
 
-											for (UINT i = 0; i < d.Parameters; ++i)
-											{
-												D3DXHANDLE param = fx->GetParameter(nullptr, i);
-
-												D3DXPARAMETER_DESC desc = {};
-												fx->GetParameterDesc(param, &desc);
-
-												if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
-												{
-													Vector value = {};
-													fx->GetValue(param, &value.x, sizeof(value));
-													int asd = 0;
-												}
-											}
-
-											D3DXHANDLE cvDiffuseMin = fx->GetParameterByName(nullptr, "cvDiffuseMin");
-											if (cvDiffuseMin)
-											{
-												D3DXPARAMETER_DESC desc = {};
-												fx->GetParameterDesc(cvDiffuseMin, &desc);
-
-												if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
-												{
-													Vector value = {};
-													fx->GetValue(cvDiffuseMin, &value.x, sizeof(value));
-													ctx.info.cvDiffuseMin = value;
-													ctx.info.cvDiffuseMin.x = 1.0f;
-												}
-
-												int y = 0;
-											}
-										}
-									}
+							if (im->m_vis_imgui_open && !mat_name.empty()) 
+							{
+								std::string n = (std::string)mat_name;
+								if (!im->m_vis_used_mat_names.contains(n)) {
+									im->m_vis_used_mat_names.insert(std::move(n));
 								}
 							}
-						}*/
 
+							// some car paints really go way above 1.0 .. so we should use that info somewhere ..
+							// we now div by 2 so we do not have to clamp, then rescale in opaque shader
+							//col.x = std::clamp(col.x, 0.0f, 1.0f);
+							//col.y = std::clamp(col.y, 0.0f, 1.0f);
+							//col.z = std::clamp(col.z, 0.0f, 1.0f);
+							//col.w = std::clamp(col.w, 0.0f, 1.0f);
 
-						// imgui debug
-						bool was_vis = false;
-						if (!im->m_vis_drawcall01)
-						{
-							im->m_vis_drawcall01 = true;
-							im->m_vis_cvDiffuseMin = v4_cvDiffuseMin;
-							im->m_vis_cvDiffuseRange = v4_cvDiffuseRange;
-							im->m_vis_cvEnvmapMin = v4_cvEnvmapMin;
-							im->m_vis_cvEnvmapRange = v4_cvEnvmapRange;
-							im->m_vis_cvPowers = v4_cvPowers;
-							im->m_vis_cvClampAndScales = v4_cvClampAndScales;
-							im->m_vis_paint_color = col;
-							im->m_vis_out_metalness = metallic;
-							im->m_vis_out_roughness = roughness;
-
-							im->m_vis_mat_data = m;
-							im->m_vis_mat_name = mat_name;
-
-							std::string dmt;
-							switch (paint_type)
-							{
-							case paint_type::perl: dmt = "perl"; break;
-							case paint_type::matte: dmt = "matte"; break;
-							case paint_type::metallic: dmt = "metallic"; break;
-							case paint_type::high_gloss: dmt = "high_gloss"; break;
-							case paint_type::iridiance: dmt = "iridiance"; break;
-							case paint_type::candy: dmt = "candy"; break;
-							case paint_type::chrome: dmt = "chrome"; break;
-							default: dmt = "unkown - using approximation!"; break;
+							if (was_vis) {
+								im->m_vis_paint_color_post = col;
 							}
 
-							im->m_vis_detected_mat_type = std::move(dmt);
+							// -------------------
+							// debug overwrites
 
-							was_vis = true;
-						}
-
-						// some car paints really go way above 1.0 .. so we should use that info somewhere ..
-						// we now div by 2 so we do not have to clamp, then rescale in opaque shader
-						//col.x = std::clamp(col.x, 0.0f, 1.0f);
-						//col.y = std::clamp(col.y, 0.0f, 1.0f);
-						//col.z = std::clamp(col.z, 0.0f, 1.0f);
-						//col.w = std::clamp(col.w, 0.0f, 1.0f);
-
-						if (was_vis) {
-							im->m_vis_paint_color_post = col;
-						}
-
-						// -------------------
-						// debug overwrites
-
-						if (im->m_dbg_vehshader_roughness_override_enabled) {
-							roughness = im->m_dbg_vehshader_roughness_override;
-						}
-
-						if (im->m_dbg_vehshader_metalness_override_enabled) {
-							metallic = im->m_dbg_vehshader_metalness_override;
-						}
-
-						if (im->m_dbg_vehshader_vinylscale_override_enabled) {
-							v4_cvVinylScales.x = im->m_dbg_vehshader_vinylscale_override;
-						}
-
-						// -----------------------
-						// setup paint shader vars
-
-						// customized paint when no name
-						if (mat_name.empty())
-						{
-							// calculate custom hash for this paint type because raw paint always uses a fully black, 0% alpha texture
-							// which results in the same mat_HASH on each car that has raw-paint -> same color on all cars
-
-							uint32_t paint_hash = 0u;
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvPowers.x);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.x);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.z);
-							paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_scale);
-							paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_range);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.x);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.y);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.z);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.x);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.y);
-							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.z);
-							set_remix_texture_hash(dev, paint_hash);
-						}
-
-						col.x = std::clamp(std::clamp(v4_cvDiffuseRange.x /** rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f); // color can be above 1 so we scale to 0-1 and back to 0-2 in the opaque shader
-						col.y = std::clamp(std::clamp(v4_cvDiffuseRange.y /*+ rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
-						col.z = std::clamp(std::clamp(v4_cvDiffuseRange.z /*- rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
-						col.w = v4_cvPowers.x;
-
-						if (im->m_dbg_vehshader_color_override_enabled)
-						{
-							if (was_vis)
-							{
-								col.x = im->m_dbg_vehshader_color_override.x;
-								col.y = im->m_dbg_vehshader_color_override.y;
-								col.z = im->m_dbg_vehshader_color_override.z;
+							if (im->m_dbg_vehshader_roughness_override_enabled) {
+								roughness = im->m_dbg_vehshader_roughness_override;
 							}
-						}
+
+							if (im->m_dbg_vehshader_metalness_override_enabled) {
+								metallic = im->m_dbg_vehshader_metalness_override;
+							}
+
+							if (im->m_dbg_vehshader_vinylscale_override_enabled) {
+								v4_cvVinylScales.x = im->m_dbg_vehshader_vinylscale_override;
+							}
+
+							// -----------------------
+							// setup paint shader vars
+
+							// customized paint when no name
+							if (mat_name.empty())
+							{
+								// calculate custom hash for this paint type because raw paint always uses a fully black, 0% alpha texture
+								// which results in the same mat_HASH on each car that has raw-paint -> same color on all cars
+
+								uint32_t paint_hash = 0u;
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvPowers.x);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.x);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.z);
+								paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_scale);
+								paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_range);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.x);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.y);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.z);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.x);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.y);
+								paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.z);
+								set_remix_texture_hash(dev, paint_hash);
+							}
+
+							col.x = std::clamp(std::clamp(v4_cvDiffuseRange.x /** rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f); // color can be above 1 so we scale to 0-1 and back to 0-2 in the opaque shader
+							col.y = std::clamp(std::clamp(v4_cvDiffuseRange.y /*+ rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
+							col.z = std::clamp(std::clamp(v4_cvDiffuseRange.z /*- rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
+							col.w = v4_cvPowers.x;
+
+							if (im->m_dbg_vehshader_color_override_enabled)
+							{
+								if (was_vis)
+								{
+									col.x = im->m_dbg_vehshader_color_override.x;
+									col.y = im->m_dbg_vehshader_color_override.y;
+									col.z = im->m_dbg_vehshader_color_override.z;
+								}
+							}
 
 #if 0
-						if (im->m_dbg_debug_bool08)
-						{
-							// debug
-							uint32_t xi = static_cast<uint32_t>(col.x * 1024.0f);
-							uint32_t yi = static_cast<uint32_t>(col.y * 1024.0f);
-							uint32_t zi = static_cast<uint32_t>(col.z * 1024.0f);
-
-							uint32_t hash = xi * 73856093u ^
-								yi * 19349663u ^
-								zi * 83492791u;
-
-							int id = hash % 6;
-							ctx.save_texture(dev, 0);
-
-							switch (id)
+							if (im->m_dbg_debug_bool08)
 							{
-							case 0:
-								dev->SetTexture(0, tex_addons::w0);
-								break;
+								// debug
+								uint32_t xi = static_cast<uint32_t>(col.x * 1024.0f);
+								uint32_t yi = static_cast<uint32_t>(col.y * 1024.0f);
+								uint32_t zi = static_cast<uint32_t>(col.z * 1024.0f);
 
-							case 1:
-								dev->SetTexture(0, tex_addons::w1);
-								break;
+								uint32_t hash = xi * 73856093u ^
+									yi * 19349663u ^
+									zi * 83492791u;
 
-							case 2:
-								dev->SetTexture(0, tex_addons::w2);
-								break;
+								int id = hash % 6;
+								ctx.save_texture(dev, 0);
 
-							case 3:
-								dev->SetTexture(0, tex_addons::w3);
-								break;
+								switch (id)
+								{
+								case 0:
+									dev->SetTexture(0, tex_addons::w0);
+									break;
 
-							case 4:
-								dev->SetTexture(0, tex_addons::w4);
-								break;
+								case 1:
+									dev->SetTexture(0, tex_addons::w1);
+									break;
 
-							case 5:
-								dev->SetTexture(0, tex_addons::w5);
-								break;
+								case 2:
+									dev->SetTexture(0, tex_addons::w2);
+									break;
+
+								case 3:
+									dev->SetTexture(0, tex_addons::w3);
+									break;
+
+								case 4:
+									dev->SetTexture(0, tex_addons::w4);
+									break;
+
+								case 5:
+									dev->SetTexture(0, tex_addons::w5);
+									break;
+								}
 							}
-						}
 #endif
 
-						set_remix_temp_float03(dev, v4_cvPowers.x * powerx_scale); // use powers.x here because it v4_cvClampAndScales.x mostly stays below 1
-						set_remix_temp_float04(dev, v4_cvClampAndScales.z * diffuse_clamp_range);
+							set_remix_temp_float03(dev, v4_cvPowers.x * powerx_scale); // use powers.x here because it v4_cvClampAndScales.x mostly stays below 1
+							set_remix_temp_float04(dev, v4_cvClampAndScales.z * diffuse_clamp_range);
 
-						set_remix_vehicle_shader_settings(dev, col, roughness, metallic, v4_cvVinylScales.x, VEHSHADER_FLAG_NONE);
-						//set_remix_modifier(dev, RemixModifier::EnableVertexColor); // vertex colors do not work for some reason
-						
-						ctx.save_rs(dev, D3DRS_TEXTUREFACTOR);
-						ctx.save_tss(dev, D3DTSS_COLOROP);
-						ctx.save_tss(dev, D3DTSS_COLORARG1);
-						ctx.save_tss(dev, D3DTSS_COLORARG2);
+							set_remix_vehicle_shader_settings(dev, col, roughness, metallic, v4_cvVinylScales.x, VEHSHADER_FLAG_NONE);
+							//set_remix_modifier(dev, RemixModifier::EnableVertexColor); // vertex colors do not work for some reason
 
-						// use tfactor to pass a secondary color to remix
-						dev->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_COLORVALUE(
-							std::clamp(v4_cvDiffuseMin.x, 0.0f, 1.0f),
-							std::clamp(v4_cvDiffuseMin.y, 0.0f, 1.0f),
-							std::clamp(v4_cvDiffuseMin.z, 0.0f, 1.0f),
-							std::clamp(v4_cvClampAndScales.x * diffuse_clamp_scale, 0.0f, 1.0f)));
+							ctx.save_rs(dev, D3DRS_TEXTUREFACTOR);
+							ctx.save_tss(dev, D3DTSS_COLOROP);
+							ctx.save_tss(dev, D3DTSS_COLORARG1);
+							ctx.save_tss(dev, D3DTSS_COLORARG2);
 
-						
+							// use tfactor to pass a secondary color to remix
+							dev->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_COLORVALUE(
+								std::clamp(v4_cvDiffuseMin.x, 0.0f, 1.0f),
+								std::clamp(v4_cvDiffuseMin.y, 0.0f, 1.0f),
+								std::clamp(v4_cvDiffuseMin.z, 0.0f, 1.0f),
+								std::clamp(v4_cvClampAndScales.x * diffuse_clamp_scale, 0.0f, 1.0f)));
 
-						dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE); 
-						dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
-						dev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_TFACTOR);
 
-						/*ctx.save_ps(dev);
-						dev->SetPixelShader(nullptr);*/
+
+							dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
+							dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+							dev->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_TFACTOR);
+
+							/*ctx.save_ps(dev);
+							dev->SetPixelShader(nullptr);*/
+						}
 					}
 				}
 			}
-
+#endif
 			/*if (g_is_rendering_world)
 			{
 				if (im->m_dbg_debug_bool01) {
@@ -1247,6 +1316,11 @@ namespace comp
 				render_with_ff = true;
 			}
 
+			/*if (g_is_rendering_particle)
+			{
+				int x = 1;
+			}*/
+
 			// use fixed function fallback if true
 			if (render_with_ff)
 			{
@@ -1340,23 +1414,24 @@ namespace comp
 
 	__declspec (naked) void pre_draw_particle_stub()
 	{
-		static uint32_t retn_addr = 0x72EA85;
+		static uint32_t func_addr = 0x75AA10;
+		static uint32_t retn_addr = 0x72EA9F;
 		__asm
 		{
 			mov		g_is_rendering_particle, 1;
-			call    dword ptr[ecx + 0x10C]; // og
+			call    func_addr;
 			jmp		retn_addr;
 		}
 	}
 
 	__declspec (naked) void post_draw_particle_stub()
 	{
-		static uint32_t retn_addr = 0x72EB92;
-		static uint32_t og_fn_addr = 0x7D2470;
+		static uint32_t retn_addr = 0x72EAC6;
+		static uint32_t func_addr = 0x72C9B0;
 		__asm
 		{
+			call    func_addr; // og
 			mov		g_is_rendering_particle, 0;
-			call    og_fn_addr; // og
 			jmp		retn_addr;
 		}
 	}
@@ -1643,10 +1718,9 @@ namespace comp
 		// always set world transform
 		shared::utils::hook::nop(0x71E82F, 2);
 		shared::utils::hook::nop(0x71E845, 2); // still set shader matrices (normally this or that)
-		
-		shared::utils::hook::nop(0x72EA7F, 6);
-		shared::utils::hook(0x72EA7F, pre_draw_particle_stub, HOOK_JUMP).install()->quick(); // retn to 72EA85
-		shared::utils::hook(0x72EB8D, post_draw_particle_stub, HOOK_JUMP).install()->quick(); // retn to 72EB92 .. call 7D2470 in stub
+
+		shared::utils::hook(0x72EA9A, pre_draw_particle_stub, HOOK_JUMP).install()->quick();
+		shared::utils::hook(0x72EAC1, post_draw_particle_stub, HOOK_JUMP).install()->quick();
 
 		// --
 
