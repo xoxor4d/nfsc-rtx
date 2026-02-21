@@ -1,0 +1,27 @@
+# ##########################################################################################################################################
+# >> Anti Culling Tweaks
+# 
+# :: Can be used tweak pre-culling behavior for specified meshes (forward/occlusion culling). 
+# :: Meshes will only be forced within the specified distance.
+# 
+# :: How to retrieve names:
+#    > Visualize model info in 3D Space (GUI -> Map Settings -> Anti Cull Meshes -> Visualize Anti Culling Info)
+#    > Select hash of model use right click context menu
+#    > ! Export to clipboard when done -> override ANTICULL with clipboard data
+#
+# ~~ ANTICULL = [
+#   {          
+#       #                   category name
+#       hashes =            array of mesh hashes                                                        [uint hex array]
+#       name =              name of mesh                                                                [string]
+#       distance =          distance (from player) until forcing logic is active (0 = always forced)    [float 0-inf]
+#       filter =            use name as filter (matches any mesh name containing this string)           [bool false/true]
+#   }, 
+#   { ... },
+# ]      
+ANTICULL = [
+    # streetlights
+    { hashes = [
+        0x121be69c, 0x121c72fd
+    ] , distance = 500 },
+]
