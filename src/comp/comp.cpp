@@ -93,6 +93,22 @@ namespace comp
 		// using shadermodel 1 disables these?
 		*game::options_rain_enabled = 1;
 		*game::options_rain_supported = 1;
+
+		// todo: proper vars
+		*reinterpret_cast<BYTE*>(0xA65340) = 0; // g_CarEnvironmentMapEnable
+		*reinterpret_cast<BYTE*>(0xA65358) = 0; // g_RoadReflectionEnable
+		*reinterpret_cast<BYTE*>(0xA65360) = 0; // g_MotionBlurEnable
+		*reinterpret_cast<BYTE*>(0xA6536C) = 1; // g_ParticleSystemEnable
+		*reinterpret_cast<BYTE*>(0xA65370) = 3; // g_WorldLodLevel
+		*reinterpret_cast<BYTE*>(0xA65378) = 1; // g_CarLodLevel
+		*reinterpret_cast<BYTE*>(0xA65394) = 0; // g_VisualTreatment
+
+		*reinterpret_cast<BYTE*>(0xA65398) = 0; // g_ShadowDetail
+		*reinterpret_cast<BYTE*>(0xA63E60) = 1; // g_ShaderDetailLevel
+		*reinterpret_cast<BYTE*>(0xA6537C) = 0; // g_FSAALevel
+		*reinterpret_cast<BYTE*>(0xA65360) = 0; // g_MotionBlurEnable
+		
+
 	}
 
 
