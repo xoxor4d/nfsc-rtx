@@ -3,11 +3,13 @@
 
 #include "comp_settings.hpp"
 #include "imgui_internal.h"
+#include "map_settings.hpp"
 #include "renderer.hpp"
 #include "shared/common/imgui_helper.hpp"
 #include "shared/common/font_awesome_solid_900.hpp"
 #include "shared/common/font_defines.hpp"
 #include "shared/common/font_opensans.hpp"
+#include "shared/common/toml_ext.hpp"
 
 // Allow us to directly call the ImGui WndProc function.
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND, UINT, WPARAM, LPARAM);
@@ -225,6 +227,11 @@ namespace comp
 
 			SPACEY8;
 
+			bool temp_rain = *game::always_rain;
+			if (ImGui::Checkbox("Always Raining", &temp_rain)) {
+				*game::always_rain = temp_rain;
+			}
+
 			ImGui::Checkbox("Disable World Wetness", &im->m_dbg_disable_world_wetness);
 			ImGui::Checkbox("World Wetness Variation", &im->m_dbg_enable_world_wetness_variation);
 			ImGui::Checkbox("World Wetness Puddles", &im->m_dbg_enable_world_wetness_puddles);
@@ -243,6 +250,7 @@ namespace comp
 			SPACEY8;
 		}
 
+#if 0
 		if (ImGui::CollapsingHeader("Camera"))
 		{
 			SPACEY4;
@@ -267,6 +275,7 @@ namespace comp
 
 			SPACEY8;
 		}
+#endif
 
 		if (ImGui::CollapsingHeader("Culling"))
 		{
@@ -277,8 +286,15 @@ namespace comp
 				bool tmp_preculler_bool = *game::preculler_mode;
 				if (ImGui::Checkbox("Enable Preculling", &tmp_preculler_bool)) {
 					*game::preculler_mode = tmp_preculler_bool;
-				}
+				} TT("Preculling / Occlusion checks");
 			}
+
+			ImGui::Checkbox("AntiCull Mesh check dist before hash", &im->m_dbg_anticull_mesh_dist_before_hash);
+			ImGui::Checkbox("AntiCull Mesh check first hash only", &im->m_dbg_anticull_mesh_first_hash_only);
+			ImGui::Checkbox("AntiCull Mesh disable", &im->m_dbg_anticull_mesh_disable);
+
+#if 0
+			SPACEY4;
 
 			if (game::drawscenery_cell_dist_check_01) {
 				ImGui::DragFloat("DrawScenery CmpFloat 01", game::drawscenery_cell_dist_check_01, 0.01f);
@@ -301,7 +317,7 @@ namespace comp
 
 			ImGui::DragFloat("CompVis BoundingRad Offs", &im->m_dbg_compute_vis_bounding_rad_offset, 0.1f);
 			ImGui::DragFloat("CompVis OutDist Offs", &im->m_dbg_compute_vis_out_distance_offset, 0.1f);
-			
+#endif
 			SPACEY8;
 		}
 
@@ -523,7 +539,7 @@ namespace comp
 		SPACEY4;
 
 		//compsettings_bool_widget("Disable Preculling", cs->nocull_disable_precull);
-		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Scenery No Culling Distance", cs->nocull_distance_scenery, 0.0f, FLT_MAX, 0.5f);
+		//SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Scenery No Culling Distance", cs->nocull_distance_scenery, 0.0f, FLT_MAX, 0.5f);
 		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Mesh No Culling Distance", cs->nocull_distance_meshes, 0.0f, FLT_MAX, 0.5f);
 
 		SPACEY4;
@@ -607,6 +623,526 @@ namespace comp
 		}
 	}
 
+	// -------------------
+
+	bool reload_mapsettings_popup()
+	{
+		static bool popup_rendered_this_frame = false;
+		static int last_frame_count = -1;
+
+		// Reset flag if we're in a new frame
+		int current_frame = ImGui::GetFrameCount();
+		if (current_frame != last_frame_count) 
+		{
+			popup_rendered_this_frame = false;
+			last_frame_count = current_frame;
+		}
+
+		// Only render the popup once per frame
+		if (popup_rendered_this_frame) {
+			return false;
+		}
+
+		bool result = false;
+		if (ImGui::BeginPopupModal("Reload MapSettings?", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings))
+		{
+			popup_rendered_this_frame = true;
+			const auto half_width = ImGui::GetContentRegionMax().x * 0.5f;
+			auto line1_str = "You'll loose all unsaved changes if you continue!";
+			auto line2_str = "Use the copy to clipboard buttons and manually update  ";
+			auto line3_str = "the map_settings.toml file if you've made changes.";
+
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(5.0f + half_width - (ImGui::CalcTextSize(line1_str).x * 0.5f));
+			ImGui::TextUnformatted(line1_str);
+
+			ImGui::Spacing();
+			ImGui::SetCursorPosX(5.0f + half_width - (ImGui::CalcTextSize(line2_str).x * 0.5f));
+			ImGui::TextUnformatted(line2_str);
+			ImGui::SetCursorPosX(5.0f + half_width - (ImGui::CalcTextSize(line3_str).x * 0.5f));
+			ImGui::TextUnformatted(line3_str);
+
+			ImGui::Spacing(0, 8);
+			ImGui::Spacing(0, 0); ImGui::SameLine();
+
+			ImVec2 button_size(half_width - 6.0f - ImGui::GetStyle().WindowPadding.x, 0.0f);
+			if (ImGui::Button("Reload", button_size))
+			{
+				result = true;
+				map_settings::load_settings();
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::SameLine(0, 6);
+			if (ImGui::Button("Cancel", button_size)) {
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+
+		return result;
+	}
+
+	bool reload_mapsettings_button_with_popup(const char* ID)
+	{
+		ImGui::PushFont(shared::common::font::BOLD);
+		if (ImGui::Button(shared::utils::va("Reload MapSettings  %s##%s", ICON_FA_REDO, ID), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+		{
+			if (!ImGui::IsPopupOpen("Reload MapSettings?")) {
+				ImGui::OpenPopup("Reload MapSettings?");
+			}
+		}
+		ImGui::PopFont();
+
+		return reload_mapsettings_popup();
+	}
+
+	void cont_mapsettings_anticull_meshes()
+	{
+		const auto& im = imgui::get();
+		auto& ac = map_settings::get_map_settings().anticull_meshes;
+
+		SPACEY4;
+		ImGui::PushFont(shared::common::font::BOLD);
+		if (ImGui::Button("Copy to Clipboard   " ICON_FA_SAVE, ImVec2(ImGui::GetContentRegionAvail().x * 0.5f, 0)))
+		{
+			ImGui::LogToClipboard();
+			ImGui::LogText("%s", shared::common::toml_ext::build_anticull_array(ac).c_str());
+			ImGui::LogFinish();
+		} ImGui::PopFont();
+
+		ImGui::SameLine();
+		reload_mapsettings_button_with_popup("AnticullMeshes");
+
+		SPACEY12;
+		ImGui::Separator();
+		SPACEY4;
+
+		ImGui::Checkbox("Visualize Anti Culling Info", &im->m_dbg_visualize_model_info); TT("Visualize Anti Culling Info");
+		//ImGui::DragFloat("Info Distance", &im->m_dbg_visualize_anti_cull_info_distance, 0.05f);  TT("Only draw mesh vis. up until this distance.");
+		ImGui::DragFloat("Info Min Radius", &im->m_dbg_visualize_model_info_distance, 0.05f); TT("A mesh needs to have at least this radius to be visualized.");
+		ImGui::InputText("3D Model Name Filter", &im->m_dbg_visualize_model_info_name_filter); TT("Filter by string");
+		
+		SPACEY4;
+		ImGui::SeparatorText("  Nearby hashes ~ Use Right Click Context Menu  ");
+		SPACEY12;
+
+		static std::uint32_t selected_hash = 0u;
+		static ImGuiTextFilter filter;
+
+		std::unordered_set<std::uint32_t> added_hashes;
+
+		if (ImGui::BeginListBox("##nearby", ImVec2(ImGui::GetContentRegionAvail().x, 140)))
+		{
+			for (size_t i = 0; i < im->visualized_model_infos.size(); ++i)
+			{
+				const auto& m = im->visualized_model_infos[i];
+
+				std::uint32_t hash = m.hash_a;
+
+				if (!hash || added_hashes.contains(hash)) {
+					continue;
+				}
+
+				added_hashes.insert(hash);
+
+				char hash_str[17];
+				std::snprintf(hash_str, sizeof(hash_str), "%llx", static_cast<unsigned long long>(hash));
+
+				if (!filter.PassFilter(hash_str) && !filter.PassFilter(m.name.c_str())) {
+					continue;
+				}
+
+				// display hash and category in two columns
+				ImGui::PushID(static_cast<int>(hash));
+
+				char popup_id[64];
+				std::snprintf(popup_id, sizeof(popup_id), "##ContextMenu_%llx", static_cast<unsigned long long>(hash));
+
+				if (ImGui::Selectable(shared::utils::va("a: %llx", static_cast<unsigned long long>(hash)), selected_hash == hash, 0, ImVec2(ImGui::GetContentRegionAvail().x * 0.2f, 0))) 
+				{
+					selected_hash = hash;
+					im->m_dbg_visualize_model_info_name_hash = hash;
+				}
+
+				// right-click context menu
+				if (ImGui::BeginPopupContextItem(popup_id))
+				{
+					ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8.0f, 8.0f));
+					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(10.0f, 4.0f));
+
+					// Apply blur and padding similar to tooltip
+					ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.124f, 0.124f, 0.124f, 0.776f));
+
+					const auto padding = 0.0f;
+
+					ImGui::Spacing(0, padding); // top padding
+					ImGui::Spacing(padding, 0); ImGui::SameLine(); // left pad
+
+					// Header with hash
+					ImGui::PushFont(shared::common::font::FONTS::BOLD);
+					ImGui::Text("Hash: 0x%llx", static_cast<unsigned long long>(hash));
+					ImGui::PopFont();
+
+					ImGui::Spacing(0, 3);
+					ImGui::Separator();
+					ImGui::Spacing(0, 3);
+
+					if (!ac.empty())
+					{
+						ImGui::Spacing(padding, 0); ImGui::SameLine(); // left pad
+						ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetColorU32(ImGuiCol_TextDisabled));
+						ImGui::Text("Add to Category:");
+						ImGui::PopStyleColor();
+						ImGui::Spacing(0, 2);
+
+						for (auto& c : ac)
+						{
+							const bool already_in_this_cat = c.hashes.contains(hash);
+
+							if (!c.category_name.empty())
+							{
+								if (ImGui::MenuItem(c.category_name.c_str(), nullptr, already_in_this_cat, !already_in_this_cat)) {
+									c.hashes.insert(hash);
+								}
+
+								if (already_in_this_cat)
+								{
+									ImGui::PushID(c.category_name.c_str());
+									if (ImGui::MenuItem("Remove Override")) {
+										c.hashes.erase(c.hashes.find(hash));
+									}
+									ImGui::PopID();
+								}
+							}
+
+						}
+
+						ImGui::Spacing(0, 3);
+						ImGui::Separator();
+						ImGui::Spacing(0, 3);
+					}
+
+					// Option to create new category in this TOML file
+					if (ImGui::MenuItem("Create New Category"))
+					{
+						// Generate unique category name
+						std::string base_name = "new";
+						std::string new_category_name = base_name + std::to_string(ac.size());
+
+						// Create new category
+						map_settings::anti_cull_meshes_s new_category;
+						new_category.category_name = new_category_name;
+						new_category.distance = 100.0f;
+						new_category.hashes.insert(hash);
+						ac.emplace_back(new_category);
+					}
+
+					ImGui::Spacing(0, padding); // bottom padding
+
+					ImGui::PopStyleVar(2);
+					ImGui::PopStyleColor();
+					ImGui::EndPopup();
+				} // end context menu
+
+				auto bcd_hashes_str = std::format("b: 0x{:08X}, c: 0x{:08X}, d: 0x{:08X}", m.hash_b, m.hash_c, m.hash_d);
+
+				ImGui::SameLine();
+				ImGui::PushFont(shared::common::font::BOLD);
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.5f, 0.5f, 0.7f, 1.0f));
+				ImGui::Text("%s  //  %s", m.name.c_str(), bcd_hashes_str.c_str());
+				ImGui::PopFont();
+				ImGui::PopStyleColor();
+
+				ImGui::PopID();
+			}
+
+			ImGui::EndListBox();
+		}
+
+		ImGui::BeginGroup();
+		const auto screenpos_prefilter = ImGui::GetCursorScreenPos();
+		filter.Draw("##Filter", ImGui::GetContentRegionAvail().x
+			- ImGui::GetFrameHeight()
+			- ImGui::GetStyle().FramePadding.x + 3.0f);
+
+		if (!filter.IsActive())
+		{
+			ImGui::SetCursorScreenPos(ImVec2(screenpos_prefilter.x + 12.0f, screenpos_prefilter.y + 5.0f));
+			ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.4f, 0.4f, 0.4f, 0.6f));
+			ImGui::TextUnformatted("Filter ..");
+			ImGui::PopStyleColor();
+		}
+		ImGui::EndGroup();
+
+		ImGui::SameLine();
+		if (ImGui::Button("X", ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight()))) {
+			filter.Clear();
+		}
+
+		// -----
+
+		int cat_idx = 0;
+		for (auto it = ac.begin(); it != ac.end(); )
+		{
+			auto& elem = *it;
+
+			if (!cat_idx) {
+				ImGui::Spacing(0, 20);
+			}
+			else {
+				ImGui::Spacing(0, 8);
+			}
+
+			cat_idx++;
+			bool pending_cat_removal = false;
+
+			ImGui::PushID(shared::utils::va("cat_%d", cat_idx));
+			const auto cat_name = shared::utils::va("Category: %s", elem.category_name.c_str());
+			if (ImGui::CollapsingHeader(cat_name))
+			{
+				SPACEY4;
+
+				if (elem._internal_cat_buffer.empty()) {
+					elem._internal_cat_buffer = elem.category_name;
+				}
+
+				if (ImGui::InputText("Category Name", &elem._internal_cat_buffer, ImGuiInputTextFlags_EnterReturnsTrue))
+				{
+					if (!elem._internal_cat_buffer.empty()) // do not allow empty name
+					{
+						elem.category_name = std::move(elem._internal_cat_buffer);
+						elem._internal_cat_buffer.clear();
+					}
+				}
+
+				{
+					SET_CHILD_WIDGET_WIDTH;
+					ImGui::DragFloat("Distance", &elem.distance, 0.25f);
+
+					if (elem._internal_name_buffer.empty()) {
+						elem._internal_name_buffer = elem.name;
+					}
+
+					SPACEY4;
+
+					ImGui::TextUnformatted("CPU intensive, use HASHES - for testing only ...");
+					if (ImGui::InputText("Name/Filter", &elem._internal_name_buffer, ImGuiInputTextFlags_EnterReturnsTrue))
+					{
+						if (!elem._internal_name_buffer.empty()) // do not allow empty name
+						{
+							elem.name = std::move(elem._internal_name_buffer);
+							elem._internal_name_buffer.clear();
+						}
+					}
+
+					ImGui::BeginDisabled(elem.name.empty());
+					ImGui::Checkbox("Is Filter", &elem.is_filter); TT("If enabled, checks if mesh name contains string above instead of 1:1 matching it.");
+					ImGui::EndDisabled();
+
+					ImGui::Spacing(0, 4);
+
+					ImGui::PushFont(shared::common::font::REGULAR_SMALL);
+					ImGui::TextUnformatted("  Double Click to remove an entry .. ");
+					ImGui::PopFont();
+
+
+					ImGui::Widget_ContainerWithDropdownShadowSquare(120, [&elem, im]()
+						{
+							if (ImGui::BeginTable("##ac_table", 5, ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg, ImVec2(ImGui::GetContentRegionAvail().x, 100)))
+							{
+								ImGui::TableSetupColumn("##col1", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x / 5);
+								ImGui::TableSetupColumn("##col2", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x / 5);
+								ImGui::TableSetupColumn("##col3", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x / 5);
+								ImGui::TableSetupColumn("##col4", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x / 5);
+								ImGui::TableSetupColumn("##col5", ImGuiTableColumnFlags_WidthFixed, ImGui::GetContentRegionAvail().x / 5);
+								int col = 0;
+
+								for (auto set_it = elem.hashes.begin(); set_it != elem.hashes.end(); )
+								{
+									const auto index_str = std::format("0x{:08X}", *set_it);
+									if (col % 4 == 0) {
+										ImGui::TableNextRow();
+									}
+
+									ImGui::TableNextColumn();
+									bool erase_this = false;
+
+									if (ImGui::Selectable(index_str.c_str(), false, ImGuiSelectableFlags_AllowDoubleClick))
+									{
+										if (ImGui::IsMouseDoubleClicked(0)) {
+											erase_this = true;
+										}
+									}
+
+									if (ImGui::IsItemHovered()) {
+										im->m_dbg_visualize_model_info_name_hash = *set_it;
+									}
+
+									++col;
+									if (erase_this) {
+										set_it = elem.hashes.erase(set_it);
+									}
+									else {
+										++set_it;
+									}
+								}
+								ImGui::EndTable();
+							}
+						});
+
+
+					auto add_mesh_index = [](map_settings::anti_cull_meshes_s& ac)
+						{
+							try
+							{
+								const int val = std::stoi(ac._internal_hash_buffer);
+								ac.hashes.emplace(val);
+							}
+							catch (const std::invalid_argument&) {
+								shared::common::log("ImGui", "AntiCull - Add Index - Invalid Argument", shared::common::LOG_TYPE::LOG_TYPE_ERROR);
+							}
+							catch (const std::out_of_range&) {
+								shared::common::log("ImGui", "AntiCull - Add Index - Out of Range", shared::common::LOG_TYPE::LOG_TYPE_ERROR);
+							}
+
+							ac._internal_hash_buffer.clear();
+						};
+
+					ImGui::Style_ColorButtonPush(imgui::get()->ImGuiCol_ButtonRed, true);
+					if (ImGui::Button("Remove Category")) {
+						pending_cat_removal = true;
+					}
+					ImGui::Style_ColorButtonPop();
+
+					ImGui::SameLine(0, 24);
+
+					ImGui::BeginDisabled(elem._internal_hash_buffer.empty());
+					{
+						if (ImGui::Button(" + ")) {
+							add_mesh_index(elem);
+						}
+
+						ImGui::EndDisabled();
+					}
+
+					ImGui::SameLine();
+
+					SET_CHILD_WIDGET_WIDTH;
+					if (ImGui::InputText("Add Index", &elem._internal_hash_buffer, ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_EnterReturnsTrue)) {
+						add_mesh_index(elem);
+					} TT("Use the + Button on the left or press ENTER to add the index.");
+				}
+			}
+			ImGui::PopID();
+
+			if (pending_cat_removal) {
+				it = ac.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+
+		SPACEY4;
+	}
+
+	void imgui::tab_map_settings()
+	{
+		SPACEY8;
+		ImGui::SeparatorText("The following settings do NOT auto-save.");
+		ImGui::TextDisabled("Export to clipboard and override the settings manually!");
+		SPACEY8;
+
+		// anticull meshes
+		{
+			static float cont_anticull_height = 0.0f;
+			cont_anticull_height = ImGui::Widget_ContainerWithCollapsingTitle("Anti Cull Meshes", cont_anticull_height, 
+				cont_mapsettings_anticull_meshes, false, ICON_FA_EYE, &ImGuiCol_ContainerBackground, &ImGuiCol_ContainerBorder);
+		}
+	}
+
+	// ----------
+
+	bool w2s(const Vector& world_pos, ImVec2& screen_coords, bool allow_offscreen = false)
+	{
+		auto sview = reinterpret_cast<game::eViewPlatInterface*>(0xB4AF90);
+		if (sview && sview->m_pTransform)
+		{
+			if (shared::globals::d3d_device)
+			{
+				D3DVIEWPORT9 vp;
+				shared::globals::d3d_device->GetViewport(&vp);
+
+				const auto wp = world_pos.ToD3DXVector();
+
+				D3DXVECTOR3 clip_space;
+				D3DXVec3Project(&clip_space, &wp, &vp, &sview->m_pTransform->ProjectionMatrix, &sview->m_pTransform->ViewMatrix, nullptr);
+
+				if (clip_space.z < 0.0f || clip_space.z > 1.0f) {
+					return false; // behind camera or too far
+				}
+
+				screen_coords.x = clip_space.x;
+				screen_coords.y = clip_space.y;
+
+				if (!allow_offscreen)
+				{
+					// cull off-screen points
+					if (screen_coords.x < 0 || screen_coords.x > vp.Width || screen_coords.y < 0 || screen_coords.y > vp.Height) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	void imgui::draw_debug()
+	{
+		const auto im = imgui::get();
+		
+		if (m_dbg_visualize_model_info)
+		{
+			ImVec2 viewport_pos = {};
+			const float dist_sqr = im->m_dbg_visualize_model_info_distance * im->m_dbg_visualize_model_info_distance;
+
+			for (auto& m : visualized_model_infos)
+			{
+				if (fabs(im->m_dbg_visualize_model_info_cam_pos.DistToSqr(m.pos) < dist_sqr))
+				{
+					if (w2s(m.pos, viewport_pos)) 
+					{
+						bool highlight = false;
+
+						if (m.hash_a && m.hash_a == im->m_dbg_visualize_model_info_name_hash) {
+							highlight = true;
+						} else if (m.hash_b && m.hash_b == im->m_dbg_visualize_model_info_name_hash) {
+							highlight = true;
+						} else if (m.hash_c && m.hash_c == im->m_dbg_visualize_model_info_name_hash) {
+							highlight = true;
+						} else if (m.hash_d && m.hash_d == im->m_dbg_visualize_model_info_name_hash) {
+							highlight = true;
+						} else if ( m.name == im->m_dbg_visualize_model_info_name_filter) {
+							highlight = true;
+						}
+
+						ImGui::PushStyleColor(ImGuiCol_Text, highlight ? ImVec4(0.3f, 1.0f, 0.3f, 1.0f) : ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
+						ImGui::PushFont(highlight ? shared::common::font::BOLD_LARGE : shared::common::font::BOLD);
+						ImGui::GetBackgroundDrawList()->AddText(viewport_pos, ImGui::GetColorU32(ImGuiCol_Text), m.name.c_str());
+						ImGui::PopFont();
+						ImGui::PopStyleColor();
+					}
+				}
+			}
+
+			visualized_model_infos.clear();
+		}
+	}
+
 	// -----------
 
 	void imgui::devgui()
@@ -661,6 +1197,7 @@ namespace comp
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar(1);
 			ADD_TAB("Comp Settings", tab_compsettings);
+			ADD_TAB("Map Settings", tab_map_settings);
 			ADD_TAB("Dev", tab_dev);
 			ADD_TAB("About", tab_about);
 			ImGui::EndTabBar();
@@ -764,6 +1301,8 @@ namespace comp
 						shared::globals::imgui_allow_input_bypass_timeout = 0u;
 						shared::globals::imgui_allow_input_bypass = false;
 					}
+
+					im->draw_debug();
 
 					if (im->m_stats.is_tracking_enabled()) {
 						im->m_stats.reset_stats();

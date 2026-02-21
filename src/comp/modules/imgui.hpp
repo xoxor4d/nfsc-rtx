@@ -19,6 +19,9 @@ namespace comp
 
 		bool m_initialized_device = false;
 
+		ImVec4 ImGuiCol_ButtonGreen = ImVec4(0.3f, 0.4f, 0.05f, 0.7f);
+		ImVec4 ImGuiCol_ButtonYellow = ImVec4(0.4f, 0.3f, 0.1f, 0.8f);
+		ImVec4 ImGuiCol_ButtonRed = ImVec4(0.48f, 0.15f, 0.15f, 1.00f);
 		ImVec4 ImGuiCol_ContainerBackground = ImVec4(0.220f, 0.220f, 0.220f, 0.875f);
 		ImVec4 ImGuiCol_ContainerBorder = ImVec4(0.099f, 0.099f, 0.099f, 0.901f);
 		ImVec4 ImGuiCol_VerticalFadeContainerBackgroundStart = ImVec4(0.0f, 0.0f, 0.0f, 0.65f);
@@ -64,6 +67,10 @@ namespace comp
 		bool m_dbg_disable_car_normalmap = false;
 		bool m_dbg_disable_glass = false;
 		bool m_dbg_disable_sky = false;
+
+		bool m_dbg_anticull_mesh_dist_before_hash = false;
+		bool m_dbg_anticull_mesh_first_hash_only = false;
+		bool m_dbg_anticull_mesh_disable = false;
 
 		// ---
 
@@ -133,6 +140,26 @@ namespace comp
 
 		float m_vis_out_roughness = 0.0f;
 		float m_vis_out_metalness = 0.0f;
+
+		// ---
+
+		float m_dbg_visualize_model_info_distance = 80.0f;
+		bool m_dbg_visualize_model_info = false;
+		std::string m_dbg_visualize_model_info_name_filter;
+		std::uint32_t m_dbg_visualize_model_info_name_hash;
+
+		Vector m_dbg_visualize_model_info_cam_pos; // not a setting
+		struct visualized_model_info_s
+		{
+			Vector pos;
+			std::string name;
+			std::uint32_t hash_a;
+			std::uint32_t hash_b;
+			std::uint32_t hash_c;
+			std::uint32_t hash_d;
+			bool _internal_highlight = false;
+		};
+		std::vector<visualized_model_info_s> visualized_model_infos;
 
 		class ImGuiStats
 		{
@@ -268,6 +295,8 @@ namespace comp
 		void tab_about();
 		void tab_dev();
 		void tab_compsettings();
+		void tab_map_settings();
+		void draw_debug();
 		
 		bool m_im_window_focused = false;
 		bool m_im_window_hovered = false;

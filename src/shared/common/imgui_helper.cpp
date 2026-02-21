@@ -285,4 +285,90 @@ namespace ImGui
 		SetCursorScreenPos(GetCursorScreenPos() + ImVec2(0, 8.0f));
 		return GetItemRectSize().y + 6.0f/*- 28.0f*/;
 	}
+
+	float Widget_ContainerWithDropdownShadowSquare(const float container_height, const std::function<void()>& callback, const ImVec4* bg_col, const ImVec4* border_col)
+	{
+		Spacing(0, 6);
+
+		const ImVec4 background_color = bg_col ? *bg_col : ImVec4(0.220f, 0.220f, 0.220f, 0.863f);
+		const ImVec4 border_color = border_col ? *border_col : ImVec4(0.099f, 0.099f, 0.099f, 0.901f);
+
+		const auto& style = GetStyle();
+
+		const auto window = GetCurrentWindow();
+		const auto min_x = window->WorkRect.Min.x - style.WindowPadding.x * 0.5f + 1.0f;
+		const auto max_x = window->WorkRect.Max.x + style.WindowPadding.x * 0.5f - 1.0f;
+
+		const auto min = ImVec2(min_x, GetCursorScreenPos().y - style.ItemSpacing.y);
+		const auto max = ImVec2(max_x, min.y + container_height);
+
+		GetWindowDrawList()->AddRect(min + ImVec2(-1, -1), max + ImVec2(1, 1), ColorConvertFloat4ToU32(border_color), 0.0f);
+		GetWindowDrawList()->AddRectFilled(min, max, ColorConvertFloat4ToU32(background_color), 0.0f);
+
+		// dropshadow
+		{
+			const auto dshadow_pmin = GetCursorScreenPos() - ImVec2(style.WindowPadding.x * 0.5f, 4);
+			const auto dshadow_pmax = dshadow_pmin + ImVec2(GetContentRegionAvail().x + style.WindowPadding.x, 48.0f);
+
+			const auto col_bottom = ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 0.0f));
+			const auto col_top = ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 0.4f));
+			GetWindowDrawList()->AddRectFilledMultiColor(dshadow_pmin, dshadow_pmax, col_top, col_top, col_bottom, col_bottom);
+		}
+
+		Indent(4);
+		BeginGroup();
+		Spacing(0, 4);
+		callback();
+		Spacing(0, 4);
+		EndGroup();
+		Unindent(4);
+
+		Spacing(0, 4);
+
+		return GetItemRectSize().y + 6.0f;
+	}
+
+	void Style_DeleteButtonPush()
+	{
+		PushStyleColor(ImGuiCol_Button, ImVec4(0.55f, 0.05f, 0.05f, 1.0f));
+		PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.68f, 0.05f, 0.05f, 1.0f));
+		PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.75f, 0.2f, 0.2f, 1.0f));
+		PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, 1.0f));
+
+		PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+		PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+		PushFont(shared::common::font::BOLD);
+	}
+
+	void Style_DeleteButtonPop()
+	{
+		PopStyleVar(2);
+		PopStyleColor(4);
+		PopFont();
+	}
+
+	void Style_ColorButtonPush(const ImVec4& base_color, bool black_border)
+	{
+		PushStyleColor(ImGuiCol_Button, base_color);
+		PushStyleColor(ImGuiCol_ButtonHovered, base_color * ImVec4(1.4f, 1.4f, 1.4f, 1.0f));
+		PushStyleColor(ImGuiCol_ButtonActive, base_color * ImVec4(1.8f, 1.8f, 1.8f, 1.0f));
+
+		PushStyleColor(ImGuiCol_Border, black_border
+			? ImVec4(0, 0, 0, 1.0f)
+			: GetStyleColorVec4(ImGuiCol_Border));
+	}
+
+	void Style_ColorButtonPop() {
+		PopStyleColor(4);
+	}
+
+	void Style_InvisibleSelectorPush()
+	{
+		PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0, 0, 0, 0));
+		PushStyleColor(ImGuiCol_HeaderActive, ImVec4(0, 0, 0, 0));
+	}
+
+	void Style_InvisibleSelectorPop() {
+		PopStyleColor(2);
+	}
 }

@@ -348,12 +348,12 @@ namespace comp
 			// ----------------------------------
 			// culling related settings
 
-			variable nocull_distance_scenery =
+			/*variable nocull_distance_scenery =
 			{
 				"nocull_distance_scenery",
 				("Distance (radius around player) where culling of level areas is disabled."),
 				80.0f
-			};
+			};*/
 
 			variable nocull_distance_meshes =
 			{

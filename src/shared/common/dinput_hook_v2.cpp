@@ -238,7 +238,7 @@ namespace shared::common
 				//di->updateKeyState(static_cast<LPBYTE>(lpvData)); // game sends keyboard input via window messages so no need
 				//di->KeyboardDeviceStateUsed = true;
 
-				if (!shared::globals::imgui_wants_text_input) {
+				if (shared::globals::imgui_wants_text_input) {
 					do_not_clear = true;
 				}
 				

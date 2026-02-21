@@ -22,10 +22,10 @@ namespace comp::game
 		Vector4D origin;
 		Vector4D plane_normal;
 		float max_strength;
-		int some_bitflag;
+		std::int32_t preculler_section_number;
 		int unk9;
 		int unk10;
-	};
+	}; STATIC_ASSERT_OFFSET(vis_struct, preculler_section_number, 0x44);
 
 	struct tree_node
 	{
@@ -548,7 +548,7 @@ namespace comp::game
 
 	struct scenery_info
 	{
-		std::uint8_t debug_name[0x18];
+		char debug_name[0x18];
 		std::uint32_t solid_keys[4];
 		void* models[4];
 		float radius;

@@ -14,6 +14,8 @@ namespace comp::game
 
 	view_base* views = nullptr;
 
+	int* always_rain = nullptr;
+
 	int* options_rain_supported = nullptr;
 	int* options_rain_enabled = nullptr;
 
@@ -96,7 +98,10 @@ namespace comp::game
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(views, view_base*,
 			"8D 80 ? ? ? ? 89 46", 2, 0x482D1D);
 
-		if (const auto offset = shared::utils::mem::find_pattern("89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 5F", 2, "options_rain", use_pattern, 0xDEADBEEF); offset) 
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(always_rain, int*,
+			"A1 ? ? ? ? 85 C0 56 8B F1 74 ? A1 ? ? ? ? 89 86", 1, 0x7B3B60);
+
+		if (const auto offset = shared::utils::mem::find_pattern("89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 5F", 2, "options_rain", use_pattern, 0x712E64); offset)
 		{
 			options_rain_enabled = (int*)*(DWORD*)offset;
 			options_rain_supported = (int*)*(DWORD*)(offset + 0xC); 

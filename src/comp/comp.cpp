@@ -2,8 +2,10 @@
 
 #include "modules/comp_settings.hpp"
 #include "modules/imgui.hpp"
+#include "modules/map_settings.hpp"
 #include "modules/remix_vars.hpp"
 #include "modules/renderer.hpp"
+#include "shared/common/dinput_hook_v2.hpp"
 #include "shared/common/remix_api.hpp"
 
 // see comment in main()
@@ -18,7 +20,7 @@ namespace comp
 			tex_addons::init_texture_addons();
 		}
 
-		const auto& cs = comp_settings::get();
+		//const auto& cs = comp_settings::get();
 		const auto& im = imgui::get();
 
 		// fake camera
@@ -192,8 +194,60 @@ namespace comp
 	// ---
 
 	//uint32_t das_stub_pixel_size = 0u;
-	int anticull_check02(game::scenery_instance* instance, game::vis_struct* cull_info)
+	int anticull_check02(game::scenery_instance* instance, game::vis_struct* cull_info, game::scenery_info* info)
 	{
+		const auto im = imgui::get();
+		if (im->m_dbg_visualize_model_info) 
+		{
+			bool has_filter = !im->m_dbg_visualize_model_info_name_filter.empty();
+			bool passed_filter = false;
+			if (has_filter)
+			{
+				const auto mdl_lower = shared::utils::str_to_lower(std::string(info->debug_name));
+				passed_filter = mdl_lower.contains(im->m_dbg_visualize_model_info_name_filter);
+			}
+
+			const float dist_sqr = (instance->position - cull_info->origin).LengthSqr();
+			if (dist_sqr < im->m_dbg_visualize_model_info_distance * im->m_dbg_visualize_model_info_distance
+					&& (!has_filter || (has_filter && passed_filter)))
+			{
+				im->m_dbg_visualize_model_info_cam_pos = cull_info->origin; // cam
+				im->visualized_model_infos.emplace_back(instance->position, info->debug_name, 
+					info->solid_keys[0], info->solid_keys[1], info->solid_keys[2], info->solid_keys[3]);
+			}
+		}
+
+		/*const auto ms = map_settings::get_map_settings();
+		if (!ms.anticull_meshes.empty())
+		{
+			const auto mdl_lower = shared::utils::str_to_lower(std::string(info->debug_name));
+			for (auto& a : ms.anticull_meshes)
+			{
+				bool match = false;
+
+				if (!a.is_filter)
+				{
+					if (mdl_lower == a.name) {
+						match = true;
+					}
+				}
+				else
+				{
+					if (mdl_lower.contains(a.name)) {
+						match = true;
+					}
+				}
+
+				if (match)
+				{
+					const float dist_sqr = (instance->position - cull_info->origin).LengthSqr();
+					if (dist_sqr <= a.distance * a.distance) {
+						return 1;
+					}
+				}
+			}
+		}*/
+
 		const auto nocull_dist = comp_settings::get()->nocull_distance_meshes._float();
 		if (nocull_dist > 0.0f) // game::drawscenery_cell_dist_check_02
 		{
@@ -212,8 +266,6 @@ namespace comp
 		return 0;
 	}
 
-	
-
 	__declspec (naked) void draw_a_scenery_stub()
 	{
 		static uint32_t retn_addr = 0x79FB3B;
@@ -225,13 +277,15 @@ namespace comp
 			// eax = pixel_síze
 			// esi = instance
 			// edi = cull_info
+			// ebx = info
 
 			//mov		das_stub_pixel_size, eax;
 			pushad;
+			push	ebx; // info
 			push	edi; // cull_info
 			push	esi; // instance
 			call	anticull_check02;
-			add		esp, 8;
+			add		esp, 12;
 
 			cmp		eax, 1;
 			jne		ORG;
@@ -249,6 +303,133 @@ namespace comp
 		}
 	}
 
+
+	int anticull_check03(game::scenery_pack* pack, game::scenery_instance* instance, game::vis_struct* cull_info)
+	{
+		const auto im = imgui::get();
+
+		if (im->m_dbg_anticull_mesh_disable) {
+			return 0;
+		}
+
+		game::scenery_info& info = pack->infos[instance->scenery_info_number];
+		std::int32_t preculler = cull_info->preculler_section_number;
+
+		// only do anti cull check if not vis
+		if (preculler >= 0 || ((1u << (preculler & 7)) & pack->preculler_infos[instance->preculler_info_index].visibility_bits[(preculler >> 3)]) != 0)
+		{
+			const auto ms = map_settings::get_map_settings();
+			if (!ms.anticull_meshes.empty())
+			{
+				std::string mdl_lower;
+
+				for (auto& a : ms.anticull_meshes)
+				{
+					if (im->m_dbg_anticull_mesh_dist_before_hash)
+					{
+						float dist_sqr = (instance->position - cull_info->origin).LengthSqr();
+						const bool in_range = dist_sqr <= a.distance * a.distance;
+
+						if (!in_range) {
+							continue;
+						}
+					}
+					
+
+					bool match = false;
+
+					// fast path
+					if (!a.hashes.empty())
+					{
+						if (info.solid_keys[0] && a.hashes.contains(info.solid_keys[0])) {
+							match = true;
+						} else if (!im->m_dbg_anticull_mesh_first_hash_only && info.solid_keys[1] && info.solid_keys[0] != info.solid_keys[1] && a.hashes.contains(info.solid_keys[1])) {
+							match = true;
+						} else if (!im->m_dbg_anticull_mesh_first_hash_only && info.solid_keys[2] && info.solid_keys[1] != info.solid_keys[2] && a.hashes.contains(info.solid_keys[2])) {
+							match = true;
+						} else if (!im->m_dbg_anticull_mesh_first_hash_only && info.solid_keys[3] && info.solid_keys[2] != info.solid_keys[3] && a.hashes.contains(info.solid_keys[3])) {
+							match = true;
+						}
+					}
+
+					// slow path
+					else if (!a.name.empty())
+					{
+						// get lower case name once
+						if (mdl_lower.empty()) {
+							mdl_lower = shared::utils::str_to_lower(std::string(info.debug_name));
+						}
+
+						if (!a.is_filter)
+						{
+							if (mdl_lower == a.name) {
+								match = true;
+							}
+						}
+						else
+						{
+							if (mdl_lower.contains(a.name)) {
+								match = true;
+							}
+						}
+					}
+
+					if (match)
+					{
+						if (im->m_dbg_anticull_mesh_dist_before_hash) {
+							return 1;
+						}
+
+						const float dist_sqr = (instance->position - cull_info->origin).LengthSqr();
+						if (dist_sqr <= a.distance * a.distance) {
+							return 1;
+						}
+					}
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	//draw_a_scenery_stub2
+	__declspec (naked) void draw_a_scenery_stub2()
+	{
+		static uint32_t retn_addr = 0x79FA88;
+		static uint32_t skip_addr = 0x79FAAE;
+		__asm
+		{
+			mov		[esp + 0x18], eax;
+
+			// esi = instance
+			// eax = pack
+			// edi = cull_info
+
+			push	eax; // save eax
+			pushad;
+			push	edi; // cull_info
+			push	esi; // instance
+			push	eax; // pack
+			call	anticull_check03;
+			add		esp, 12;
+
+			cmp		eax, 1;
+			jne		ORG;
+
+			popad;
+			pop		eax; // restore eax
+			jmp		skip_addr;
+
+		ORG:
+			popad;
+			pop		eax; // restore eax
+
+			// og
+			test    ecx, ecx;
+			jmp		retn_addr;
+		}
+	}
+
 	void main()
 	{
 		// #Step 2: init remix api if you want to use it or comment it otherwise
@@ -256,6 +437,7 @@ namespace comp
 		shared::common::remix_api::initialize(nullptr, nullptr, nullptr, false);
 
 		// init modules which do not need to be initialized, before the game inits, here
+		shared::common::loader::module_loader::register_module(std::make_unique<map_settings>());
 		shared::common::loader::module_loader::register_module(std::make_unique<imgui>());
 		shared::common::loader::module_loader::register_module(std::make_unique<renderer>());
 
@@ -287,6 +469,9 @@ namespace comp
 		
 		shared::utils::hook::nop(0x79FB35, 6);
 		shared::utils::hook(0x79FB35, draw_a_scenery_stub, HOOK_JUMP).install()->quick();
+
+		shared::utils::hook::nop(0x79FA82, 6);
+		shared::utils::hook(0x79FA82, draw_a_scenery_stub2, HOOK_JUMP).install()->quick();
 
 		MH_EnableHook(MH_ALL_HOOKS);
 	}

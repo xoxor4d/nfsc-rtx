@@ -19,6 +19,8 @@ namespace comp::game
 
 	extern view_base* views;
 
+	extern int* always_rain;
+
 	extern int* options_rain_supported;
 	extern int* options_rain_enabled;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "comp/modules/map_settings.hpp"
+
 #define TOML_ERROR(TITLE, ENTRY, MSG, ...) \
 	shared::common::log("Toml", std::format("{}", toml::format_error(toml::make_error_info(#TITLE, (ENTRY), shared::utils::va(#MSG, __VA_ARGS__)))), shared::common::LOG_TYPE::LOG_TYPE_ERROR, true);
 
@@ -87,4 +89,6 @@ namespace shared::common::toml_ext
 
 		return default_setting;
 	}
+
+	std::string build_anticull_array(const std::vector<comp::map_settings::anti_cull_meshes_s>& entries);
 }
