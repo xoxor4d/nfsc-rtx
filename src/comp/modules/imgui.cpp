@@ -293,9 +293,10 @@ namespace comp
 			ImGui::Checkbox("AntiCull Mesh check first hash only", &im->m_dbg_anticull_mesh_first_hash_only);
 			ImGui::Checkbox("AntiCull Mesh disable", &im->m_dbg_anticull_mesh_disable);
 
-#if 0
+
 			SPACEY4;
 
+#if 0
 			if (game::drawscenery_cell_dist_check_01) {
 				ImGui::DragFloat("DrawScenery CmpFloat 01", game::drawscenery_cell_dist_check_01, 0.01f);
 			}
@@ -307,17 +308,17 @@ namespace comp
 			if (game::drawscenery_cell_dist_check_03) {
 				ImGui::DragFloat("DrawScenery CmpFloat 03", game::drawscenery_cell_dist_check_03, 0.01f);
 			}
-
-			ImGui::Checkbox("Force Return Value for Compute Vis", &im->m_dbg_manual_compute_vis);
+#endif
+			ImGui::Checkbox("Force Return Value For a Culling Func (PixelSize)", &im->m_dbg_manual_compute_vis);
 			ImGui::BeginDisabled(!im->m_dbg_manual_compute_vis);
 			{
 				ImGui::DragInt("Forced Return Value", &im->m_dbg_manual_compute_vis_num, 0.2f, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp);
 				ImGui::EndDisabled();
 			}
 
-			ImGui::DragFloat("CompVis BoundingRad Offs", &im->m_dbg_compute_vis_bounding_rad_offset, 0.1f);
-			ImGui::DragFloat("CompVis OutDist Offs", &im->m_dbg_compute_vis_out_distance_offset, 0.1f);
-#endif
+			ImGui::DragFloat("^ BoundingRad Offs", &im->m_dbg_compute_vis_bounding_rad_offset, 0.1f);
+			ImGui::DragFloat("^ OutDist Offs", &im->m_dbg_compute_vis_out_distance_offset, 0.1f);
+
 			SPACEY8;
 		}
 

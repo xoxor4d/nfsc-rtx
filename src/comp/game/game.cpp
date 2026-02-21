@@ -35,6 +35,14 @@ namespace comp::game
 	uint32_t nop_addr__draw_scenery_chk02 = 0u;
 	uint32_t hk_addr__draw_scenery_comp_vis_fn_call = 0u;
 
+	uint32_t retn_addr__tree_cull = 0u;
+
+	uint32_t retn_addr__draw_a_scenery = 0u;
+	uint32_t commit_addr__draw_a_scenery = 0u;
+
+	uint32_t retn_addr__draw_a_scenery_precull = 0u;
+	uint32_t skip_addr__draw_a_scenery_precull = 0u;
+
 	// --------------
 
 #define PATTERN_OFFSET_SIMPLE(var, pattern, byte_offset, static_addr) \
@@ -144,6 +152,20 @@ namespace comp::game
 		PATTERN_OFFSET_SIMPLE(nop_addr__draw_scenery_chk01, "7C ? 8B 43 ? 85 C0", 0, 0x79FC1C);
 		PATTERN_OFFSET_SIMPLE(nop_addr__draw_scenery_chk02, "0F 8E ? ? ? ? 8B 56", 0, 0x79FB3F);
 		PATTERN_OFFSET_SIMPLE(hk_addr__draw_scenery_comp_vis_fn_call, "E8 ? ? ? ? 83 C4 ? 83 F8 ? 89 44 24", 0, 0x79FB30);
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__tree_cull, "75 ? 8B 94 24 ? ? ? ? 6A", 0, 0x79FDDF);
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__draw_a_scenery, "89 44 24 ? 0F 8E ? ? ? ? 8B 56", 0, 0x79FB3B);
+		PATTERN_OFFSET_SIMPLE(commit_addr__draw_a_scenery, "8B 43 ? 89 44 24 ? E9", 0, 0x79FC86);
+		
+		if (const auto offset = shared::utils::mem::find_pattern("7C ? 0F BF 56", 0, "retn_addr__draw_a_scenery_precull", use_pattern, 0x79FA88); offset)
+		{
+			retn_addr__draw_a_scenery_precull = offset;
+			skip_addr__draw_a_scenery_precull = shared::utils::mem::resolve_relative_jump_address(offset, 2, 1);
+			found_pattern_count++;
+		} total_pattern_count++;
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__draw_a_scenery_precull, "7C ? 0F BF 56", 0, 0x79FA88);
 
 		// end GAME_ASM_OFFSETS
 #pragma endregion

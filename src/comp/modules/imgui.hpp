@@ -105,7 +105,7 @@ namespace comp
 		bool m_dbg_manual_compute_vis = false;
 		int m_dbg_manual_compute_vis_num = 0;
 
-		float m_dbg_compute_vis_bounding_rad_offset = 55.0f;
+		float m_dbg_compute_vis_bounding_rad_offset = 0.0f;
 		float m_dbg_compute_vis_out_distance_offset = 0.0f;
 
 		// ---

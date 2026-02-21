@@ -44,7 +44,12 @@ namespace comp::game
 	extern uint32_t nop_addr__draw_scenery_chk02;
 	extern uint32_t hk_addr__draw_scenery_comp_vis_fn_call;
 
+	extern uint32_t retn_addr__tree_cull;
+	extern uint32_t retn_addr__draw_a_scenery;
+	extern uint32_t commit_addr__draw_a_scenery;
 
+	extern uint32_t retn_addr__draw_a_scenery_precull;
+	extern uint32_t skip_addr__draw_a_scenery_precull;
 
 	// ---
 

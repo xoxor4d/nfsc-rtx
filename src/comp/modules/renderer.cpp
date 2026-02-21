@@ -768,7 +768,7 @@ namespace comp
 							float avg_env_min = (cvEnvmapMin.x + cvEnvmapMin.y + cvEnvmapMin.z) / 3.0f;
 							float avg_env_range = (cvEnvmapRange.x + cvEnvmapRange.y + cvEnvmapRange.z) / 3.0f;
 
-							if (!im->m_dbg_debug_bool03 && abs(avg_env_range) < 0.01f + im->m_debug_vector3.x)  // constant env (or none)
+/*							if (!im->m_dbg_debug_bool03 && abs(avg_env_range) < 0.01f + im->m_debug_vector3.x)  // constant env (or none)
 							{
 								if (avg_env_min < (0.2f + im->m_debug_vector.y)) {
 									roughness = 0.98f;
@@ -776,30 +776,31 @@ namespace comp
 									roughness = 0.0f;
 								}
 							}
-							else
+							else*/
 							{
-								roughness = (0.63f + im->m_debug_vector.x) / sqrtf(spec_power);  // fits ~0.2 at power=10, ~0.1 at power=40/13-14
+								roughness = (0.63f /*+ im->m_debug_vector.x*/) / sqrtf(spec_power);  // fits ~0.2 at power=10, ~0.1 at power=40/13-14
 								roughness = std::clamp(roughness, 0.05f, 1.0f);  // small floor
-								roughness *= (1.0f + im->m_debug_vector.z);
+								//roughness *= (1.0f + im->m_debug_vector.z);
 							}
 
 							// Check if env tint is colored (non-monochrome)
 							float var_min = std::max(std::max(abs(cvEnvmapMin.x - avg_env_min), abs(cvEnvmapMin.y - avg_env_min)), abs(cvEnvmapMin.z - avg_env_min));
 							float var_range = std::max(std::max(abs(cvEnvmapRange.x - avg_env_range), abs(cvEnvmapRange.y - avg_env_range)), abs(cvEnvmapRange.z - avg_env_range));
 
-							if (!im->m_dbg_debug_bool04 && (var_min > 0.15 + im->m_debug_vector3.y || var_range > 0.15 + im->m_debug_vector3.y)) {
+							if (/*!im->m_dbg_debug_bool04 &&*/ (var_min > 0.15 /*+ im->m_debug_vector3.y*/ || var_range > 0.15 /*+ im->m_debug_vector3.y*/)) {
 								metallic = 1.0;
 							}
 							else  // monochrome (gray/white)
 							{
-								if (!im->m_dbg_debug_bool05 && abs(avg_env_range) < 0.01f) {
+								/*if (!im->m_dbg_debug_bool05 && abs(avg_env_range) < 0.01f) {
 									metallic = (avg_env_min > (0.2f + im->m_debug_vector2.y)) ? 1.0f : 0.0f;
 								}
-								else
+								else*/
 								{
 									float base = 1.0f - avg_env_min;
-									metallic = std::clamp(base * (2.5f + im->m_debug_vector2.x), 0.0f, 1.0f);  // 0.88→0.3, 0.75→0.625≈0.8, 1.0→0
-									metallic *= (1.0f + im->m_debug_vector2.z);
+									metallic = std::clamp(base * (2.5f /*+ im->m_debug_vector2.x*/), 0.0f, 1.0f);  // 0.88→0.3, 0.75→0.625≈0.8, 1.0→0
+									//metallic *= (1.0f + im->m_debug_vector2.z);
+									metallic *= (1.0f + -0.9f);
 								}
 							}
 						}
@@ -953,11 +954,6 @@ namespace comp
 							was_vis = true;
 						}
 
-						ctx.save_rs(dev, D3DRS_TEXTUREFACTOR); // prob. not needed
-						ctx.save_tss(dev, D3DTSS_COLOROP);
-						ctx.save_tss(dev, D3DTSS_COLORARG1);
-						ctx.save_tss(dev, D3DTSS_COLORARG2);
-
 						// some car paints really go way above 1.0 .. so we should use that info somewhere ..
 						// we now div by 2 so we do not have to clamp, then rescale in opaque shader
 						//col.x = std::clamp(col.x, 0.0f, 1.0f);
@@ -1008,10 +1004,6 @@ namespace comp
 							set_remix_texture_hash(dev, paint_hash);
 						}
 
-						/*uint32_t bits = (paint_hash >> 9) | 0x3f800000;
-						float rnd = reinterpret_cast<float&>(bits) - 1.0f;*/
-
-
 						col.x = std::clamp(std::clamp(v4_cvDiffuseRange.x /** rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f); // color can be above 1 so we scale to 0-1 and back to 0-2 in the opaque shader
 						col.y = std::clamp(std::clamp(v4_cvDiffuseRange.y /*+ rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
 						col.z = std::clamp(std::clamp(v4_cvDiffuseRange.z /*- rnd*/, 0.0f, 2.0f) * 0.5f, 0.0f, 1.0f);
@@ -1019,7 +1011,7 @@ namespace comp
 
 						if (im->m_dbg_vehshader_color_override_enabled)
 						{
-							if (was_vis || im->m_dbg_debug_bool03)
+							if (was_vis)
 							{
 								col.x = im->m_dbg_vehshader_color_override.x;
 								col.y = im->m_dbg_vehshader_color_override.y;
@@ -1027,9 +1019,9 @@ namespace comp
 							}
 						}
 
+#if 0
 						if (im->m_dbg_debug_bool08)
 						{
-
 							// debug
 							uint32_t xi = static_cast<uint32_t>(col.x * 1024.0f);
 							uint32_t yi = static_cast<uint32_t>(col.y * 1024.0f);
@@ -1069,16 +1061,20 @@ namespace comp
 								break;
 							}
 						}
+#endif
 
 						set_remix_temp_float03(dev, v4_cvPowers.x * powerx_scale); // use powers.x here because it v4_cvClampAndScales.x mostly stays below 1
 						set_remix_temp_float04(dev, v4_cvClampAndScales.z * diffuse_clamp_range);
 
 						set_remix_vehicle_shader_settings(dev, col, roughness, metallic, v4_cvVinylScales.x, VEHSHADER_FLAG_NONE);
 						//set_remix_modifier(dev, RemixModifier::EnableVertexColor); // vertex colors do not work for some reason
-						// use tfactor to pass a secondary color instead
 						
+						ctx.save_rs(dev, D3DRS_TEXTUREFACTOR);
+						ctx.save_tss(dev, D3DTSS_COLOROP);
+						ctx.save_tss(dev, D3DTSS_COLORARG1);
+						ctx.save_tss(dev, D3DTSS_COLORARG2);
 
-						//dev->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_COLORVALUE(col.x, col.y, col.z, 1.0f));
+						// use tfactor to pass a secondary color to remix
 						dev->SetRenderState(D3DRS_TEXTUREFACTOR, D3DCOLOR_COLORVALUE(
 							std::clamp(v4_cvDiffuseMin.x, 0.0f, 1.0f),
 							std::clamp(v4_cvDiffuseMin.y, 0.0f, 1.0f),
