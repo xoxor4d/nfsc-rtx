@@ -532,11 +532,6 @@ namespace comp
 
 	HRESULT d3d9ex::D3D9Device::SetVertexShaderConstantF(UINT StartRegister, CONST float* pConstantData, UINT Vector4fCount)
 	{
-		if (StartRegister == 21 && g_is_rendering_car)
-		{
-			int x = 1;
-		}
-
 		return m_pIDirect3DDevice9->SetVertexShaderConstantF(StartRegister, pConstantData, Vector4fCount);
 	}
 

@@ -12,6 +12,11 @@ namespace comp::game
 	float* drawscenery_cell_dist_check_03 = nullptr; // bounding radius related (goes into vis func and used for comp later)
 	int* preculler_mode = nullptr; // setting this to 0 disables occlusion checks?
 
+	view_base* views = nullptr;
+
+	int* options_rain_supported = nullptr;
+	int* options_rain_enabled = nullptr;
+
 	// --------------
 	// game functions
 
@@ -87,7 +92,16 @@ namespace comp::game
 
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(preculler_mode, int*,
 			"A3 ? ? ? ? 8D 44 24 ? 50 8B C8", 1, 0x73085A);
-		// 
+		
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(views, view_base*,
+			"8D 80 ? ? ? ? 89 46", 2, 0x482D1D);
+
+		if (const auto offset = shared::utils::mem::find_pattern("89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 5F", 2, "options_rain", use_pattern, 0xDEADBEEF); offset) 
+		{
+			options_rain_enabled = (int*)*(DWORD*)offset;
+			options_rain_supported = (int*)*(DWORD*)(offset + 0xC); 
+			found_pattern_count++;
+		} total_pattern_count++;
 
 		// end GAME_VARIABLES
 #pragma endregion

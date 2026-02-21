@@ -67,6 +67,19 @@ namespace comp
 
 		// ---
 
+		bool m_dbg_disable_world_wetness = false;
+		bool m_dbg_enable_world_wetness_variation = true;
+		bool m_dbg_enable_world_wetness_puddles = true;
+		bool m_dbg_enable_world_wetness_occlusion = true;
+		bool m_dbg_enable_world_wetness_occlusion_smoothing = true;
+		bool m_dbg_enable_world_wetness_raindrops = false;
+
+		bool m_dbg_disable_car_raindrops = false;
+
+		bool m_dbg_disable_camera_raindrops = true;
+
+		// ---
+
 		bool m_dbg_use_fake_camera = false;
 
 		// View matrix parameters

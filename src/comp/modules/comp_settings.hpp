@@ -542,6 +542,7 @@ namespace comp
 			// general rendering related settings
 
 
+
 		};
 	
 		static inline var_definitions vars = {};

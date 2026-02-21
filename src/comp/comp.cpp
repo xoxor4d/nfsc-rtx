@@ -84,8 +84,13 @@ namespace comp
 
 		// adjust game variables based on comp settings
 		//*game::preculler_mode = cs->nocull_disable_precull._bool() ? 0 : 1;
-		*game::drawscenery_cell_dist_check_01 = cs->nocull_distance_scenery._float();
-		*game::drawscenery_cell_dist_check_02 = cs->nocull_distance_meshes._float();
+
+		//*game::drawscenery_cell_dist_check_01 = cs->nocull_distance_scenery._float();
+		//*game::drawscenery_cell_dist_check_02 = cs->nocull_distance_meshes._float();
+
+		// using shadermodel 1 disables these?
+		*game::options_rain_enabled = 1;
+		*game::options_rain_supported = 1;
 	}
 
 	
@@ -107,9 +112,9 @@ namespace comp
 
 		bounding_radius += im->m_dbg_compute_vis_bounding_rad_offset;
 
-		const float dx = pos[0] - vis->plane_origin.x;
-		const float dy = pos[1] - vis->plane_origin.y;
-		const float dz = pos[2] - vis->plane_origin.z;
+		const float dx = pos[0] - vis->origin.x;
+		const float dy = pos[1] - vis->origin.y;
+		const float dz = pos[2] - vis->origin.z;
 
 		if (-bounding_radius <= dz * vis->plane_normal.z + dy * vis->plane_normal.y + dx * vis->plane_normal.x)
 		{
@@ -127,6 +132,121 @@ namespace comp
 		}
 
 		return 0;
+	}
+
+
+
+
+	game::vis_struct* tree_cull_stub_cullinfo_helper = nullptr;
+	game::visible_state tree_cull_stub_curr_vis_helper;
+
+	game::visible_state anticull_check01(game::tree_node* current)
+	{
+		if (tree_cull_stub_curr_vis_helper != game::visible_state::inside)
+		{
+			const auto nocull_dist = comp_settings::get()->nocull_distance_meshes._float();
+			if (nocull_dist > 0.0f) // game::drawscenery_cell_dist_check_02
+			{
+				Vector center = (current->bbox_min + current->bbox_max) * 0.5f;
+				Vector to_center = center - tree_cull_stub_cullinfo_helper->origin;
+				float distance_sqr = to_center.LengthSqr();
+				float threshold_sqr = nocull_dist * nocull_dist;
+
+				if (distance_sqr <= threshold_sqr)
+				{
+					// Use inside state to bypass all visibility checks
+					return game::visible_state::inside;
+				}
+			}
+		}
+
+		return tree_cull_stub_curr_vis_helper;
+	}
+
+	uint8_t tree_cull_stub_ret_helper;
+	__declspec (naked) void tree_cull_stub()
+	{
+		static uint32_t retn_addr = 0x79FDDF;
+		__asm
+		{
+			mov		eax, [esp + 0x160];
+			mov		tree_cull_stub_cullinfo_helper, eax;
+			mov		tree_cull_stub_curr_vis_helper, bl;
+
+			pushad;
+			push	ebp; // current
+			call	anticull_check01;
+			mov		tree_cull_stub_ret_helper, al;
+			add		esp, 4;
+			popad;
+
+			mov		bl, tree_cull_stub_ret_helper;
+			sub     esi, 4;
+			dec     edi;
+			cmp     bl, 1;
+
+			jmp		retn_addr;
+		}
+	}
+
+	// ---
+
+	//uint32_t das_stub_pixel_size = 0u;
+	int anticull_check02(game::scenery_instance* instance, game::vis_struct* cull_info)
+	{
+		const auto nocull_dist = comp_settings::get()->nocull_distance_meshes._float();
+		if (nocull_dist > 0.0f) // game::drawscenery_cell_dist_check_02
+		{
+			float dist_sqr = (instance->position - cull_info->origin).LengthSqr();
+			float threshold_sqr = nocull_dist * nocull_dist;
+
+			if (dist_sqr <= threshold_sqr)
+			{
+/*				if (das_stub_pixel_size == 0u) {
+					das_stub_pixel_size = 100u; // Force a valid pixel size for pathtracing
+				}*/
+				return 1;
+			}
+		}
+
+		return 0;
+	}
+
+	
+
+	__declspec (naked) void draw_a_scenery_stub()
+	{
+		static uint32_t retn_addr = 0x79FB3B;
+		static uint32_t commit_addr = 0x79FC86;
+		__asm
+		{
+			add     esp, 0x10; // after get_pixel_size
+
+			// eax = pixel_síze
+			// esi = instance
+			// edi = cull_info
+
+			//mov		das_stub_pixel_size, eax;
+			pushad;
+			push	edi; // cull_info
+			push	esi; // instance
+			call	anticull_check02;
+			add		esp, 8;
+
+			cmp		eax, 1;
+			jne		ORG;
+
+			popad;
+			jmp		commit_addr;
+		
+		ORG:
+			popad;
+			//mov		eax, das_stub_pixel_size;
+			
+			// og
+			cmp     eax, 1;
+			jmp		retn_addr;
+		}
 	}
 
 	void main()
@@ -161,7 +281,12 @@ namespace comp
 		//shared::utils::hook::nop(game::nop_addr__draw_scenery_chk02, 6); // draw all no matter what 'compute_visibility_of_cell' returned // 0x79FB3F
 #endif
 
-		//shared::utils::hook(game::retn_addr__pre_draw_something - 5u, pre_render_something_stub, HOOK_JUMP).install()->quick();
+		shared::utils::hook::nop(0x79FDD8, 7);
+		shared::utils::hook(0x79FDD8, tree_cull_stub, HOOK_JUMP).install()->quick();
+
+		
+		shared::utils::hook::nop(0x79FB35, 6);
+		shared::utils::hook(0x79FB35, draw_a_scenery_stub, HOOK_JUMP).install()->quick();
 
 		MH_EnableHook(MH_ALL_HOOKS);
 	}

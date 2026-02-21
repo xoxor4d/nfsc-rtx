@@ -17,6 +17,11 @@ namespace comp::game
 	extern float* drawscenery_cell_dist_check_03;
 	extern int* preculler_mode;
 
+	extern view_base* views;
+
+	extern int* options_rain_supported;
+	extern int* options_rain_enabled;
+
 	// --------------
 	// game functions
 

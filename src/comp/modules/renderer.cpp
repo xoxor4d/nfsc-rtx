@@ -20,6 +20,8 @@ namespace comp
 	bool g_rendered_first_primitive = false;
 	bool g_applied_hud_hack = false; // was hud "injection" applied this frame
 
+	int g_is_rendering_rain = 0;
+
 	game::material_instance g_current_material_data = {};
 	game::effect* g_curr_effect_ptr = nullptr;
 
@@ -110,7 +112,7 @@ namespace comp
 			{
 				const uint32_t max_val = (1u << bits) - 1u;
 				const float normalized = std::clamp(v, 0.0f, max_range) / max_range;
-				return static_cast<uint32_t>(std::round(normalized * max_val));
+				return static_cast<uint16_t>(std::round(normalized * max_val));
 			};
 
 		// pack wetness_params1 (lower 16 bits): scalar(6) + max_z(5) + blend_width(5) = 16 bits
@@ -142,7 +144,7 @@ namespace comp
 			{
 				const uint32_t max_val = (1u << bits) - 1u;
 				const float normalized = std::clamp(v, 0.0f, max_range) / max_range;
-				return static_cast<uint32_t>(std::round(normalized * max_val));
+				return static_cast<uint16_t>(std::round(normalized * max_val));
 			};
 
 		dc_ctx.save_rs(dev, RS_211_VEHSHADER_PARAMS_PACKED1);
@@ -377,6 +379,22 @@ namespace comp
 		return false;
 	}
 
+
+	float get_world_wetness_amount()
+	{
+		if (game::views)
+		{
+			if (const auto p1 = game::views[1]; p1.active)
+			{
+				if (const auto r = p1.rain; r) {
+					return r->rain_intensity;
+				}
+			}
+		}
+
+		return 0.0f;
+	}
+
 	// ----
 
 	drawcall_mod_context& setup_context(IDirect3DDevice9* dev)
@@ -487,6 +505,22 @@ namespace comp
 			render_with_ff = true;
 		}
 
+		if (g_is_rendering_rain) 
+		{
+			// TODO: cutout translucent materials via mask?
+			if (im->m_dbg_disable_camera_raindrops) {
+				ctx.modifiers.do_not_render = true;
+			}
+			
+			ctx.save_texture(dev, 0);
+			dev->SetTexture(0, tex_addons::w0);
+
+			ctx.save_tss(dev, D3DTSS_COLOROP);
+			ctx.save_tss(dev, D3DTSS_COLORARG1);
+			dev->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1);
+			dev->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
+		}
+
 
 		// use fixed function fallback if true
 		if (render_with_ff)
@@ -573,13 +607,19 @@ namespace comp
 
 			if (g_is_rendering_world || g_is_rendering_dry_road)
 			{
-				if (im->m_dbg_debug_bool01)
+				const auto wetness = get_world_wetness_amount();
+				if (wetness > 0.0f)
 				{
-					set_remix_roughness_settings(dev, im->m_debug_vector5.x, // TODO: wetness
-						0.35f,
-						0.65f,
-						0.1f,
-						WETNESS_FLAG_ENABLE_VARIATION | WETNESS_FLAG_ENABLE_PUDDLE_LAYER | WETNESS_FLAG_ENABLE_OCCLUSION_TEST | WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING /*| WETNESS_FLAG_ENABLE_RAINDROPS*/);
+					if (!im->m_dbg_disable_world_wetness)
+					{
+						uint8_t wetflags = WETNESS_FLAG_NONE;
+						wetflags |= im->m_dbg_enable_world_wetness_variation ? WETNESS_FLAG_ENABLE_VARIATION : 0u;
+						wetflags |= im->m_dbg_enable_world_wetness_puddles ? WETNESS_FLAG_ENABLE_PUDDLE_LAYER : 0u;
+						wetflags |= im->m_dbg_enable_world_wetness_occlusion ? WETNESS_FLAG_ENABLE_OCCLUSION_TEST : 0u;
+						wetflags |= im->m_dbg_enable_world_wetness_occlusion_smoothing ? WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING : 0u;
+						wetflags |= im->m_dbg_enable_world_wetness_raindrops ? WETNESS_FLAG_ENABLE_RAINDROPS : 0u;
+						set_remix_roughness_settings(dev, 1.0f - wetness, 0.35f, 0.65f, 0.1f, wetflags);
+					}
 				}
 			}
 
@@ -615,17 +655,18 @@ namespace comp
 
 			if (g_is_rendering_car)
 			{
-				if (im->m_dbg_debug_bool01)
+				const auto wetness = get_world_wetness_amount();
+				if (wetness > 0.0f)
 				{
-					set_remix_roughness_settings(dev, im->m_debug_vector5.x, // TODO: wetness
-						0.60f,
-						0.65f,
-						0.1f,
-						WETNESS_FLAG_ENABLE_EXP_RAINDROPS | WETNESS_FLAG_USE_LOCAL_COORDINATES);
+					if (!im->m_dbg_disable_car_raindrops)
+					{
+						uint8_t wetflags = WETNESS_FLAG_ENABLE_EXP_RAINDROPS | WETNESS_FLAG_USE_LOCAL_COORDINATES;
+						set_remix_roughness_settings(dev, wetness, 0.6f, 0.65f, 0.1f, wetflags);
+					}
 				}
 
 				{
-					if (ctx.info.cvDiffuseMin.x == 1.0f)
+					//if (ctx.info.cvDiffuseMin.x == 1.0f)
 					{
 						Vector4D v4_cvDiffuseMin;
 						Vector4D v4_cvDiffuseRange;
@@ -703,10 +744,10 @@ namespace comp
 						float diffuse_clamp_scale = 1.0f;
 						float diffuse_clamp_range = 1.0f;
 
-						if (!g_curr_effect_ptr)
+						/*if (!g_curr_effect_ptr)
 						{
 							int x = 1;
-						}
+						}*/
 
 						game::material_data& m = mat.material;
 
@@ -724,15 +765,15 @@ namespace comp
 							// no settings found -> approximate dynamically
 
 							const float spec_power = cvPowers.y;
-							float avg_env_min = (cvEnvmapMin.x + cvEnvmapMin.y + cvEnvmapMin.z) / 3.0;
-							float avg_env_range = (cvEnvmapRange.x + cvEnvmapRange.y + cvEnvmapRange.z) / 3.0;
+							float avg_env_min = (cvEnvmapMin.x + cvEnvmapMin.y + cvEnvmapMin.z) / 3.0f;
+							float avg_env_range = (cvEnvmapRange.x + cvEnvmapRange.y + cvEnvmapRange.z) / 3.0f;
 
 							if (!im->m_dbg_debug_bool03 && abs(avg_env_range) < 0.01f + im->m_debug_vector3.x)  // constant env (or none)
 							{
 								if (avg_env_min < (0.2f + im->m_debug_vector.y)) {
-									roughness = 0.98;
+									roughness = 0.98f;
 								} else {
-									roughness = 0.0;
+									roughness = 0.0f;
 								}
 							}
 							else
@@ -763,7 +804,7 @@ namespace comp
 							}
 						}
 
-						if (g_curr_effect_ptr)
+						/*if (g_curr_effect_ptr)
 						{
 							if (g_curr_effect_ptr->last_used_light_material_)
 							{
@@ -785,7 +826,7 @@ namespace comp
 						else
 						{
 							int x = 1;
-						}
+						}*/
 
 						
 
@@ -946,23 +987,26 @@ namespace comp
 						// -----------------------
 						// setup paint shader vars
 
+						// customized paint when no name
+						if (mat_name.empty())
+						{
+							// calculate custom hash for this paint type because raw paint always uses a fully black, 0% alpha texture
+							// which results in the same mat_HASH on each car that has raw-paint -> same color on all cars
 
-						// calculate custom hash for this paint type because raw paint always uses a fully black, 0% alpha texture
-						// which results in the same mat_HASH on each car that has raw-paint -> same color on all cars
-
-						uint32_t paint_hash = 0u;
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvPowers.x);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.x);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.z);
-						paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_scale);
-						paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_range);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.x);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.y);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.z);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.x);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.y);
-						paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.z);
-						set_remix_texture_hash(dev, paint_hash);
+							uint32_t paint_hash = 0u;
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvPowers.x);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.x);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvClampAndScales.z);
+							paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_scale);
+							paint_hash = shared::utils::hash32_combine(paint_hash, diffuse_clamp_range);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.x);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.y);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseRange.z);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.x);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.y);
+							paint_hash = shared::utils::hash32_combine(paint_hash, v4_cvDiffuseMin.z);
+							set_remix_texture_hash(dev, paint_hash);
+						}
 
 						/*uint32_t bits = (paint_hash >> 9) | 0x3f800000;
 						float rnd = reinterpret_cast<float&>(bits) - 1.0f;*/
@@ -1384,6 +1428,8 @@ namespace comp
 		g_is_rendering_car_normalmap = 0;
 		g_is_rendering_glass_reflect = 0;
 		g_is_rendering_sky = 0;
+		g_is_rendering_dry_road = 0;
+		g_is_rendering_water = 0;
 
 		if (effect)
 		{
@@ -1397,31 +1443,27 @@ namespace comp
 
 				if (std::string_view(tech_desc.Name) == "world") {
 					g_is_rendering_world = 1;
-				}
-				else if (std::string_view(tech_desc.Name) == "worldnormalmap") {
+				} else if (std::string_view(tech_desc.Name) == "worldnormalmap") {
 					g_is_rendering_world_normalmap = 1;
-				}
-				else if (std::string_view(tech_desc.Name) == "car") {
+				} else if (std::string_view(tech_desc.Name) == "car") {
 					g_is_rendering_car = 1;
-				}
-				else if (std::string_view(tech_desc.Name) == "car_normalmap") {
+				} else if (std::string_view(tech_desc.Name) == "car_normalmap") {
 					g_is_rendering_car_normalmap = 1;
-				}
-				else if (std::string_view(tech_desc.Name) == "glassreflect") {
+				} else if (std::string_view(tech_desc.Name) == "glassreflect") {
 					g_is_rendering_glass_reflect = 1;
-				}
-				else if (std::string_view(tech_desc.Name) == "sky") {
+				} else if (std::string_view(tech_desc.Name) == "sky") {
 					g_is_rendering_sky = 1;
 				} else if (std::string_view(tech_desc.Name) == "dryroad") {
 					g_is_rendering_dry_road = 1;
 				} else if (std::string_view(tech_desc.Name) == "water") {
 					g_is_rendering_water = 1;
 				}
-				else 
+				/*else 
 				{
 					int x = 1;
-				}
+				}*/
 
+#if 0
 				if (g_is_rendering_car)
 				{
 
@@ -1504,13 +1546,9 @@ namespace comp
 						}
 					}
 				}
-				
-
-				int z = 0;
+#endif
 			}
 		}
-		
-		int x = 1;
 	}
 
 	
@@ -1528,6 +1566,28 @@ namespace comp
 
 			pushad;
 			push	edi; //ID3DXBaseEffect *
+			call	post_commit_changes;
+			add		esp, 4;
+			popad;
+
+			jmp		retn_addr;
+		}
+	}
+
+	// 
+	__declspec (naked) void pre_effect_commit_changes_prim_up()
+	{
+		static uint32_t retn_addr = 0x7274D3;
+		__asm
+		{
+			mov		g_curr_effect_ptr, esi;
+			mov     esi, [esi + 0x44];
+			mov     eax, [esi];
+			push    esi;
+			call    dword ptr[eax + 0x104]; // CommitChanges
+
+			pushad;
+			push	esi; //ID3DXBaseEffect *
 			call	post_commit_changes;
 			add		esp, 4;
 			popad;
@@ -1562,6 +1622,20 @@ namespace comp
 		}
 	}
 
+	// 
+	__declspec (naked) void on_rain_render_stub()
+	{
+		static uint32_t func_addr = 0x722CB0;
+		static uint32_t retn_addr = 0x729863;
+		__asm
+		{
+			mov		g_is_rendering_rain, 1;
+			call	func_addr;
+			mov		g_is_rendering_rain, 0;
+			jmp		retn_addr;
+		}
+	}
+
 	renderer::renderer()
 	{
 		p_this = this;
@@ -1590,8 +1664,11 @@ namespace comp
 
 		// ---
 
-		// 71EE18
+		// drawindexed prim
 		shared::utils::hook(0x71EE18, pre_effect_commit_changes, HOOK_JUMP).install()->quick();
+
+		// draw prim up
+		shared::utils::hook(0x7274C7, pre_effect_commit_changes_prim_up, HOOK_JUMP).install()->quick();
 
 		shared::utils::hook::nop(0x71E065, 6);
 		shared::utils::hook(0x71E065, on_handle_material_data_stub, HOOK_JUMP).install()->quick();
@@ -1600,6 +1677,8 @@ namespace comp
 		//shared::utils::hook(game::retn_addr__pre_draw_something - 5u, pre_render_something_stub, HOOK_JUMP).install()->quick();
 		//shared::utils::hook(game::hk_addr__post_draw_something, post_render__something_stub, HOOK_JUMP).install()->quick();
 
+
+		shared::utils::hook(0x72985E, on_rain_render_stub, HOOK_JUMP).install()->quick();
 
 		// -----
 		m_initialized = true;

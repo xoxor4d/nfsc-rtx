@@ -207,10 +207,14 @@ namespace comp
 			ImGui::Checkbox("Force FF IndexedPrim", &im->m_dbg_force_ff_indexed_prim);
 			ImGui::Checkbox("Force FF IndexedPrim Up", &im->m_dbg_force_ff_indexed_prim_up);
 
+			SPACEY8;
+
 			ImGui::Checkbox("Ignore Prim Drawcalls", &im->m_dbg_disable_prim_draw);
 			ImGui::Checkbox("Ignore PrimUp Drawcalls", &im->m_dbg_disable_prim_up_draw);
 			ImGui::Checkbox("Ignore IndexedPrim Drawcalls", &im->m_dbg_disable_indexed_prim_draw);
 			ImGui::Checkbox("Ignore IndexedPrimUp Drawcalls", &im->m_dbg_disable_indexed_prim_up_draw);
+
+			SPACEY8;
 
 			ImGui::Checkbox("Disable World Drawcalls", &im->m_dbg_disable_world);
 			ImGui::Checkbox("Disable WorldNormal Drawcalls", &im->m_dbg_disable_world_normalmap);
@@ -218,6 +222,23 @@ namespace comp
 			ImGui::Checkbox("Disable CarNormal Drawcalls", &im->m_dbg_disable_car_normalmap);
 			ImGui::Checkbox("Disable Glass Drawcalls", &im->m_dbg_disable_glass);
 			ImGui::Checkbox("Disable Sky Drawcalls", &im->m_dbg_disable_sky);
+
+			SPACEY8;
+
+			ImGui::Checkbox("Disable World Wetness", &im->m_dbg_disable_world_wetness);
+			ImGui::Checkbox("World Wetness Variation", &im->m_dbg_enable_world_wetness_variation);
+			ImGui::Checkbox("World Wetness Puddles", &im->m_dbg_enable_world_wetness_puddles);
+			ImGui::Checkbox("World Wetness Occlusion Test", &im->m_dbg_enable_world_wetness_occlusion);
+			ImGui::Checkbox("World Wetness Occlusion Smoothing", &im->m_dbg_enable_world_wetness_occlusion_smoothing);
+			ImGui::Checkbox("World Wetness Occlusion Raindrops", &im->m_dbg_enable_world_wetness_raindrops);
+
+			SPACEY4;
+
+			ImGui::Checkbox("Disable Car Raindrops", &im->m_dbg_disable_car_raindrops);
+
+			SPACEY4;
+
+			ImGui::Checkbox("Disable Camera Raindrops", &im->m_dbg_disable_camera_raindrops);
 
 			SPACEY8;
 		}
