@@ -1,5 +1,7 @@
 #pragma once
 
+// (c) structs from: https://github.com/MaxHwoy/hyperlinked
+
 namespace comp::game
 {
 	enum class visible_state : std::uint8_t
@@ -158,9 +160,6 @@ namespace comp::game
 	};
 	STATIC_ASSERT_OFFSET(view_base, rain, 0x6C);
 	STATIC_ASSERT_SIZE(view_base, 0x80);
-
-
-	
 
 	template <typename T> class span final
 	{
