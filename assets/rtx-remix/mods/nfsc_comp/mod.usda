@@ -1,0 +1,19 @@
+#usda 1.0
+(
+    customLayerData = {
+        string lightspeed_game_name = "Need for Speed Carbon"
+        string lightspeed_layer_type = "replacement"
+        dictionary lightspeed_mod_dependencies = {
+        }
+        string lightspeed_mod_name = "nfsc_comp"
+        string lightspeed_mod_version = "0.0.1"
+    }
+    subLayers = [
+        @./comp_effects.usda@,
+        @./comp_cars.usda@,
+        @./comp_world.usda@
+    ]
+    timeCodesPerSecond = 24
+    upAxis = "Z"
+)
+

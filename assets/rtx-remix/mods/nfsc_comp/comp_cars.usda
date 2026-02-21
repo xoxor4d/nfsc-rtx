@@ -1,0 +1,537 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_4C88F68F02C7A7E9" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:thin_wall_thickness = 10
+                custom bool inputs:thin_walled = 1
+                custom color3f inputs:transmittance_color = (1, 0.33976835, 0.33976835)
+                custom float inputs:transmittance_measurement_distance = 1
+            }
+        }
+
+        over "mat_D5266C80CF170C31" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:thin_wall_thickness = 3
+                custom bool inputs:thin_walled = 1
+                custom color3f inputs:transmittance_color = (0.93436295, 0.9343536, 0.9343536)
+                custom float inputs:transmittance_measurement_distance = 1.5
+            }
+        }
+
+        over "mat_D49FBF67D2F9C5E5" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 2
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_0422DCD93561B0AB" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 2
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_141190F548530A7F" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 0.62
+                custom float inputs:thin_wall_thickness = 1
+                custom bool inputs:thin_walled = 1
+                custom float inputs:transmittance_measurement_distance = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/141190F548530A7F_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_36BDC57E34E26D14" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 2
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_3769040522CD2924" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 2
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_3C2C6965A7D06B6C" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/3C2C6965A7D06B6C_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_B5CC794157E9E6E8" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 2
+                custom bool inputs:thin_walled = 1
+                custom float inputs:transmittance_measurement_distance = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/B5CC794157E9E6E8_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_5954AFD0BF18B82F" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/5954AFD0BF18B82F_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_16619CCD6B61C858" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_F5CC90FA127B3C59" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/F5CC90FA127B3C59_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_FC2B35780A3EF5B5" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 2
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_3A1F22D15497AEEB" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 2
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_D31746E6FF593AE7" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/D31746E6FF593AE7_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_1DB7A55EC1502803" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/1DB7A55EC1502803_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_697ADC44A3447091" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/697ADC44A3447091_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_0A2A9D344C170715" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.6
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_A2C01FB9C2CECDEA" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom color3f inputs:transmittance_color = (1, 0.31274134, 0.31274134)
+            }
+        }
+
+        over "mat_E62472227726C9F7" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/E62472227726C9F7_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_042DB500EEA142D2" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/042DB500EEA142D2_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_591A2C9DDC14E34D" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom asset inputs:normalmap_texture = @./assets/vehicle/lights/591A2C9DDC14E34D_normal_dx_OTH_Normal.n.rtex.dds@
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 0
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/5954AFD0BF18B82F_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_2C240E1362B17511" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_E086384DD8DC8E51" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom color3f inputs:transmittance_color = (0.9189189, 0.9189097, 0.9189097)
+            }
+        }
+
+        over "mat_9BA68DEC08AC732E" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.3
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/9BA68DEC08AC732E_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_02D19F8B0C101B64" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_78900833CD0C5E65" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/78900833CD0C5E65_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_AF1486A1489E5559" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom color3f inputs:transmittance_color = (1, 0.12355214, 0.12355214)
+            }
+        }
+
+        over "mat_65DB4F6AF74DC68A" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_39917B2B325D5806" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.3
+                custom asset inputs:normalmap_texture = @./assets/vehicle/lights/39917B2B325D5806_normal_dx_OTH_Normal.n.rtex.dds@
+                custom float inputs:thin_wall_thickness = 1.4
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/39917B2B325D5806_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_8948D738A2AD4FBC" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom color3f inputs:transmittance_color = (0.7799228, 0.779915, 0.779915)
+            }
+        }
+
+        over "mat_56B757F09BF9184C" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_26A8D29C940722FF" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/26A8D29C940722FF_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_8AC3B7320191BBDC" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_AB592F775DBCA017" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.3
+                custom bool inputs:thin_walled = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/lights/AB592F775DBCA017_trans.dds@
+                custom bool inputs:use_diffuse_layer = 1
+            }
+        }
+
+        over "mat_C42755CAADA70B42" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_B044C3374B818B92"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.85999995
+                custom float inputs:reflection_roughness_constant = 0.114999995
+            }
+        }
+
+        over "mat_A9293408787559C8"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.85499996
+                custom float inputs:reflection_roughness_constant = 0.17999999
+            }
+        }
+
+        over "mat_84FECF234C35944C"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 1
+                custom float inputs:reflection_roughness_constant = 0
+            }
+        }
+
+        over "mat_2A53C85BD6B0E438"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.90999997
+                custom float inputs:reflection_roughness_constant = 0.17
+            }
+        }
+
+        over "mat_6931CD799E460823"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 0.21499999
+            }
+        }
+
+        over "mat_D03032D44614456F" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+    }
+}
+

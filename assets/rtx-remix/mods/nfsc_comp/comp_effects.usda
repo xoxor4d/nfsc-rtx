@@ -1,0 +1,39 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_29AEB5805A5933AA" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/effects/rain/raindrop_albedo.a.rtex.dds@
+                custom float inputs:ior_constant = 1.4
+                custom asset inputs:normalmap_texture = @./assets/effects/rain/raindrop_normal_dx_OTH_Normal.n.rtex.dds@
+                custom float inputs:reflection_roughness_constant = 0.515
+                custom asset inputs:reflectionroughness_texture = @./assets/effects/rain/raindrop_roughness.r.rtex.dds@
+                custom bool inputs:thin_walled = 0
+                custom color3f inputs:transmittance_color = (1, 0.99999, 0.99999)
+            }
+        }
+    }
+
+    over "meshes"
+    {
+        over "mesh_DF97137B82605995"
+        {
+            over "mesh"
+            {
+                custom uniform bool remix_category:alpha_blend_to_cutout = 0
+                custom uniform bool remix_category:particle = 0
+            }
+        }
+    }
+}
+
