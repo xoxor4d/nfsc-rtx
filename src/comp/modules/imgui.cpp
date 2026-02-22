@@ -184,6 +184,10 @@ namespace comp
 				*game::always_rain = temp_rain;
 			}
 
+			ImGui::BeginDisabled(!temp_rain);
+				ImGui::DragFloat("Wetness Value", &im->m_always_rain_wetness_value, 0.01f, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+			ImGui::EndDisabled();
+
 			SPACEY4;
 		}
 
@@ -214,25 +218,6 @@ namespace comp
 			SPACEY8;
 
 			ImGui::Checkbox("Disable Remix Car Shader", &im->m_dbg_disable_remix_car_shader);
-
-			SPACEY8;
-
-			ImGui::Checkbox("Disable World Wetness", &im->m_dbg_disable_world_wetness);
-			ImGui::Checkbox("World Wetness Variation", &im->m_dbg_enable_world_wetness_variation);
-			ImGui::Checkbox("World Wetness Puddles", &im->m_dbg_enable_world_wetness_puddles);
-			ImGui::Checkbox("World Wetness Occlusion Test", &im->m_dbg_enable_world_wetness_occlusion);
-			ImGui::Checkbox("World Wetness Occlusion Smoothing", &im->m_dbg_enable_world_wetness_occlusion_smoothing);
-			ImGui::Checkbox("World Wetness Raindrops", &im->m_dbg_enable_world_wetness_raindrops);
-			ImGui::DragFloat("World Wetness Raindrop Scale", &im->m_dbg_enable_world_wetness_raindrop_scale, 0.01f, 0.0f, 10.0f);
-
-			SPACEY4;
-
-			ImGui::Checkbox("Disable Car Raindrops", &im->m_dbg_disable_car_raindrops);
-
-			SPACEY4;
-
-			ImGui::Checkbox("Disable Camera Raindrops", &im->m_dbg_disable_camera_raindrops);
-			TT("Needs translucent cutout function to look good so disabled for now.");
 
 			SPACEY8;
 		}
@@ -584,13 +569,77 @@ namespace comp
 		ImGui::SeparatorText(" Anti Culling ");
 		SPACEY4;
 
-		//compsettings_bool_widget("Disable Preculling", cs->nocull_disable_precull);
-		//SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Scenery No Culling Distance", cs->nocull_distance_scenery, 0.0f, FLT_MAX, 0.5f);
-		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Mesh No Culling Distance", cs->nocull_distance_meshes, 0.0f, FLT_MAX, 0.5f);
+		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("No Culling Distance", cs->nocull_distance, 0.0f, FLT_MAX, 0.5f);
 
 		SPACEY4;
 	}
 
+	void compsettings_rendering_container()
+	{
+		const auto& cs = comp_settings::get();
+
+		SPACEY4;
+		ImGui::SeparatorText(" Vertex Colors ");
+		SPACEY4;
+
+		ImGui::Widget_CategoryWithVerticalLabel("Vertex Colors", [&]()
+			{
+				ImGui::PushID("vercol");
+				compsettings_bool_widget("Enable Vertex Colors Globally", cs->vertex_colors_global);
+				compsettings_bool_widget("Enable Vertex Colors on Particles", cs->vertex_colors_particles);
+				compsettings_bool_widget("Enable Vertex Colors on World Meshes", cs->vertex_colors_world);
+				ImGui::PopID();
+			});
+
+		SPACEY4;
+		ImGui::SeparatorText(" Effects ");
+		SPACEY4;
+
+		ImGui::Widget_CategoryWithVerticalLabel("Flares", [&]()
+			{
+				ImGui::PushID("flares");
+				compsettings_bool_widget("Draw Flares", cs->flare_enabled);
+				SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Flare Alpha Multiplier", cs->flare_alpha_multiplier, 0.0f, 1.0f, 0.01f);
+				ImGui::PopID();
+			});
+
+		SPACEY8;
+		ImGui::SeparatorText(" Wetness ");
+		SPACEY4;
+
+		ImGui::Widget_CategoryWithVerticalLabel("World", [&]()
+			{
+				ImGui::PushID("world");
+				compsettings_bool_widget("Enable World Wetness", cs->wetness_world);
+				compsettings_bool_widget("Enable Variation", cs->wetness_world_variation);
+				compsettings_bool_widget("Enable Puddles", cs->wetness_world_puddles);
+				compsettings_bool_widget("Enable Occlusion Check", cs->wetness_world_occlusion_check);
+				compsettings_bool_widget("Enable Occlusion Smoothing", cs->wetness_world_occlusion_smoothing);
+				compsettings_bool_widget("Enable Raindrops", cs->wetness_world_raindrops);
+				SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Raindrop Scale", cs->wetness_world_raindrop_scale, 0.0f, 1.0f, 0.01f);
+				ImGui::PopID();
+			});
+
+		SPACEY12;
+
+		ImGui::Widget_CategoryWithVerticalLabel("Car", [&]()
+			{
+				ImGui::PushID("car");
+				compsettings_bool_widget("Car Raindrops", cs->wetness_car_raindrops);
+				ImGui::PopID();
+			});
+
+		SPACEY12;
+
+		ImGui::Widget_CategoryWithVerticalLabel("Camera", [&]()
+			{
+				ImGui::PushID("camera");
+				compsettings_bool_widget("Camera Raindrops", cs->enable_camera_raindrops);
+				ImGui::PopID();
+			});
+
+		SPACEY4;
+	}
 
 	void compsettings_material_container()
 	{
@@ -649,9 +698,16 @@ namespace comp
 
 		// culling related
 		{
-			static float cont_cs_renderer_height = 0.0f;
-			cont_cs_renderer_height = ImGui::Widget_ContainerWithCollapsingTitle("Culling Settings", cont_cs_renderer_height,
+			static float cont_cs_culling_height = 0.0f;
+			cont_cs_culling_height = ImGui::Widget_ContainerWithCollapsingTitle("Culling Settings", cont_cs_culling_height,
 				compsettings_culling_container, false, ICON_FA_TV, &im->ImGuiCol_ContainerBackground, &im->ImGuiCol_ContainerBorder);
+		}
+
+		// rendering related
+		{
+			static float cont_cs_renderer_height = 0.0f;
+			cont_cs_renderer_height = ImGui::Widget_ContainerWithCollapsingTitle("Rendering Settings", cont_cs_renderer_height,
+				compsettings_rendering_container, false, ICON_FA_CAMERA, &im->ImGuiCol_ContainerBackground, &im->ImGuiCol_ContainerBorder);
 		}
 
 		// material related

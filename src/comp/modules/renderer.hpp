@@ -1,4 +1,5 @@
 #pragma once
+#include "d3dxeffects.hpp"
 
 namespace comp
 {
@@ -432,7 +433,7 @@ namespace comp
 
 			//std::string_view shader_name;
 			IDirect3DDevice9* device_ptr = nullptr;
-			
+
 			float shaderconst_emissive_intensity = -1.0f;
 
 			Vector cvDiffuseMin;
@@ -520,7 +521,7 @@ namespace comp
 			WETNESS_FLAG_ENABLE_RAINDROPS = 1 << 1,				// either expensive or normal raindrops
 			WETNESS_FLAG_USE_LOCAL_COORDINATES = 1 << 2,		// uses world position but transformed to object local space
 			WETNESS_FLAG_ENABLE_EXP_RAINDROPS = 1 << 3,			// either expensive or normal raindrops
-			WETNESS_FLAG_RAINDROPS_HALF_DENSITY = 1 << 4,		// raindrops with half density
+			WETNESS_FLAG_LARGE_OCCLUSION_DIST = 1 << 4,			// extend occlusion check distance (4x the normal distance - for tunnels)
 			WETNESS_FLAG_ENABLE_PUDDLE_LAYER = 1 << 5,			// adds a puddle layer to wet surfaces 
 			WETNESS_FLAG_ENABLE_OCCLUSION_TEST = 1 << 6,		// test if something is covering this surface
 			WETNESS_FLAG_ENABLE_OCCLUSION_SMOOTHING = 1 << 7,	// smooth occlusion edges - needs DLSS RR

@@ -256,16 +256,19 @@ namespace comp
 
 	HRESULT d3dxeffects::D3DXEffect::SetTechnique(D3DXHANDLE hTechnique)
 	{
-		D3DXTECHNIQUE_DESC tech_desc{};
+		D3DXTECHNIQUE_DESC tech_desc {};
 		if (SUCCEEDED(m_pID3DXEffect->GetTechniqueDesc(hTechnique, &tech_desc)) && tech_desc.Name)
 		{
 			effects::g_current_tech_name = tech_desc.Name;
 
+			if (std::string_view(tech_desc.Name) == "car_normalmap")
+			{
+				int x = 1;
+			}
+
 			// O(1) lookup: map name -> ETECH enum value (empty until enum is populated)
 			const auto it = effects::g_tech_name_to_enum.find(tech_desc.Name);
-			effects::g_current_tech = (it != effects::g_tech_name_to_enum.end())
-				? it->second
-				: effects::ETECH::UNKNOWN;
+			effects::g_current_tech = (it != effects::g_tech_name_to_enum.end()) ? it->second : effects::ETECH::UNKNOWN;
 		}
 
 		return m_pID3DXEffect->SetTechnique(hTechnique);

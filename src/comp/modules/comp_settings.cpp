@@ -151,9 +151,27 @@ namespace comp
 				ASSIGN(remix_override_rtxdi_samplecount);
 				
 				// culling related settings
-				//ASSIGN(nocull_distance_scenery);
-				ASSIGN(nocull_distance_meshes);
-				//ASSIGN(nocull_disable_precull);
+				ASSIGN(nocull_distance);
+
+				// rendering related settings
+				ASSIGN(vertex_colors_global);
+				ASSIGN(vertex_colors_particles);
+				ASSIGN(vertex_colors_world);
+
+				ASSIGN(flare_enabled);
+				ASSIGN(flare_alpha_multiplier);
+
+				ASSIGN(wetness_world);
+				ASSIGN(wetness_world_variation);
+				ASSIGN(wetness_world_puddles);
+				ASSIGN(wetness_world_occlusion_check);
+				ASSIGN(wetness_world_occlusion_smoothing);
+				ASSIGN(wetness_world_raindrops);
+				ASSIGN(wetness_world_raindrop_scale);
+
+				ASSIGN(wetness_car_raindrops);
+
+				ASSIGN(enable_camera_raindrops);
 
 				// material related settings
 				

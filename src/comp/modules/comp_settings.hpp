@@ -348,25 +348,119 @@ namespace comp
 			// ----------------------------------
 			// culling related settings
 
-			/*variable nocull_distance_scenery =
+			variable nocull_distance =
 			{
-				"nocull_distance_scenery",
-				("Distance (radius around player) where culling of level areas is disabled."),
-				80.0f
-			};*/
-
-			variable nocull_distance_meshes =
-			{
-				"nocull_distance_meshes",
+				"nocull_distance",
 				("Distance (radius around player) where culling of objects is disabled"),
 				150.0f
 			};
 
-			/*variable nocull_disable_precull = {
-				"nocull_disable_precull",
-				("Disables the preculling system (occlusion)"),
+
+			// ----------------------------------
+			// rendering related settings
+
+			variable vertex_colors_global =
+			{
+				"vertex_colors_global",
+				("Enabled vertex colors (baked lighting) globally"),
 				false
-			};*/
+			};
+
+			variable vertex_colors_particles =
+			{
+				"vertex_colors_particles",
+				("Enabled vertex colors (baked lighting) on particles"),
+				true
+			};
+
+			variable vertex_colors_world =
+			{
+				"vertex_colors_world",
+				("Enabled vertex colors (baked lighting) on world objects"),
+				false
+			};
+
+			// ---
+
+			variable flare_enabled = 
+			{
+				"flare_enabled", 
+				("Render flares"), 
+				true
+			};
+
+			variable flare_alpha_multiplier =
+			{
+				"flare_alpha_multiplier",
+				("Alpha multiplier for flares"),
+				0.6f
+			};
+
+			// ---
+
+			variable wetness_world =
+			{
+				"wetness_world",
+				("Enable World Wetness"),
+				true
+			};
+
+			variable wetness_world_variation =
+			{
+				"wetness_world_variation",
+				("Enable World Wetness Variation"),
+				true
+			};
+
+			variable wetness_world_puddles =
+			{
+				"wetness_world_puddles",
+				("Enable World Wetness Puddles"),
+				true
+			};
+
+			variable wetness_world_occlusion_check =
+			{
+				"wetness_world_occlusion_check",
+				("Enable World Wetness Occlusion Checks (dry ground under cover)"),
+				true
+			};
+
+			variable wetness_world_occlusion_smoothing =
+			{
+				"wetness_world_occlusion_smoothing",
+				 ("Enable World Wetness Occlusion Smoothing (smooth wet <-> dry transition)\n"
+				  "Does NOT look good without DLSS!"),
+				true
+			};
+
+			variable wetness_world_raindrops =
+			{
+				"wetness_world_raindrops",
+				("Enable World Wetness Raindrops"),
+				false
+			};
+
+			variable wetness_world_raindrop_scale = {
+				"wetness_world_raindrop_scale", ("World Wetness Raindrop Scale"),
+				0.20f
+			};
+
+			// ---
+
+			variable wetness_car_raindrops =
+			{
+				"wetness_car_raindrops",
+				("Enable Raindrops on Cars"),
+				true
+			};
+
+			variable enable_camera_raindrops =
+			{
+				"enable_camera_raindrops",
+				("Enable Raindrops on the Camera Lense. Does not look good until we have cutout translucents."),
+				false
+			};
 
 			// ----------------------------------
 			// material related settings

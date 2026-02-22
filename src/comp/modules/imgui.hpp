@@ -76,17 +76,7 @@ namespace comp
 
 		// ---
 
-		bool m_dbg_disable_world_wetness = false;
-		bool m_dbg_enable_world_wetness_variation = true;
-		bool m_dbg_enable_world_wetness_puddles = true;
-		bool m_dbg_enable_world_wetness_occlusion = true;
-		bool m_dbg_enable_world_wetness_occlusion_smoothing = true;
-		bool m_dbg_enable_world_wetness_raindrops = false;
-		float m_dbg_enable_world_wetness_raindrop_scale = 0.2f;
-
-		bool m_dbg_disable_car_raindrops = false;
-
-		bool m_dbg_disable_camera_raindrops = true;
+		float m_always_rain_wetness_value = 1.0f;
 
 		// ---
 

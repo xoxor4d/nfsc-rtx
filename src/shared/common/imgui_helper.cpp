@@ -4,6 +4,8 @@
 #include "imgui_internal.h"
 #include "imgui_helper.hpp"
 
+#include "comp/modules/imgui.hpp"
+
 namespace ImGui
 {
 	void Spacing(const float& x, const float& y) {
@@ -326,6 +328,136 @@ namespace ImGui
 		Spacing(0, 4);
 
 		return GetItemRectSize().y + 6.0f;
+	}
+
+	float Widget_CategoryWithVerticalLabel(const char* category_text, const std::function<void()>& callback, const ImVec4* text_color, const ImVec4* line_color)
+	{
+		const auto im = comp::imgui::get();
+
+		const ImVec4 default_text_color = GetStyleColorVec4(ImGuiCol_Text);
+		const ImVec4 default_line_color = ImVec4(0.4f, 0.4f, 0.4f, 1.0f);
+
+		const ImVec4 final_text_color = text_color ? *text_color : default_text_color;
+		const ImVec4 final_line_color = line_color ? *line_color : default_line_color;
+
+		const auto draw_list = GetWindowDrawList();
+		ImFont* font = GetFont();
+
+		// Save starting position
+		const ImVec2 start_pos = GetCursorScreenPos();
+		ImVec2 text_size = CalcTextSize(category_text);
+
+		// When text is rotated 90° counter-clockwise, the text's width becomes its height
+		// We need horizontal space = font height
+		const float font_height = text_size.y;
+		const float text_area_width = font_height; // Font height
+		const float line_spacing = 8.0f; // Space between text and line
+		const float line_thickness = 2.0f;
+		const float content_spacing = 12.0f; // Space between line and content
+		const float total_left_margin = text_area_width + line_spacing + line_thickness + content_spacing;
+
+		// Move cursor to the right to make space for vertical text, line, and spacing
+		SetCursorScreenPos(ImVec2(start_pos.x + total_left_margin, start_pos.y));
+
+		// Split draw list into channels for proper layering
+		// Channel 0: gradient (background)
+		// Channel 1: content (foreground)
+		draw_list->ChannelsSplit(2);
+		draw_list->ChannelsSetCurrent(1); // Draw content on foreground channel
+
+		// Draw content in a group to measure its height
+		BeginGroup();
+		Spacing(0, 10.0f); // Top padding
+		if (callback) {
+			callback();
+		}
+		Spacing(0, 10.0f); // Bottom padding
+		EndGroup();
+
+		// Get the actual height of the content group
+		const ImVec2 content_rect_size = GetItemRectSize();
+		const float content_height = content_rect_size.y;
+
+		// Switch to background channel to draw gradient, text, and line
+		draw_list->ChannelsSetCurrent(0);
+
+		// Calculate position for the rotated text (centered vertically along content)
+		const float text_center_y = start_pos.y + content_height * 0.5f;
+		const float text_x = start_pos.x;
+
+		// Render text vertices at origin first
+		const ImVec2 temp_pos = ImVec2(0.0f, 0.0f);
+		const size_t vtx_begin = draw_list->VtxBuffer.Size;
+
+		const ImVec4 clip_rect = ImVec4(-FLT_MAX, -FLT_MAX, FLT_MAX, FLT_MAX);
+		PushFont(shared::common::font::BOLD_LARGE);
+		const float font_size = GetFontSize();
+
+		bool use_dot_label_text = false;
+		if (text_size.x > content_height)
+		{
+			use_dot_label_text = true;
+			text_size = CalcTextSize("...");
+		}
+
+		font->RenderText(draw_list, font_size, temp_pos, ColorConvertFloat4ToU32(final_text_color),
+			clip_rect, use_dot_label_text ? "..." : category_text, nullptr, 0.0f, false);
+		PopFont();
+		const size_t vtx_end = draw_list->VtxBuffer.Size;
+
+		// Transform vertices for -90 degree rotation
+		// After rotation: original (x,y) becomes (y, -x)
+		for (size_t i = vtx_begin; i < vtx_end; i++)
+		{
+			ImDrawVert& vtx = draw_list->VtxBuffer[i];
+			const float x = vtx.pos.x;
+			const float y = vtx.pos.y;
+
+			// Rotate and translate to final position
+			// Keep X consistent (at text_x), center Y along content height
+			vtx.pos.x = text_x + y;
+			vtx.pos.y = text_center_y - x + text_size.x * 0.5f;
+		}
+
+		// Draw vertical line between text and content
+		const float line_x = start_pos.x + 18.0f + line_spacing;
+		const ImVec2 line_start = ImVec2(line_x, start_pos.y);
+		const ImVec2 line_end = ImVec2(line_x, start_pos.y + content_height);
+		draw_list->AddLine(line_start, line_end, ColorConvertFloat4ToU32(final_line_color), line_thickness);
+
+		// Draw left gradient rectangle from text to line (fades from transparent to line)
+		{
+			const float left_gradient_start_x = start_pos.x - 4.0f;
+			const float left_gradient_end_x = line_x;
+			const ImVec2 left_gradient_pmin = ImVec2(left_gradient_start_x, start_pos.y);
+			const ImVec2 left_gradient_pmax = ImVec2(left_gradient_end_x, start_pos.y + content_height);
+
+			const auto col_left = ColorConvertFloat4ToU32(ImVec4(im->ImGuiCol_VerticalFadeContainerBackgroundEnd));   // Transparent on the left
+			const auto col_right = ColorConvertFloat4ToU32(ImVec4(im->ImGuiCol_VerticalFadeContainerBackgroundStart)); // Semi-transparent at the line
+			draw_list->AddRectFilledMultiColor(left_gradient_pmin, left_gradient_pmax, col_left, col_right, col_right, col_left);
+		}
+
+		// Draw right gradient rectangle from line to right edge (fades from line into content)
+		{
+			const auto& style = GetStyle();
+			const auto window = GetCurrentWindow();
+			const float gradient_start_x = line_x;
+			const float gradient_end_x = window->WorkRect.Max.x + style.WindowPadding.x * 0.5f;
+			const ImVec2 gradient_pmin = ImVec2(gradient_start_x, start_pos.y);
+			const ImVec2 gradient_pmax = ImVec2(gradient_end_x, start_pos.y + content_height);
+
+			const auto col_left = ColorConvertFloat4ToU32(ImVec4(im->ImGuiCol_VerticalFadeContainerBackgroundStart));  // Semi-transparent at the line
+			const auto col_right = ColorConvertFloat4ToU32(ImVec4(im->ImGuiCol_VerticalFadeContainerBackgroundEnd));  // Transparent on the right
+			draw_list->AddRectFilledMultiColor(gradient_pmin, gradient_pmax, col_left, col_right, col_right, col_left);
+		}
+
+		// Merge channels so background is drawn first, then content on top
+		draw_list->ChannelsMerge();
+
+		// Move cursor to the next row (below this widget)
+		SetCursorScreenPos(ImVec2(start_pos.x, start_pos.y + content_height));
+
+		return content_height;
 	}
 
 	void Style_DeleteButtonPush()

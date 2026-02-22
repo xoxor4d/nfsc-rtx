@@ -88,7 +88,7 @@ namespace comp
 
 		// for hyperlinked tests
 		//*game::drawscenery_cell_dist_check_01 = cs->nocull_distance_scenery._float();
-		//*game::drawscenery_cell_dist_check_02 = cs->nocull_distance_meshes._float();
+		//*game::drawscenery_cell_dist_check_02 = cs->nocull_distance._float();
 
 		// using shadermodel 1 disables these?
 		*game::options_rain_enabled = 1;
@@ -107,8 +107,8 @@ namespace comp
 		*reinterpret_cast<BYTE*>(0xA63E60) = 1; // g_ShaderDetailLevel
 		*reinterpret_cast<BYTE*>(0xA6537C) = 0; // g_FSAALevel
 		*reinterpret_cast<BYTE*>(0xA65360) = 0; // g_MotionBlurEnable
-		
 
+		renderer::get()->m_triggered_remix_injection = false;
 	}
 
 
@@ -152,7 +152,7 @@ namespace comp
 	{
 		if (tree_cull_stub_curr_vis_helper != game::visible_state::inside)
 		{
-			const auto nocull_dist = comp_settings::get()->nocull_distance_meshes._float();
+			const auto nocull_dist = comp_settings::get()->nocull_distance._float();
 			if (nocull_dist > 0.0f)
 			{
 				Vector center = (current->bbox_min + current->bbox_max) * 0.5f;
@@ -219,7 +219,7 @@ namespace comp
 			}
 		}
 
-		const auto nocull_dist = comp_settings::get()->nocull_distance_meshes._float();
+		const auto nocull_dist = comp_settings::get()->nocull_distance._float();
 		if (nocull_dist > 0.0f)
 		{
 			const float dist_sqr = (instance->position - cull_info->origin).LengthSqr();
