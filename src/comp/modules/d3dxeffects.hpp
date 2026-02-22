@@ -1,4 +1,85 @@
 #pragma once
+#include <unordered_map>
+#include <vector>
+#include <string>
+
+namespace comp::effects
+{
+	// ---------------------------------------------------------------------------
+	// Technique enum  (string names come from D3DXTechniqueDesc::Name)
+	// ---------------------------------------------------------------------------
+	enum class ETECH : int
+	{
+		UNKNOWN											= -1,
+		WORLD											=  0,
+		LOWLOD											=  1,
+		WORLD_1_1										=  2,
+		DRYROAD											=  3,
+		RAINING_ON_ROAD									=  4,
+		WORLD_FIXED										=  5,
+		CAR												=  6,
+		WORLD_MIN										=  7,
+		FILTER											=  8,
+		VISUALTREATMENT									=  9,
+		VISUALTREATMENT_ENCHANCED						= 10,  // note: original spelling
+		MOTIONBLUR										= 11,
+		COMPOSITE_BLUR									= 12,
+		UVESOVERCLIFF									= 13,
+		UVESOVERCLIFFDARKEN								= 14,
+		SCREEN_PASSTHRU									= 15,
+		FUZZZ											= 16,
+		NO_FUZZZ										= 17,
+		STREAK_FLARES									= 18,
+		FLARES											= 19,
+		SKY												= 20,
+		SKINNED											= 21,
+		DEPTH_TECHNIQUE_NOALPHA							= 22,
+		TSHADER_INSTANCING								= 23,
+		TWOPASSBLUR										= 24,
+		GAUSSBLUR5X5									= 25,
+		DOWNSCALE4X4									= 26,
+		DOWNSCALE2X2									= 27,
+		DOWNSCALE2X2_FOR_MOTIONBLUR						= 28,
+		DOWNSCALE_FOR_BLOOM								= 29,
+		BLEND_TEXTURES									= 30,
+		COMBINE_REFLECTION_COLOUR_AND_HEADLIGHT_ALPHA	= 31,
+		FINALHDRPASS									= 32,
+		WORLD_MASKED									= 33,
+		YUVMOVIE										= 34,
+		SCREEN_PASSTHRU_ALPHA_TAG						= 35,
+		DOWNSCALE4X4_T0_UVES_HDR						= 36,
+		BLOOM											= 37,
+		BLUR											= 38,
+		BRIGHTPASS										= 39,
+		CALCULATE_LUMINANCE								= 40,
+		CALCULATE_ADAPTATION							= 41,
+		ATTENUATE										= 42,
+		DEBUG_SHOW_RED_CHANNEL							= 43,
+		MAIN											= 44,
+		MAIN_1_1										= 45,
+		GLASSREFLECT									= 46,
+		WATER											= 47,
+		RVM												= 48,
+		PIP												= 49,
+		GHOSTCAR										= 50,
+	};
+
+	// All unique technique names seen across all wrapped effects 
+	// (populated at effect-creation time, logged to the console once).
+	inline std::vector<std::string>              g_discovered_techniques;
+
+	// Fast name -> enum lookup used inside SetTechnique (O(1) unordered lookup).
+	// Populate this map as soon as the enum above is extended.
+	inline std::unordered_map<std::string, ETECH> g_tech_name_to_enum;
+
+	// Current active technique – updated every SetTechnique call.
+	inline ETECH        g_current_tech      = ETECH::UNKNOWN;
+	inline std::string  g_current_tech_name;
+
+	// Public accessors
+	inline ETECH              get_current_tech()      { return g_current_tech; }
+	inline const std::string& get_current_tech_name() { return g_current_tech_name; }
+}
 
 namespace comp
 {
@@ -15,7 +96,37 @@ namespace comp
 		{
 			friend class d3dxeffects;
 		public:
-			D3DXEffect(ID3DXEffect* pOriginal) : m_pID3DXEffect(pOriginal) {};
+			D3DXEffect(ID3DXEffect* pOriginal) : m_pID3DXEffect(pOriginal)
+		{
+			// Enumerate all techniques in this effect and register any new ones
+			D3DXEFFECT_DESC desc{};
+			if (SUCCEEDED(pOriginal->GetDesc(&desc)))
+			{
+				for (UINT i = 0; i < desc.Techniques; i++)
+				{
+					D3DXHANDLE hTech = pOriginal->GetTechnique(i);
+					if (!hTech) continue;
+
+					D3DXTECHNIQUE_DESC td{};
+					if (SUCCEEDED(pOriginal->GetTechniqueDesc(hTech, &td)) && td.Name)
+					{
+						const std::string name(td.Name);
+						const bool is_new = std::find(
+							effects::g_discovered_techniques.begin(),
+							effects::g_discovered_techniques.end(), name)
+							== effects::g_discovered_techniques.end();
+
+						if (is_new)
+						{
+							effects::g_discovered_techniques.push_back(name);
+							shared::common::log("d3dxeffects",
+								std::format("[technique] '{}'", name),
+								shared::common::LOG_TYPE::LOG_TYPE_STATUS, false);
+						}
+					}
+				}
+			}
+		};
 			virtual ~D3DXEffect() {};
 
 			// IUnknown methods

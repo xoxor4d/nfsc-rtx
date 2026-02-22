@@ -2,6 +2,7 @@
 #include "imgui.hpp"
 
 #include "comp_settings.hpp"
+#include "d3dxeffects.hpp"
 #include "imgui_internal.h"
 #include "map_settings.hpp"
 #include "renderer.hpp"
@@ -472,6 +473,28 @@ namespace comp
 
 			SPACEY8;
 		}
+
+		if (ImGui::CollapsingHeader("D3DXEffects"))
+		{
+			SPACEY4;
+
+			// unique techniques discovered at effect-creation time
+			const auto& techs = comp::effects::g_discovered_techniques;
+			if (ImGui::Button("Print Techniques to Console", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetFrameHeight())))
+			{
+				for (const auto& name : techs) {
+					std::cout << name << std::endl;
+				}
+			}
+
+			ImGui::Text("Discovered techniques (%zu):", techs.size());
+			for (const auto& name : techs) {
+				ImGui::BulletText("%s", name.c_str());
+			}
+
+			SPACEY4;
+		}
+
 		// m_vis_cvDiffuseMin
 	}
 

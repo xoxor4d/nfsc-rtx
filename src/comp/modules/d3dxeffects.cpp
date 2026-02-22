@@ -256,13 +256,19 @@ namespace comp
 
 	HRESULT d3dxeffects::D3DXEffect::SetTechnique(D3DXHANDLE hTechnique)
 	{
-		D3DXTECHNIQUE_DESC tech_desc;
-		m_pID3DXEffect->GetTechniqueDesc(hTechnique, &tech_desc);
+		D3DXTECHNIQUE_DESC tech_desc{};
+		if (SUCCEEDED(m_pID3DXEffect->GetTechniqueDesc(hTechnique, &tech_desc)) && tech_desc.Name)
+		{
+			effects::g_current_tech_name = tech_desc.Name;
 
-		//shared::common::log("d3dxeffects", std::format("SetTechnique: {}", tech_desc.Name), shared::common::LOG_TYPE::LOG_TYPE_STATUS, true);
-		
-		const auto hr = m_pID3DXEffect->SetTechnique(hTechnique);
-		return hr;
+			// O(1) lookup: map name -> ETECH enum value (empty until enum is populated)
+			const auto it = effects::g_tech_name_to_enum.find(tech_desc.Name);
+			effects::g_current_tech = (it != effects::g_tech_name_to_enum.end())
+				? it->second
+				: effects::ETECH::UNKNOWN;
+		}
+
+		return m_pID3DXEffect->SetTechnique(hTechnique);
 	}
 
 	D3DXHANDLE d3dxeffects::D3DXEffect::GetCurrentTechnique() {
@@ -433,6 +439,63 @@ namespace comp
 
 	d3dxeffects::d3dxeffects()
 	{
+		// Build the name -> ETECH lookup table (used in SetTechnique for O(1) checking)
+		using E = effects::ETECH;
+		effects::g_tech_name_to_enum =
+		{
+			{ "world",                                          E::WORLD                                         },
+			{ "lowlod",                                         E::LOWLOD                                        },
+			{ "world_1_1",                                      E::WORLD_1_1                                     },
+			{ "dryroad",                                        E::DRYROAD                                       },
+			{ "raining_on_road",                                E::RAINING_ON_ROAD                               },
+			{ "world_fixed",                                    E::WORLD_FIXED                                   },
+			{ "car",                                            E::CAR                                           },
+			{ "world_min",                                      E::WORLD_MIN                                     },
+			{ "filter",                                         E::FILTER                                        },
+			{ "visualtreatment",                                E::VISUALTREATMENT                               },
+			{ "visualtreatment_enchanced",                      E::VISUALTREATMENT_ENCHANCED                     },
+			{ "motionblur",                                     E::MOTIONBLUR                                    },
+			{ "composite_blur",                                 E::COMPOSITE_BLUR                                },
+			{ "uvesovercliff",                                  E::UVESOVERCLIFF                                 },
+			{ "uvesovercliffdarken",                            E::UVESOVERCLIFFDARKEN                           },
+			{ "screen_passthru",                                E::SCREEN_PASSTHRU                               },
+			{ "fuzzz",                                          E::FUZZZ                                         },
+			{ "no_fuzzz",                                       E::NO_FUZZZ                                      },
+			{ "streak_flares",                                  E::STREAK_FLARES                                 },
+			{ "flares",                                         E::FLARES                                        },
+			{ "sky",                                            E::SKY                                           },
+			{ "skinned",                                        E::SKINNED                                       },
+			{ "depth_technique_noalpha",                        E::DEPTH_TECHNIQUE_NOALPHA                       },
+			{ "TShader_Instancing",                             E::TSHADER_INSTANCING                            },
+			{ "TwoPassBlur",                                    E::TWOPASSBLUR                                   },
+			{ "GaussBlur5x5",                                   E::GAUSSBLUR5X5                                  },
+			{ "DownScale4x4",                                   E::DOWNSCALE4X4                                  },
+			{ "DownScale2x2",                                   E::DOWNSCALE2X2                                  },
+			{ "DownScale2x2ForMotionBlur",                      E::DOWNSCALE2X2_FOR_MOTIONBLUR                   },
+			{ "DownScaleForBloom",                              E::DOWNSCALE_FOR_BLOOM                           },
+			{ "BlendTextures",                                  E::BLEND_TEXTURES                                },
+			{ "CombineReflectionColourAndHeadlightAlpha",       E::COMBINE_REFLECTION_COLOUR_AND_HEADLIGHT_ALPHA },
+			{ "finalhdrpass",                                   E::FINALHDRPASS                                  },
+			{ "world_masked",                                   E::WORLD_MASKED                                  },
+			{ "yuvmovie",                                       E::YUVMOVIE                                      },
+			{ "screen_passthru_alpha_tag",                      E::SCREEN_PASSTHRU_ALPHA_TAG                     },
+			{ "downscale4x4_t0_uves_hdr",                       E::DOWNSCALE4X4_T0_UVES_HDR                      },
+			{ "bloom",                                          E::BLOOM                                         },
+			{ "blur",                                           E::BLUR                                          },
+			{ "brightpass",                                     E::BRIGHTPASS                                    },
+			{ "calculate_luminance",                            E::CALCULATE_LUMINANCE                           },
+			{ "calculate_adaptation",                           E::CALCULATE_ADAPTATION                          },
+			{ "attenuate",                                      E::ATTENUATE                                     },
+			{ "DebugShowRedChannel",                            E::DEBUG_SHOW_RED_CHANNEL                        },
+			{ "main",                                           E::MAIN                                          },
+			{ "main_1_1",                                       E::MAIN_1_1                                      },
+			{ "glassreflect",                                   E::GLASSREFLECT                                  },
+			{ "water",                                          E::WATER                                         },
+			{ "rvm",                                            E::RVM                                           },
+			{ "pip",                                            E::PIP                                           },
+			{ "ghostcar",                                       E::GHOSTCAR                                      },
+		};
+
 		if (HMODULE hD3DX9 = GetModuleHandle(L"d3dx9_43.dll"); hD3DX9) 
 		{
 			auto try_hook = [&](LPCSTR name, LPVOID hook, LPVOID* original)
