@@ -91,7 +91,7 @@ namespace comp
 
 		ImGui::Spacing(0.0f, 20.0f);
 
-		ImGui::CenterText("RTX REMIX COMPATIBILITY BASE");
+		ImGui::CenterText("NFSC RTX REMIX COMPATIBILITY MOD");
 		ImGui::CenterText("                      by #xoxor4d");
 
 		ImGui::Spacing(0.0f, 24.0f);
@@ -108,7 +108,7 @@ namespace comp
 #endif
 
 		SPACEY16;
-		CENTER_URL("GitHub Repository", "https://github.com/xoxor4d/remix-comp-base");
+		CENTER_URL("GitHub Repository", "https://github.com/xoxor4d/nfsc-rtx");
 
 		SPACEY16;
 		ImGui::Separator();
@@ -120,9 +120,16 @@ namespace comp
 		ImGui::Spacing(0.0f, 8.0f);
 
 		CENTER_URL("NVIDIA - RTX Remix", "https://github.com/NVIDIAGameWorks/rtx-remix");
+		CENTER_URL("People of the showcase discord", "https://discord.gg/j6sh7JD3v9");
 		CENTER_URL("Dear Imgui", "https://github.com/ocornut/imgui");
 		CENTER_URL("Minhook", "https://github.com/TsudaKageyu/minhook");
 		CENTER_URL("Ultimate-ASI-Loader", "https://github.com/ThirteenAG/Ultimate-ASI-Loader");
+		CENTER_URL("MaxHwoy - hyperlinked", "https://github.com/MaxHwoy/hyperlinked");
+
+		CENTER_URL("xan1242 - XNFS-ShaderLoader-Carbon", "https://github.com/xan1242/xnfs-shaderloader-carbon");
+		CENTER_URL("ThirteenAG - Widescreen Fix", "https://fusionfix.io/wfp#nfsc");
+		CENTER_URL("nlgzrgn- HUD Adapter", "https://nfsmods.xyz/mod/364");
+		CENTER_URL("Archie - Help/Guiding/CameraToolkit", "https://github.com/ArchieGoldmill");
 
 		ImGui::Spacing(0.0f, 24.0f);
 		ImGui::CenterText("And of course, all my fellow Ko-Fi and Patreon supporters");
@@ -179,14 +186,30 @@ namespace comp
 		{
 			SPACEY4;
 
-			bool temp_rain = *game::always_rain;
+			ImGui::Widget_CategoryWithVerticalLabel("Rain", [&]()
+				{
+					ImGui::PushID("rain");
+
+					bool temp_rain = *game::always_rain;
+					if (ImGui::Checkbox("Always Raining", &temp_rain)) {
+						*game::always_rain = temp_rain;
+					}
+
+					ImGui::BeginDisabled(!temp_rain);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Wetness Value", &im->m_always_rain_wetness_value, 0.01f, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+					ImGui::EndDisabled();
+
+					ImGui::PopID();
+				});
+
+			/*bool temp_rain = *game::always_rain;
 			if (ImGui::Checkbox("Always Raining", &temp_rain)) {
 				*game::always_rain = temp_rain;
 			}
 
 			ImGui::BeginDisabled(!temp_rain);
 				ImGui::DragFloat("Wetness Value", &im->m_always_rain_wetness_value, 0.01f, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
-			ImGui::EndDisabled();
+			ImGui::EndDisabled();*/
 
 			SPACEY4;
 		}
@@ -195,29 +218,64 @@ namespace comp
 		{
 			SPACEY4;
 
-			ImGui::Checkbox("Force FF PrimUp", &im->m_dbg_force_ff_prim_up);
-			ImGui::Checkbox("Force FF IndexedPrim", &im->m_dbg_force_ff_indexed_prim);
-			ImGui::Checkbox("Force FF IndexedPrim Up", &im->m_dbg_force_ff_indexed_prim_up);
+			ImGui::Widget_CategoryWithVerticalLabel("Force FF", [&]()
+				{
+					ImGui::PushID("forceff");
+					ImGui::Checkbox("Force FF PrimUp", &im->m_dbg_force_ff_prim_up);
+					ImGui::Checkbox("Force FF IndexedPrim", &im->m_dbg_force_ff_indexed_prim);
+					ImGui::Checkbox("Force FF IndexedPrim Up", &im->m_dbg_force_ff_indexed_prim_up);
+					ImGui::PopID();
+				});
 
-			SPACEY8;
+			//ImGui::Checkbox("Force FF PrimUp", &im->m_dbg_force_ff_prim_up);
+			//ImGui::Checkbox("Force FF IndexedPrim", &im->m_dbg_force_ff_indexed_prim);
+			//ImGui::Checkbox("Force FF IndexedPrim Up", &im->m_dbg_force_ff_indexed_prim_up);
 
-			ImGui::Checkbox("Ignore Prim Drawcalls", &im->m_dbg_disable_prim_draw);
-			ImGui::Checkbox("Ignore PrimUp Drawcalls", &im->m_dbg_disable_prim_up_draw);
-			ImGui::Checkbox("Ignore IndexedPrim Drawcalls", &im->m_dbg_disable_indexed_prim_draw);
-			ImGui::Checkbox("Ignore IndexedPrimUp Drawcalls", &im->m_dbg_disable_indexed_prim_up_draw);
+			SPACEY12;
 
-			SPACEY8;
+			ImGui::Widget_CategoryWithVerticalLabel("Ignore Draw", [&]()
+				{
+					ImGui::PushID("ignoredraw");
+					ImGui::Checkbox("Ignore Prim Drawcalls", &im->m_dbg_disable_prim_draw);
+					ImGui::Checkbox("Ignore PrimUp Drawcalls", &im->m_dbg_disable_prim_up_draw);
+					ImGui::Checkbox("Ignore IndexedPrim Drawcalls", &im->m_dbg_disable_indexed_prim_draw);
+					ImGui::Checkbox("Ignore IndexedPrimUp Drawcalls", &im->m_dbg_disable_indexed_prim_up_draw);
+					ImGui::PopID();
+				});
 
-			ImGui::Checkbox("Disable World Drawcalls", &im->m_dbg_disable_world);
-			ImGui::Checkbox("Disable WorldNormal Drawcalls", &im->m_dbg_disable_world_normalmap);
-			ImGui::Checkbox("Disable Car Drawcalls", &im->m_dbg_disable_car);
-			ImGui::Checkbox("Disable CarNormal Drawcalls", &im->m_dbg_disable_car_normalmap);
-			ImGui::Checkbox("Disable Glass Drawcalls", &im->m_dbg_disable_glass);
-			ImGui::Checkbox("Disable Sky Drawcalls", &im->m_dbg_disable_sky);
+			//ImGui::Checkbox("Ignore Prim Drawcalls", &im->m_dbg_disable_prim_draw);
+			//ImGui::Checkbox("Ignore PrimUp Drawcalls", &im->m_dbg_disable_prim_up_draw);
+			//ImGui::Checkbox("Ignore IndexedPrim Drawcalls", &im->m_dbg_disable_indexed_prim_draw);
+			//ImGui::Checkbox("Ignore IndexedPrimUp Drawcalls", &im->m_dbg_disable_indexed_prim_up_draw);
 
-			SPACEY8;
+			SPACEY12;
 
-			ImGui::Checkbox("Disable Remix Car Shader", &im->m_dbg_disable_remix_car_shader);
+			ImGui::Widget_CategoryWithVerticalLabel("Disable Shader", [&]()
+				{
+					ImGui::PushID("disableshader");
+					ImGui::Checkbox("Disable World Drawcalls", &im->m_dbg_disable_world);
+					ImGui::Checkbox("Disable WorldNormal Drawcalls", &im->m_dbg_disable_world_normalmap);
+					ImGui::Checkbox("Disable Car Drawcalls", &im->m_dbg_disable_car);
+					ImGui::Checkbox("Disable CarNormal Drawcalls", &im->m_dbg_disable_car_normalmap);
+					ImGui::Checkbox("Disable Glass Drawcalls", &im->m_dbg_disable_glass);
+					ImGui::Checkbox("Disable Sky Drawcalls", &im->m_dbg_disable_sky);
+					ImGui::Checkbox("Disable Water Drawcalls", &im->m_dbg_disable_water);
+					ImGui::Checkbox("Disable NOFUZZ (FX) Drawcalls", &im->m_dbg_disable_nofuzz);
+
+					ImGui::Checkbox("Disable Remix Car Shader", &im->m_dbg_disable_remix_car_shader);
+					ImGui::PopID();
+				});
+
+			//ImGui::Checkbox("Disable World Drawcalls", &im->m_dbg_disable_world);
+			//ImGui::Checkbox("Disable WorldNormal Drawcalls", &im->m_dbg_disable_world_normalmap);
+			//ImGui::Checkbox("Disable Car Drawcalls", &im->m_dbg_disable_car);
+			//ImGui::Checkbox("Disable CarNormal Drawcalls", &im->m_dbg_disable_car_normalmap);
+			//ImGui::Checkbox("Disable Glass Drawcalls", &im->m_dbg_disable_glass);
+			//ImGui::Checkbox("Disable Sky Drawcalls", &im->m_dbg_disable_sky);
+
+			//SPACEY8;
+
+			//ImGui::Checkbox("Disable Remix Car Shader", &im->m_dbg_disable_remix_car_shader);
 
 			SPACEY8;
 		}
@@ -253,20 +311,38 @@ namespace comp
 		{
 			SPACEY4;
 
-			if (game::preculler_mode)
-			{
-				bool tmp_preculler_bool = *game::preculler_mode;
-				if (ImGui::Checkbox("Enable Preculling", &tmp_preculler_bool)) {
-					*game::preculler_mode = tmp_preculler_bool;
-				} TT("Preculling / Occlusion checks");
-			}
+			ImGui::Widget_CategoryWithVerticalLabel("AntiCull", [&]()
+				{
+					ImGui::PushID("anticull");
 
-			ImGui::Checkbox("AntiCull Mesh check dist before hash", &im->m_dbg_anticull_mesh_dist_before_hash);
-			ImGui::Checkbox("AntiCull Mesh check first hash only", &im->m_dbg_anticull_mesh_first_hash_only);
-			ImGui::Checkbox("AntiCull Mesh disable", &im->m_dbg_anticull_mesh_disable);
+					if (game::preculler_mode)
+					{
+						bool tmp_preculler_bool = *game::preculler_mode;
+						if (ImGui::Checkbox("Enable Preculling", &tmp_preculler_bool)) {
+							*game::preculler_mode = tmp_preculler_bool;
+						} TT("Preculling / Occlusion checks");
+					}
 
+					ImGui::Checkbox("AntiCull Mesh check dist before hash", &im->m_dbg_anticull_mesh_dist_before_hash);
+					ImGui::Checkbox("AntiCull Mesh check first hash only", &im->m_dbg_anticull_mesh_first_hash_only);
+					ImGui::Checkbox("AntiCull Mesh disable", &im->m_dbg_anticull_mesh_disable);
 
-			SPACEY4;
+					ImGui::PopID();
+				});
+
+			//if (game::preculler_mode)
+			//{
+			//	bool tmp_preculler_bool = *game::preculler_mode;
+			//	if (ImGui::Checkbox("Enable Preculling", &tmp_preculler_bool)) {
+			//		*game::preculler_mode = tmp_preculler_bool;
+			//	} TT("Preculling / Occlusion checks");
+			//}
+			
+			//ImGui::Checkbox("AntiCull Mesh check dist before hash", &im->m_dbg_anticull_mesh_dist_before_hash);
+			//ImGui::Checkbox("AntiCull Mesh check first hash only", &im->m_dbg_anticull_mesh_first_hash_only);
+			//ImGui::Checkbox("AntiCull Mesh disable", &im->m_dbg_anticull_mesh_disable);
+
+			SPACEY12;
 
 #if 0
 			if (game::drawscenery_cell_dist_check_01) {
@@ -281,15 +357,33 @@ namespace comp
 				ImGui::DragFloat("DrawScenery CmpFloat 03", game::drawscenery_cell_dist_check_03, 0.01f);
 			}
 #endif
-			ImGui::Checkbox("Force Return Value For a Culling Func (PixelSize)", &im->m_dbg_manual_compute_vis);
-			ImGui::BeginDisabled(!im->m_dbg_manual_compute_vis);
-			{
-				ImGui::DragInt("Forced Return Value", &im->m_dbg_manual_compute_vis_num, 0.2f, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp);
-				ImGui::EndDisabled();
-			}
 
-			ImGui::DragFloat("^ BoundingRad Offs", &im->m_dbg_compute_vis_bounding_rad_offset, 0.1f);
-			ImGui::DragFloat("^ OutDist Offs", &im->m_dbg_compute_vis_out_distance_offset, 0.1f);
+			ImGui::Widget_CategoryWithVerticalLabel("Experimental", [&]()
+				{
+					ImGui::PushID("expanticull");
+
+					ImGui::Checkbox("Force Return Value For a Culling Func (PixelSize)", &im->m_dbg_manual_compute_vis);
+					ImGui::BeginDisabled(!im->m_dbg_manual_compute_vis);
+					{
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Forced Return Value", &im->m_dbg_manual_compute_vis_num, 0.2f, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp);
+						ImGui::EndDisabled();
+					}
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("^ BoundingRad Offs", &im->m_dbg_compute_vis_bounding_rad_offset, 0.1f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("^ OutDist Offs", &im->m_dbg_compute_vis_out_distance_offset, 0.1f);
+
+					ImGui::PopID();
+				});
+
+			//ImGui::Checkbox("Force Return Value For a Culling Func (PixelSize)", &im->m_dbg_manual_compute_vis);
+			//ImGui::BeginDisabled(!im->m_dbg_manual_compute_vis);
+			//{
+			//	ImGui::DragInt("Forced Return Value", &im->m_dbg_manual_compute_vis_num, 0.2f, 0, 100, "%d", ImGuiSliderFlags_AlwaysClamp);
+			//	ImGui::EndDisabled();
+			//}
+			
+			//ImGui::DragFloat("^ BoundingRad Offs", &im->m_dbg_compute_vis_bounding_rad_offset, 0.1f);
+			//ImGui::DragFloat("^ OutDist Offs", &im->m_dbg_compute_vis_out_distance_offset, 0.1f);
 
 			SPACEY8;
 		}
@@ -569,7 +663,12 @@ namespace comp
 		ImGui::SeparatorText(" Anti Culling ");
 		SPACEY4;
 
-		SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("No Culling Distance", cs->nocull_distance, 0.0f, FLT_MAX, 0.5f);
+		ImGui::Widget_CategoryWithVerticalLabel("World", [&]()
+			{
+				ImGui::PushID("world");
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("No Culling Distance", cs->nocull_distance, 0.0f, FLT_MAX, 0.5f);
+				ImGui::PopID();
+			});
 
 		SPACEY4;
 	}
@@ -599,7 +698,7 @@ namespace comp
 			{
 				ImGui::PushID("flares");
 				compsettings_bool_widget("Draw Flares", cs->flare_enabled);
-				SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Flare Alpha Multiplier", cs->flare_alpha_multiplier, 0.0f, 1.0f, 0.01f);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Flare Alpha Multiplier", cs->flare_alpha_multiplier, 0.0f, 1.0f, 0.01f);
 				ImGui::PopID();
 			});
 
@@ -616,7 +715,7 @@ namespace comp
 				compsettings_bool_widget("Enable Occlusion Check", cs->wetness_world_occlusion_check);
 				compsettings_bool_widget("Enable Occlusion Smoothing", cs->wetness_world_occlusion_smoothing);
 				compsettings_bool_widget("Enable Raindrops", cs->wetness_world_raindrops);
-				SET_CHILD_WIDGET_WIDTH; compsettings_float_widget("Raindrop Scale", cs->wetness_world_raindrop_scale, 0.0f, 1.0f, 0.01f);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Raindrop Scale", cs->wetness_world_raindrop_scale, 0.0f, 1.0f, 0.01f);
 				ImGui::PopID();
 			});
 
@@ -650,20 +749,56 @@ namespace comp
 		SPACEY4;
 
 #define MAT_OPTIONS(NAME, VAR) { \
-			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " Roughness", cs->VAR##_roughness, 0.0f, 1.0f, 0.001f); \
-			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " Metalness", cs->VAR##_metalness, 0.0f, 1.0f, 0.001f); \
-			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " View Scalar", cs->VAR##_view_scalar, 0.0f, 4.0f, 0.001f); \
-			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " View Primary Diffuse Scalar", cs->VAR##_view_primary_color_scalar, 0.0f, 4.0f, 0.001f); \
-			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(#NAME " View Primary Diffuse Blend", cs->VAR##_view_primary_color_blend_scalar, 0.0f, 4.0f, 0.001f); \
+			ImGui::PushID(#NAME); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(" Roughness", cs->VAR##_roughness, 0.0f, 1.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(" Metalness", cs->VAR##_metalness, 0.0f, 1.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(" View Scalar", cs->VAR##_view_scalar, 0.0f, 4.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(" View Primary Diffuse Scalar", cs->VAR##_view_primary_color_scalar, 0.0f, 4.0f, 0.001f); \
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget(" View Primary Diffuse Blend", cs->VAR##_view_primary_color_blend_scalar, 0.0f, 4.0f, 0.001f); \
+			ImGui::PopID(); \
 			SPACEY4; }
 
-		MAT_OPTIONS("Perl", mat_perl);
-		MAT_OPTIONS("Matte", mat_matte);
-		MAT_OPTIONS("Metallic", mat_metallic);
-		MAT_OPTIONS("HighGloss", mat_high_gloss);
-		MAT_OPTIONS("Iridiance", mat_iridiance);
-		MAT_OPTIONS("Candy", mat_candy);
-		MAT_OPTIONS("Chrome", mat_chrome);
+		ImGui::Widget_CategoryWithVerticalLabel("Perl", [&]() {
+				MAT_OPTIONS("Perl", mat_perl);
+			});
+
+		SPACEY12;
+		ImGui::Widget_CategoryWithVerticalLabel("Matte", [&]() {
+				MAT_OPTIONS("Matte", mat_matte);
+			});
+
+		SPACEY12;
+		ImGui::Widget_CategoryWithVerticalLabel("Metallic", [&]() {
+				MAT_OPTIONS("Metallic", mat_metallic);
+			});
+
+		SPACEY12;
+		ImGui::Widget_CategoryWithVerticalLabel("HighGloss", [&]() {
+				MAT_OPTIONS("HighGloss", mat_high_gloss);
+			});
+
+		SPACEY12;
+		ImGui::Widget_CategoryWithVerticalLabel("Iridiance", [&]() {
+				MAT_OPTIONS("Iridiance", mat_iridiance);
+			});
+
+		SPACEY12;
+		ImGui::Widget_CategoryWithVerticalLabel("Candy", [&]() {
+				MAT_OPTIONS("Candy", mat_candy);
+			});
+
+		SPACEY12;
+		ImGui::Widget_CategoryWithVerticalLabel("Chrome", [&]() {
+				MAT_OPTIONS("Chrome", mat_chrome);
+			});
+
+		//MAT_OPTIONS("Perl", mat_perl);
+		//MAT_OPTIONS("Matte", mat_matte);
+		//MAT_OPTIONS("Metallic", mat_metallic);
+		//MAT_OPTIONS("HighGloss", mat_high_gloss);
+		//MAT_OPTIONS("Iridiance", mat_iridiance);
+		//MAT_OPTIONS("Candy", mat_candy);
+		//MAT_OPTIONS("Chrome", mat_chrome);
 
 #undef MAT_OPTIONS
 
@@ -679,8 +814,13 @@ namespace comp
 		ImGui::SeparatorText(" Remix ");
 		SPACEY4;
 
-		SET_CHILD_WIDGET_WIDTH; ImGui::DragInt("RTXDI Initial Sample Count Override", cs->remix_override_rtxdi_samplecount.get_as<int*>(), 0.01f);
-		TT(cs->remix_override_rtxdi_samplecount.get_tooltip_string().c_str());
+		ImGui::Widget_CategoryWithVerticalLabel("RTXDI", [&]()
+			{
+				ImGui::PushID("rtx");
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("RTXDI Initial Sample Count Override", cs->remix_override_rtxdi_samplecount.get_as<int*>(), 0.01f);
+				TT(cs->remix_override_rtxdi_samplecount.get_tooltip_string().c_str());
+				ImGui::PopID();
+			});
 
 		SPACEY4;
 	}
@@ -820,10 +960,19 @@ namespace comp
 		ImGui::Separator();
 		SPACEY4;
 
-		ImGui::Checkbox("Visualize Anti Culling Info", &im->m_dbg_visualize_model_info); TT("Visualize Anti Culling Info");
+		ImGui::Widget_CategoryWithVerticalLabel("3D Info", [&]()
+			{
+				ImGui::PushID("acvis");
+				ImGui::Checkbox("Visualize Anti Culling Info", &im->m_dbg_visualize_model_info); TT("Visualize Anti Culling Info");
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Info Min Radius", &im->m_dbg_visualize_model_info_distance, 0.05f); TT("A mesh needs to have at least this radius to be visualized.");
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::InputText("3D Model Name Filter", &im->m_dbg_visualize_model_info_name_filter); TT("Filter by string");
+				ImGui::PopID();
+			});
+
+		/*ImGui::Checkbox("Visualize Anti Culling Info", &im->m_dbg_visualize_model_info); TT("Visualize Anti Culling Info");
 		//ImGui::DragFloat("Info Distance", &im->m_dbg_visualize_anti_cull_info_distance, 0.05f);  TT("Only draw mesh vis. up until this distance.");
 		ImGui::DragFloat("Info Min Radius", &im->m_dbg_visualize_model_info_distance, 0.05f); TT("A mesh needs to have at least this radius to be visualized.");
-		ImGui::InputText("3D Model Name Filter", &im->m_dbg_visualize_model_info_name_filter); TT("Filter by string");
+		ImGui::InputText("3D Model Name Filter", &im->m_dbg_visualize_model_info_name_filter); TT("Filter by string");*/
 		
 		SPACEY4;
 		ImGui::SeparatorText("  Nearby hashes ~ Use Right Click Context Menu  ");
@@ -1250,7 +1399,7 @@ namespace comp
 	void imgui::devgui()
 	{
 		ImGui::SetNextWindowSize(ImVec2(900, 800), ImGuiCond_FirstUseEver);
-		if (!ImGui::Begin("Remix Compatibility-Base Settings", &shared::globals::imgui_menu_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollWithMouse))
+		if (!ImGui::Begin("Remix NFSC Compatibility-Mod Settings", &shared::globals::imgui_menu_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollWithMouse))
 		{
 			ImGui::End();
 			return;
@@ -1412,7 +1561,7 @@ namespace comp
 						im->m_stats.reset_stats();
 					}
 
-					shared::globals::imgui_is_rendering = true;
+ 					shared::globals::imgui_is_rendering = true;
 					ImGui::EndFrame();
 					ImGui::Render();
 					ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());

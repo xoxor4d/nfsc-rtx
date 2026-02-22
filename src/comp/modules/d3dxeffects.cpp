@@ -261,11 +261,6 @@ namespace comp
 		{
 			effects::g_current_tech_name = tech_desc.Name;
 
-			if (std::string_view(tech_desc.Name) == "car_normalmap")
-			{
-				int x = 1;
-			}
-
 			// O(1) lookup: map name -> ETECH enum value (empty until enum is populated)
 			const auto it = effects::g_tech_name_to_enum.find(tech_desc.Name);
 			effects::g_current_tech = (it != effects::g_tech_name_to_enum.end()) ? it->second : effects::ETECH::UNKNOWN;
@@ -497,6 +492,7 @@ namespace comp
 			{ "rvm",                                            E::RVM                                           },
 			{ "pip",                                            E::PIP                                           },
 			{ "ghostcar",                                       E::GHOSTCAR                                      },
+			{ "car_normalmap",                                  E::CAR_NORMALMAP                                 },
 		};
 
 		if (HMODULE hD3DX9 = GetModuleHandle(L"d3dx9_43.dll"); hD3DX9) 

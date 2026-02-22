@@ -449,16 +449,11 @@ namespace comp
 		// use any logic to conditionally set this to disable the vertex shader and use fixed function fallback
 		bool render_with_ff = false;
 
-/*		if (g_is_rendering_particle)
+		/*if (g_is_rendering_particle)
 		{
 			int x = 1;
 		}*/
 
-		/*if (g_is_rendering_something)
-		{
-			// do stuff here, eg:
-			ctx.modifiers.do_not_render = true;
-		}*/
 
 		// use fixed function fallback if true
 		if (render_with_ff)
@@ -466,15 +461,6 @@ namespace comp
 			ctx.save_vs(dev);
 			dev->SetVertexShader(nullptr);
 		}
-
-
-		// example code - HUD is mostly drawn with non-indexed prims - the first with non-perspective proj might be a hud element
-			//if (const auto viewport = game::vp; viewport)
-			//{
-			//	if (viewport->proj.m[3][3] == 1.0f) {
-			//		manually_trigger_remix_injection(dev);
-			//	}
-			//}
 
 
 		// ---------
@@ -536,20 +522,12 @@ namespace comp
 		D3DXMATRIX proj;
 		dev->GetTransform(D3DTS_PROJECTION, &proj);
 
-		bool is_2d = false;
-		if (shared::utils::float_equal(proj.m[3][3], 1.0f)) {
-			is_2d = true;
-		}
 
-		if (g_is_in_endscene)
+		bool is_2d = m_triggered_remix_injection; // everything after hud injection is 2d
+		if (!is_2d && shared::utils::float_equal(proj.m[3][3], 1.0f))
 		{
-			int x = 1;
-		}
-
-		if (is_2d) 
-		{
-			//set_remix_texture_categories(dev, InstanceCategories::WorldUI | InstanceCategories::WorldMatte);
 			manually_trigger_remix_injection(dev);
+			//is_2d = true;
 		}
 
 		if (g_is_rendering_rain) 
@@ -648,6 +626,34 @@ namespace comp
 
 
 			// ---------------------------------------------
+			// Particles
+			// ---------------------------------------------
+			if (g_is_rendering_particle)
+			{
+				render_with_ff = false;
+
+				// enable vertex colors
+				if (cs->vertex_colors_particles._bool()) {
+					set_remix_texture_categories(dev, InstanceCategories::Beam);
+				}
+
+				/*if (tech == effects::ETECH::WORLD_1_1) // rings on race markers
+				{
+					if (im->m_dbg_debug_bool03) {
+						ctx.modifiers.do_not_render = true;
+					}
+				}*/
+
+				if (tech == effects::ETECH::NO_FUZZZ) // smoke and race marker logo
+				{
+					if (im->m_dbg_disable_nofuzz) {
+						ctx.modifiers.do_not_render = true;
+					}
+				}
+			}
+
+
+			// ---------------------------------------------
 			// FLARES
 			// ---------------------------------------------
 			if (tech == effects::ETECH::FLARES || tech == effects::ETECH::STREAK_FLARES)
@@ -682,30 +688,13 @@ namespace comp
 
 
 			// ---------------------------------------------
-			// Particles
+			// Water
 			// ---------------------------------------------
-			if (g_is_rendering_particle) 
+			else if (tech == effects::ETECH::WATER)
 			{
-				render_with_ff = false;
-
-				// enable vertex colors
-				if (cs->vertex_colors_particles._bool()) {
-					set_remix_texture_categories(dev, InstanceCategories::Beam);
+				if (im->m_dbg_disable_water) {
+					ctx.modifiers.do_not_render = true;
 				}
-
-				/*if (tech == effects::ETECH::WORLD_1_1) // rings on race markers
-				{
-					if (im->m_dbg_debug_bool03) {
-						ctx.modifiers.do_not_render = true;
-					}
-				}
-
-				if (tech == effects::ETECH::NO_FUZZZ) // smoke and race marker logo
-				{
-					if (im->m_dbg_debug_bool04) {
-						ctx.modifiers.do_not_render = true;
-					}
-				}*/
 			}
 
 
@@ -713,7 +702,7 @@ namespace comp
 			// World
 			// ---------------------------------------------
 			//if (g_is_rendering_world || g_is_rendering_dry_road)
-			if (tech == effects::ETECH::WORLD || tech == effects::ETECH::WORLD_1_1 
+			else if (tech == effects::ETECH::WORLD || tech == effects::ETECH::WORLD_1_1 
 				|| tech == effects::ETECH::DRYROAD || tech == effects::ETECH::RAINING_ON_ROAD)
 			{
 				/*if (tech != effects::ETECH::WORLD && tech != effects::ETECH::WORLD_1_1 && tech != effects::ETECH::DRYROAD && tech != effects::ETECH::RAINING_ON_ROAD) {
@@ -752,7 +741,7 @@ namespace comp
 			// ---------------------------------------------
 			// SKY
 			// ---------------------------------------------
-			if (tech == effects::ETECH::SKY)
+			else if (tech == effects::ETECH::SKY)
 			{
 				if (im->m_dbg_disable_sky) {
 					ctx.modifiers.do_not_render = true;
@@ -765,7 +754,7 @@ namespace comp
 			// ---------------------------------------------
 			// CAR
 			// ---------------------------------------------
-			if (tech == effects::ETECH::CAR)
+			else if (tech == effects::ETECH::CAR)
 			{
 				if (im->m_dbg_disable_car) {
 					ctx.modifiers.do_not_render = true;
@@ -1037,6 +1026,16 @@ namespace comp
 #endif
 			
 			// ---------------------------------------------
+			// CAR_NORMALMAP
+			// ---------------------------------------------
+			else if (tech == effects::ETECH::CAR_NORMALMAP)
+			{
+				if (im->m_dbg_disable_car_normalmap) {
+					ctx.modifiers.do_not_render = true;
+				}
+			}
+
+			// ---------------------------------------------
 			// MISC
 			// ---------------------------------------------
 			if (tech == effects::ETECH::GLASSREFLECT)
@@ -1299,10 +1298,6 @@ namespace comp
 
 	void renderer::manually_trigger_remix_injection(IDirect3DDevice9* dev)
 	{
-		//if (!game::is_in_game) {
-		//	return;
-		//}
-
 		if (!m_triggered_remix_injection)
 		{
 			auto& ctx = dc_ctx;
@@ -1412,9 +1407,9 @@ namespace comp
 					g_is_rendering_dry_road = 1;
 				} else if (std::string_view(tech_desc.Name) == "water") {
 					g_is_rendering_water = 1;
-				} else {
+				} /*else {
 					int x = 1;
-				}
+				}*/
 
 #if 0
 				if (g_is_rendering_car)
@@ -1607,10 +1602,10 @@ namespace comp
 		// --
 
 		// drawindexed prim
-		shared::utils::hook(0x71EE18, pre_effect_commit_changes, HOOK_JUMP).install()->quick();
-
+		//shared::utils::hook(0x71EE18, pre_effect_commit_changes, HOOK_JUMP).install()->quick();
 		// draw prim up
-		shared::utils::hook(0x7274C7, pre_effect_commit_changes_prim_up, HOOK_JUMP).install()->quick();
+		//shared::utils::hook(0x7274C7, pre_effect_commit_changes_prim_up, HOOK_JUMP).install()->quick();
+
 
 		shared::utils::hook::nop(0x71E065, 6);
 		shared::utils::hook(0x71E065, on_handle_material_data_stub, HOOK_JUMP).install()->quick();

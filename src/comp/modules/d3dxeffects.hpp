@@ -62,6 +62,7 @@ namespace comp::effects
 		RVM												= 48,
 		PIP												= 49,
 		GHOSTCAR										= 50,
+		CAR_NORMALMAP									= 51,
 	};
 
 	// All unique technique names seen across all wrapped effects 
@@ -97,36 +98,34 @@ namespace comp
 			friend class d3dxeffects;
 		public:
 			D3DXEffect(ID3DXEffect* pOriginal) : m_pID3DXEffect(pOriginal)
-		{
-			// Enumerate all techniques in this effect and register any new ones
-			D3DXEFFECT_DESC desc{};
-			if (SUCCEEDED(pOriginal->GetDesc(&desc)))
 			{
-				for (UINT i = 0; i < desc.Techniques; i++)
+				// Enumerate all techniques in this effect and register any new ones
+				D3DXEFFECT_DESC desc {};
+				if (SUCCEEDED(pOriginal->GetDesc(&desc)))
 				{
-					D3DXHANDLE hTech = pOriginal->GetTechnique(i);
-					if (!hTech) continue;
-
-					D3DXTECHNIQUE_DESC td{};
-					if (SUCCEEDED(pOriginal->GetTechniqueDesc(hTech, &td)) && td.Name)
+					for (UINT i = 0; i < desc.Techniques; i++)
 					{
-						const std::string name(td.Name);
-						const bool is_new = std::find(
-							effects::g_discovered_techniques.begin(),
-							effects::g_discovered_techniques.end(), name)
-							== effects::g_discovered_techniques.end();
+						const D3DXHANDLE hTech = pOriginal->GetTechnique(i);
+						if (!hTech) {
+							continue;
+						}
 
-						if (is_new)
+						D3DXTECHNIQUE_DESC td {};
+						if (SUCCEEDED(pOriginal->GetTechniqueDesc(hTech, &td)) && td.Name)
 						{
-							effects::g_discovered_techniques.push_back(name);
-							shared::common::log("d3dxeffects",
-								std::format("[technique] '{}'", name),
-								shared::common::LOG_TYPE::LOG_TYPE_STATUS, false);
+							const std::string name(td.Name);
+							const bool is_new = std::find(
+								effects::g_discovered_techniques.begin(), effects::g_discovered_techniques.end(), name) == effects::g_discovered_techniques.end();
+
+							if (is_new)
+							{
+								effects::g_discovered_techniques.push_back(name);
+								shared::common::log("d3dxeffects", std::format("[tech] '{}'", name), shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
+							}
 						}
 					}
 				}
-			}
-		};
+			};
 			virtual ~D3DXEffect() {};
 
 			// IUnknown methods

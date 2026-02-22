@@ -67,6 +67,8 @@ namespace comp
 		bool m_dbg_disable_car_normalmap = false;
 		bool m_dbg_disable_glass = false;
 		bool m_dbg_disable_sky = false;
+		bool m_dbg_disable_water = false;
+		bool m_dbg_disable_nofuzz = false;
 
 		bool m_dbg_disable_remix_car_shader = false;
 
