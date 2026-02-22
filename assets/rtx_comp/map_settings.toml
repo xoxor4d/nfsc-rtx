@@ -20,8 +20,10 @@
 #   { ... },
 # ]      
 ANTICULL = [
+
     # streetlights
     { hashes = [
-        0x121be69c, 0x121c72fd
-    ] , distance = 500 },
+        0x121BE69C, 0x121C72FD, 0x2EA1DB88, 0x5621897A
+    ], distance = 500.000000 },
 ]
+
