@@ -22,6 +22,14 @@ over "RootNode"
                 custom color3f inputs:transmittance_color = (1, 0.99999, 0.99999)
             }
         }
+
+        over "mat_F1F1F9A8140155A2"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.73499995
+            }
+        }
     }
 
     over "meshes"

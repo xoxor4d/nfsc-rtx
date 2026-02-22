@@ -6,7 +6,8 @@
         dictionary lightspeed_mod_dependencies = {
         }
         string lightspeed_mod_name = "nfsc_comp"
-        string lightspeed_mod_version = "0.0.1"
+        string lightspeed_mod_notes = "made for https://github.com/xoxor4d/nfsc-rtx"
+        string lightspeed_mod_version = "0.8.0"
     }
     subLayers = [
         @./comp_effects.usda@,

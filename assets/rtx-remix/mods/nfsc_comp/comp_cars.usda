@@ -532,6 +532,18 @@ over "RootNode"
                 custom bool inputs:thin_walled = 1
             }
         }
+
+        over "mat_CE40082EA0727217" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
     }
 }
 
