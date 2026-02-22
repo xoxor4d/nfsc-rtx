@@ -610,10 +610,9 @@ namespace comp
 				}
 			}
 
-			/*if (g_is_rendering_particle)
-			{
-				
-			}*/
+			if (g_is_rendering_particle) {
+				render_with_ff = false;
+			}
 
 			if (g_is_rendering_world || g_is_rendering_dry_road)
 			{
@@ -667,14 +666,17 @@ namespace comp
 			}
 
 #if 1
-			if (g_is_rendering_car && !g_is_in_endscene)
+			if (g_is_rendering_car && !g_is_in_endscene && !g_is_rendering_particle && !im->m_dbg_disable_remix_car_shader)
 			{
 				D3DXMATRIX proj;
 				dev->GetTransform(D3DTS_PROJECTION, &proj);
 
+				// camera toolkit is using car shader when particles render?
+				// -> HEADLIGHTGLASS material?
 				bool is_2d = false;
 				if (proj.m[3][3] == 1.0f)
 				{
+					auto asd = mat.material;
 					is_2d = true;
 
 					/*Direct3DBaseTexture9* tex = nullptr;
@@ -1528,11 +1530,9 @@ namespace comp
 					g_is_rendering_dry_road = 1;
 				} else if (std::string_view(tech_desc.Name) == "water") {
 					g_is_rendering_water = 1;
-				}
-				/*else 
-				{
+				} else {
 					int x = 1;
-				}*/
+				}
 
 #if 0
 				if (g_is_rendering_car)

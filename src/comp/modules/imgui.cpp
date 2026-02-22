@@ -212,7 +212,9 @@ namespace comp
 
 			SPACEY8;
 
-			
+			ImGui::Checkbox("Disable Remix Car Shader", &im->m_dbg_disable_remix_car_shader);
+
+			SPACEY8;
 
 			ImGui::Checkbox("Disable World Wetness", &im->m_dbg_disable_world_wetness);
 			ImGui::Checkbox("World Wetness Variation", &im->m_dbg_enable_world_wetness_variation);

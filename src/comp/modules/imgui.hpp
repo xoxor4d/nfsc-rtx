@@ -68,6 +68,8 @@ namespace comp
 		bool m_dbg_disable_glass = false;
 		bool m_dbg_disable_sky = false;
 
+		bool m_dbg_disable_remix_car_shader = false;
+
 		bool m_dbg_anticull_mesh_dist_before_hash = false;
 		bool m_dbg_anticull_mesh_first_hash_only = false;
 		bool m_dbg_anticull_mesh_disable = false;
