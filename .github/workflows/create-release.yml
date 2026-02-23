@@ -3,6 +3,10 @@ name: Create Release
 on:
   workflow_dispatch: {}
 
+  push:
+    branches:
+      - '**'
+
 jobs:
   create-release:
     name: Create Release
