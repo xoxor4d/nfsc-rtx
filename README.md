@@ -18,6 +18,11 @@ Feel free to join the discord server: https://discord.gg/FMnfhpfZy9
 </div>
 
 
+### Installing
+Grab the latest [Release](https://github.com/xoxor4d/nfsc-rtx/releases) and follow the instructions found there
+
+<br>
+
 #### Features:
 
 - Custom [Remix Runtime](https://github.com/xoxor4d/dxvk-remix/tree/game/nfsc_1) with:
@@ -44,6 +49,11 @@ Feel free to join the discord server: https://discord.gg/FMnfhpfZy9
 
 <br>
 
+#### Cons:
+- Autosculpt does not work (something on remix' side)
+- Large amount of drawcalls (also dues to anti culling) can result in a cpu bottleneck
+
+<br>
 
 ## Compiling
 - Clone the repository `git clone --recurse-submodules https://github.com/xoxor4d/nfsc-rtx.git`

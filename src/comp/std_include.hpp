@@ -1,7 +1,7 @@
 #pragma once
 
 constexpr auto COMP_MOD_VERSION_MAJOR = 0;
-constexpr auto COMP_MOD_VERSION_MINOR = 8;
+constexpr auto COMP_MOD_VERSION_MINOR = 9;
 constexpr auto COMP_MOD_VERSION_PATCH = 0;
 
 #define _CRT_SECURE_NO_WARNINGS
