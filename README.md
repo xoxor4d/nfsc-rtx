@@ -33,7 +33,7 @@ Feel free to join the discord server: https://discord.gg/FMnfhpfZy9
 <br>
 
 > [!IMPORTANT] 
-> Use remix mod: https://www.moddb.com/mods/nfsc-remix-01-beta/downloads/nfsc-remix-012  
+> Recommended remix mod: https://www.moddb.com/mods/nfsc-remix-01-beta/downloads/nfsc-remix-012  
 > ! **ONLY** extract `nfsc_remix` from `to the main\rtx-remix\mods\` to `your_game\rtx-remix\mods\`  
 > ! **Do NOT** extract anything else
 

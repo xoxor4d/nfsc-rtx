@@ -11,6 +11,57 @@ namespace comp::game
 		inside,
 	};
 
+	struct options
+	{
+		int version; //0x0000 
+		int size; //0x0004 
+		int car_env_map_enabled; //0x0008 
+		int performance_level_related1; //0x000C 
+		int unused1; //0x0010 
+		int unused2; //0x0014 
+		int unused3; //0x0018 
+		int bone_anims_enabled; //0x001C 
+		int road_reflections_enabled; //0x0020 
+		int unused4; //0x0024 
+		int motion_blur_enabled; //0x0028 
+		int flare_related_hardcoded; //0x002C 
+		int texture_anims_enabled; //0x0030 
+		int draw_particles; //0x0034 
+		int world_lod_level; //0x0038 
+		int world_lod_related; //0x003C 
+		int car_lod_level; //0x0040 
+		int fsaa_level; //0x0044 
+		int rain_enabled; //0x0048 
+		int texture_filtering; //0x004C 
+		int racing_resolution; //0x0050 
+		int first_time_start; //0x0054 
+		int vsync; //0x0058 
+		int visual_treatment; //0x005C 
+		int shadow_detail; //0x0060 ---- actual last entry of options
+		char pad_0x0064[0xC]; //0x0064
+		int car_env_map_related; //0x0070 
+		int performance_level_related2; //0x0074 
+		char pad_0x0078[0xC]; //0x0078
+		int bone_anims_supported; //0x0084 
+		int combine_reflection_color_headlight_alpha; //0x0088 
+		char pad_0x008C[0x4]; //0x008C
+		int motion_blur_supported; //0x0090 
+		char pad_0x0094[0x4]; //0x0094
+		int texture_anims_supported; //0x0098 
+		int particles_supported; //0x009C 
+		int worldlodlevel_supported; //0x00A0 
+		char pad_0x00A4[0x4]; //0x00A4
+		int carlodlevel_supported; //0x00A8 
+		int fsaa_supported; //0x00AC 
+		int rain_supported; //0x00B0 
+		int texturefiltering_supported; //0x00B4 
+		char pad_0x00B8[0xC]; //0x00B8
+		int visual_treatment_supported; //0x00C4 
+		int shadow_detail_supported; //0x00C8 
+		char pad_0x00CC[0x4]; //0x00CC
+	}; //Size=0x00D0
+	STATIC_ASSERT_OFFSET(options, rain_supported, 0xB0);
+
 	struct vis_struct
 	{
 		int unk1;

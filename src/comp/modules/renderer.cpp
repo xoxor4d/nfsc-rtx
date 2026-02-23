@@ -2,25 +2,15 @@
 #include "renderer.hpp"
 
 #include "comp_settings.hpp"
+#include "d3d9ex.hpp"
 #include "d3dxeffects.hpp"
 #include "imgui.hpp"
 
 namespace comp
 {
 	int g_is_rendering_particle = 0;
-	int g_is_rendering_car = 0;
-	int g_is_rendering_car_normalmap = 0;
-	int g_is_rendering_world = 0;
-
-	int g_is_rendering_dry_road = 0;
-	int g_is_rendering_world_normalmap = 0;
-	int g_is_rendering_glass_reflect = 0;
-	int g_is_rendering_sky = 0;
-	int g_is_rendering_water = 0;
 	int g_is_rendering_rain = 0;
-
 	bool g_rendered_first_primitive = false;
-	bool g_applied_hud_hack = false; // was hud "injection" applied this frame
 	bool g_is_in_endscene = false;
 
 	game::material_instance g_current_material_data = {};
@@ -523,11 +513,9 @@ namespace comp
 		dev->GetTransform(D3DTS_PROJECTION, &proj);
 
 
-		bool is_2d = m_triggered_remix_injection; // everything after hud injection is 2d
-		if (!is_2d && shared::utils::float_equal(proj.m[3][3], 1.0f))
-		{
+		const bool is_2d = m_triggered_remix_injection; // everything after hud injection is 2d
+		if (!is_2d && shared::utils::float_equal(proj.m[3][3], 1.0f)) {
 			manually_trigger_remix_injection(dev);
-			//is_2d = true;
 		}
 
 		if (g_is_rendering_rain) 
@@ -701,7 +689,6 @@ namespace comp
 			// ---------------------------------------------
 			// World
 			// ---------------------------------------------
-			//if (g_is_rendering_world || g_is_rendering_dry_road)
 			else if (tech == effects::ETECH::WORLD || tech == effects::ETECH::WORLD_1_1 
 				|| tech == effects::ETECH::DRYROAD || tech == effects::ETECH::RAINING_ON_ROAD)
 			{
@@ -1302,6 +1289,7 @@ namespace comp
 		{
 			auto& ctx = dc_ctx;
 
+			ctx.save_rs(dev, D3DRS_FOGENABLE);
 			dev->SetRenderState(D3DRS_FOGENABLE, FALSE);
 
 			ctx.save_vs(dev);
@@ -1330,221 +1318,44 @@ namespace comp
 				{     w,     h, 0.0f, 1.0f, color }  // br
 			};
 
+			DWORD og_fvf;
+			dev->GetFVF(&og_fvf); // not saving/restoring FVF was causing imgui to not render
+			dev->SetFVF(D3DFVF_XYZRHW | D3DFVF_DIFFUSE);
 			dev->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, vertices, sizeof(CUSTOMVERTEX));
+			dev->SetFVF(og_fvf);
 
 			ctx.restore_vs(dev);
 			ctx.restore_ps(dev);
+			ctx.restore_render_state(dev, D3DRS_FOGENABLE);
 			ctx.restore_render_state(dev, D3DRS_ZWRITEENABLE);
 			
 			m_triggered_remix_injection = true;
 		}
 	}
 
-
 	// ---
-
 
 	__declspec (naked) void pre_draw_particle_stub()
 	{
-		static uint32_t func_addr = 0x75AA10;
-		static uint32_t retn_addr = 0x72EA9F;
 		__asm
 		{
 			mov		g_is_rendering_particle, 1;
-			call    func_addr;
-			jmp		retn_addr;
+			call    game::fn_addr__pre_draw_particle;	// 0x75AA10
+			jmp		game::retn_addr__pre_draw_particle; // 0x72EA9F
 		}
 	}
 
 	__declspec (naked) void post_draw_particle_stub()
 	{
-		static uint32_t retn_addr = 0x72EAC6;
-		static uint32_t func_addr = 0x72C9B0;
 		__asm
 		{
-			call    func_addr; // og
+			call    game::fn_addr__post_draw_particle; // og - 0x72C9B0
 			mov		g_is_rendering_particle, 0;
-			jmp		retn_addr;
+			jmp		game::retn_addr__post_draw_particle; // 0x72EAC6
 		}
 	}
 
 	// --
-
-	void post_commit_changes(ID3DXEffect* effect)
-	{
-		g_is_rendering_world = 0;
-		g_is_rendering_world_normalmap = 0;
-		g_is_rendering_car = 0;
-		g_is_rendering_car_normalmap = 0;
-		g_is_rendering_glass_reflect = 0;
-		g_is_rendering_sky = 0;
-		g_is_rendering_dry_road = 0;
-		g_is_rendering_water = 0;
-
-		if (effect)
-		{
-			D3DXEFFECT_DESC d = {};
-			effect->GetDesc(&d);
-
-			if (auto htech = effect->GetTechnique(0); htech)
-			{
-				D3DXTECHNIQUE_DESC tech_desc;
-				effect->GetTechniqueDesc(htech, &tech_desc);
-
-				if (std::string_view(tech_desc.Name) == "world") {
-					g_is_rendering_world = 1;
-				} else if (std::string_view(tech_desc.Name) == "worldnormalmap") {
-					g_is_rendering_world_normalmap = 1;
-				} else if (std::string_view(tech_desc.Name) == "car") {
-					g_is_rendering_car = 1;
-				} else if (std::string_view(tech_desc.Name) == "car_normalmap") {
-					g_is_rendering_car_normalmap = 1;
-				} else if (std::string_view(tech_desc.Name) == "glassreflect") {
-					g_is_rendering_glass_reflect = 1;
-				} else if (std::string_view(tech_desc.Name) == "sky") {
-					g_is_rendering_sky = 1;
-				} else if (std::string_view(tech_desc.Name) == "dryroad") {
-					g_is_rendering_dry_road = 1;
-				} else if (std::string_view(tech_desc.Name) == "water") {
-					g_is_rendering_water = 1;
-				} /*else {
-					int x = 1;
-				}*/
-
-#if 0
-				if (g_is_rendering_car)
-				{
-
-//   cavHarmonicCoeff   c0      10
-//   WorldViewProj      c10      4
-//   cmWorldView        c14      3
-//   cvFogValue         c17      1
-//   cfFogEnable        c18      1
-//   cvLocalEyePos      c19      1
-//   cfEnvmapPullAmount c20      1
-//   cvDiffuseMin       c21      1
-//   cvDiffuseRange     c22      1
-//   cvEnvmapMin        c23      1
-//   cvEnvmapRange      c24      1
-//   cvPowers           c25      1
-//   cvClampAndScales   c26      1
-//   cvFlakes           c27      1
-
-					if (tech_desc.Passes > 0)
-					{
-						auto& ctx = renderer::dc_ctx;
-
-						auto second_pass = effect->GetPass(htech, 0);
-						if (second_pass)
-						{
-							D3DXPASS_DESC pass_desc;
-							effect->GetPassDesc(second_pass, &pass_desc);
-
-							//effect->GetParameterByName()
-							//D3DXPARAMETER_DESC param_desc;
-							//effect->GetParameterDesc(d, &param_desc);
-
-							for (UINT i = 0; i < d.Parameters; ++i)
-							{
-								D3DXHANDLE param = effect->GetParameter(nullptr, i);
-
-								D3DXPARAMETER_DESC desc = {};
-								effect->GetParameterDesc(param, &desc);
-
-								if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
-								{
-									Vector value = {};
-									effect->GetValue(param, &value.x, sizeof(value));
-									int asd = 0;
-								}
-							}
-
-							D3DXHANDLE cvDiffuseMin = effect->GetParameterByName(nullptr, "cvDiffuseMin");
-							if (cvDiffuseMin)
-							{
-								D3DXPARAMETER_DESC desc = {};
-								effect->GetParameterDesc(cvDiffuseMin, &desc);
-
-								if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
-								{
-									Vector value = {};
-									effect->GetValue(cvDiffuseMin, &value.x, sizeof(value));
-									ctx.info.cvDiffuseMin = value;
-									ctx.info.cvDiffuseMin.x = 1.0f;
-								}
-
-								int y = 0;
-							}
-
-							D3DXHANDLE cvDiffuseRange = effect->GetParameterByName(nullptr, "cvDiffuseRange");
-							if (cvDiffuseRange)
-							{
-								D3DXPARAMETER_DESC desc = {};
-								effect->GetParameterDesc(cvDiffuseRange, &desc);
-
-								if (desc.Class == D3DXPC_VECTOR && desc.Type == D3DXPT_FLOAT)
-								{
-									Vector value = {};
-									effect->GetValue(cvDiffuseRange, &value.x, sizeof(value));
-									ctx.info.cvDiffuseRange = value;
-								}
-
-								int y = 0;
-							}
-						}
-					}
-				}
-#endif
-			}
-		}
-	}
-
-	
-
-	__declspec (naked) void pre_effect_commit_changes()
-	{
-		static uint32_t retn_addr = 0x71EE24;
-		__asm
-		{
-			mov		g_curr_effect_ptr, edi;
-			mov     edi, [edi + 0x44];
-			mov     eax, [edi];
-			push    edi;
-			call    dword ptr[eax + 0x104]; // CommitChanges
-
-			pushad;
-			push	edi; //ID3DXBaseEffect *
-			call	post_commit_changes;
-			add		esp, 4;
-			popad;
-
-			jmp		retn_addr;
-		}
-	}
-
-	// 
-	__declspec (naked) void pre_effect_commit_changes_prim_up()
-	{
-		static uint32_t retn_addr = 0x7274D3;
-		__asm
-		{
-			mov		g_curr_effect_ptr, esi;
-			mov     esi, [esi + 0x44];
-			mov     eax, [esi];
-			push    esi;
-			call    dword ptr[eax + 0x104]; // CommitChanges
-
-			pushad;
-			push	esi; //ID3DXBaseEffect *
-			call	post_commit_changes;
-			add		esp, 4;
-			popad;
-
-			jmp		retn_addr;
-		}
-	}
-
-	// ---
 
 	void on_handle_material_data(game::material_instance* data)
 	{
@@ -1555,7 +1366,6 @@ namespace comp
 
 	__declspec (naked) void on_handle_material_data_stub()
 	{
-		static uint32_t retn_addr = 0x71E06B;
 		__asm
 		{
 			mov		[edi + 0x1780], esi;
@@ -1566,21 +1376,19 @@ namespace comp
 			add		esp, 4;
 			popad;
 
-			jmp		retn_addr;
+			jmp		game::retn_addr__on_handle_material_data; // 0x71E06B
 		}
 	}
 
 	// 
 	__declspec (naked) void on_rain_render_stub()
 	{
-		static uint32_t func_addr = 0x722CB0;
-		static uint32_t retn_addr = 0x729863;
 		__asm
 		{
 			mov		g_is_rendering_rain, 1;
-			call	func_addr;
+			call	game::func_addr__on_rain_render; // 0x722CB0
 			mov		g_is_rendering_rain, 0;
-			jmp		retn_addr;
+			jmp		game::retn_addr__on_rain_render; // 0x729863
 		}
 	}
 
@@ -1589,29 +1397,23 @@ namespace comp
 		p_this = this;
 
 		// always set view and proj transforms even when in shader mode
-		shared::utils::hook::nop(0x71E736, 2);
-		shared::utils::hook::nop(0x71E6ED, 2);
+		shared::utils::hook::nop(game::nop_addr__set_transforms_01, 2); // 0x71E736
+		shared::utils::hook::nop(game::nop_addr__set_transforms_02, 2); // 0x71E6ED
 
 		// always set world transform
-		shared::utils::hook::nop(0x71E82F, 2);
-		shared::utils::hook::nop(0x71E845, 2); // still set shader matrices (normally this or that)
+		shared::utils::hook::nop(game::nop_addr__set_transforms_03, 2); // 0x71E82F
+		shared::utils::hook::nop(game::nop_addr__set_transforms_04, 2); // 0x71E845 - still set shader matrices (normally this or that)
 
-		shared::utils::hook(0x72EA9A, pre_draw_particle_stub, HOOK_JUMP).install()->quick();
-		shared::utils::hook(0x72EAC1, post_draw_particle_stub, HOOK_JUMP).install()->quick();
+		shared::utils::hook(game::retn_addr__pre_draw_particle - 5u, pre_draw_particle_stub, HOOK_JUMP).install()->quick(); // 0x72EA9F
+		shared::utils::hook(game::retn_addr__post_draw_particle - 5u, post_draw_particle_stub, HOOK_JUMP).install()->quick(); // 0x75AA10
 
 		// --
 
-		// drawindexed prim
-		//shared::utils::hook(0x71EE18, pre_effect_commit_changes, HOOK_JUMP).install()->quick();
-		// draw prim up
-		//shared::utils::hook(0x7274C7, pre_effect_commit_changes_prim_up, HOOK_JUMP).install()->quick();
+		shared::utils::hook::nop(game::retn_addr__on_handle_material_data - 6u, 6); // 0x71E06B
+		shared::utils::hook(game::retn_addr__on_handle_material_data - 6u, on_handle_material_data_stub, HOOK_JUMP).install()->quick();
 
 
-		shared::utils::hook::nop(0x71E065, 6);
-		shared::utils::hook(0x71E065, on_handle_material_data_stub, HOOK_JUMP).install()->quick();
-
-
-		shared::utils::hook(0x72985E, on_rain_render_stub, HOOK_JUMP).install()->quick();
+		shared::utils::hook(game::retn_addr__on_rain_render - 5u, on_rain_render_stub, HOOK_JUMP).install()->quick(); // 0x72985E
 
 		// -----
 		m_initialized = true;

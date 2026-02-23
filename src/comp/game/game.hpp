@@ -6,11 +6,7 @@ namespace comp::game
 	// --------------
 	// game variables
 
-	//extern DWORD* d3d_dev_sample_addr;
-	
-	//inline IDirect3DDevice9* get_d3d_device() {
-	//	return reinterpret_cast<IDirect3DDevice9*>(*d3d_dev_sample_addr);
-	//}
+	extern int* game_input_allowed;
 
 	extern float* drawscenery_cell_dist_check_01;
 	extern float* drawscenery_cell_dist_check_02;
@@ -21,8 +17,7 @@ namespace comp::game
 
 	extern int* always_rain;
 
-	extern int* options_rain_supported;
-	extern int* options_rain_enabled;
+	extern options* game_options;
 
 	// --------------
 	// game functions
@@ -37,8 +32,24 @@ namespace comp::game
 	// --------------
 	// game asm offsets
 
-	//extern uint32_t retn_addr__func1;
-	//extern uint32_t nop_addr__func2;
+	extern uint32_t nop_addr__set_transforms_01;
+	extern uint32_t nop_addr__set_transforms_02;
+	extern uint32_t nop_addr__set_transforms_03;
+	extern uint32_t nop_addr__set_transforms_04;
+
+	extern uint32_t retn_addr__pre_draw_particle;
+	extern uint32_t fn_addr__pre_draw_particle;
+	extern uint32_t retn_addr__post_draw_particle;
+	extern uint32_t fn_addr__post_draw_particle;
+	extern uint32_t retn_addr__on_handle_material_data;
+	extern uint32_t retn_addr__on_rain_render;
+	extern uint32_t func_addr__on_rain_render;
+
+	// comp
+
+	extern uint32_t retn_addr__game_focused_stub;
+	extern uint32_t skip_addr__game_focused_stub;
+
 	extern uint32_t mem_addr__get_vis_state_sb;
 	extern uint32_t nop_addr__draw_scenery_chk01;
 	extern uint32_t nop_addr__draw_scenery_chk02;

@@ -5,12 +5,7 @@
 #include "modules/map_settings.hpp"
 #include "modules/remix_vars.hpp"
 #include "modules/renderer.hpp"
-#include "shared/common/dinput_hook_v2.hpp"
 #include "shared/common/remix_api.hpp"
-
-// see comment in main()
-//#include "shared/common/dinput_hook_v1.hpp"
-//#include "shared/common/dinput_hook_v2.hpp"
 
 namespace comp
 {
@@ -20,99 +15,80 @@ namespace comp
 			tex_addons::init_texture_addons();
 		}
 
-		//const auto& cs = comp_settings::get();
-		const auto& im = imgui::get();
-
-		// fake camera
-		if (im->m_dbg_use_fake_camera)
-		{
-			D3DXMATRIX view_matrix
-			(
-				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, 0.447f, 0.894f, 0.0f,
-				0.0f, -0.894f, 0.447f, 0.0f,
-				0.0f, 100.0f, -50.0f, 1.0f
-			);
-
-			D3DXMATRIX proj_matrix
-			(
-				1.359f, 0.0f, 0.0f, 0.0f,
-				0.0f, 2.414f, 0.0f, 0.0f,
-				0.0f, 0.0f, 1.001f, 1.0f,
-				0.0f, 0.0f, -1.0f, 0.0f
-			);
-
-			// Construct view matrix
-			D3DXMATRIX rotation, translation;
-			D3DXMatrixRotationYawPitchRoll(&rotation,
-				D3DXToRadian(im->m_dbg_camera_yaw),		// Yaw in radians
-				D3DXToRadian(im->m_dbg_camera_pitch),	// Pitch in radians
-				0.0f);									// No roll for simplicity
-
-			D3DXMatrixTranslation(&translation,
-				-im->m_dbg_camera_pos[0], // Negate for camera (moves world opposite)
-				-im->m_dbg_camera_pos[1],
-				-im->m_dbg_camera_pos[2]);
-
-			D3DXMatrixMultiply(&view_matrix, &rotation, &translation);
-
-			// Construct projection matrix
-			D3DXMatrixPerspectiveFovLH(&proj_matrix,
-				D3DXToRadian(im->m_dbg_camera_fov), // FOV in radians
-				im->m_dbg_camera_aspect,
-				im->m_dbg_camera_near_plane,
-				im->m_dbg_camera_far_plane);
-
-			shared::globals::d3d_device->SetTransform(D3DTS_WORLD, &shared::globals::IDENTITY);
-			shared::globals::d3d_device->SetTransform(D3DTS_VIEW, &view_matrix);
-			shared::globals::d3d_device->SetTransform(D3DTS_PROJECTION, &proj_matrix);
-		}
-
-
 		// Actual camera setup here if matrices are available
-		{
+		// No longer needed
+		/*{
 			shared::globals::d3d_device->SetTransform(D3DTS_WORLD, &shared::globals::IDENTITY); // does not hurt
 
 			auto sview = reinterpret_cast<game::eViewPlatInterface*>(0xB4AF90);
 			if (sview && sview->m_pTransform)
 			{
+				const auto& im = imgui::get();
 				if (im->m_dbg_use_game_matrices)
 				{
 					shared::globals::d3d_device->SetTransform(D3DTS_VIEW, &sview->m_pTransform->ViewMatrix);
 					shared::globals::d3d_device->SetTransform(D3DTS_PROJECTION, &sview->m_pTransform->ProjectionMatrix);
 				}
 			}
-		}
+		}*/
 
-		// adjust game variables based on comp settings
-
-		// for hyperlinked tests
+		// for hyperlinked fork tests: (treecull function in hyperlinked is much slower than og)
 		//*game::drawscenery_cell_dist_check_01 = cs->nocull_distance_scenery._float();
 		//*game::drawscenery_cell_dist_check_02 = cs->nocull_distance._float();
 
-		// using shadermodel 1 disables these?
-		*game::options_rain_enabled = 1;
-		*game::options_rain_supported = 1;
-
-		// todo: proper vars
-		*reinterpret_cast<BYTE*>(0xA65340) = 0; // g_CarEnvironmentMapEnable
-		*reinterpret_cast<BYTE*>(0xA65358) = 0; // g_RoadReflectionEnable
-		*reinterpret_cast<BYTE*>(0xA65360) = 0; // g_MotionBlurEnable
-		*reinterpret_cast<BYTE*>(0xA6536C) = 1; // g_ParticleSystemEnable
-		*reinterpret_cast<BYTE*>(0xA65370) = 3; // g_WorldLodLevel
-		*reinterpret_cast<BYTE*>(0xA65378) = 1; // g_CarLodLevel
-		*reinterpret_cast<BYTE*>(0xA65394) = 0; // g_VisualTreatment
-
-		*reinterpret_cast<BYTE*>(0xA65398) = 0; // g_ShadowDetail
-		*reinterpret_cast<BYTE*>(0xA63E60) = 1; // g_ShaderDetailLevel
-		*reinterpret_cast<BYTE*>(0xA6537C) = 0; // g_FSAALevel
-		*reinterpret_cast<BYTE*>(0xA65360) = 0; // g_MotionBlurEnable
+		if (const auto options = game::game_options; options)
+		{
+			options->car_env_map_enabled = 0;
+			options->road_reflections_enabled = 0;
+			options->motion_blur_enabled = 0;
+			options->draw_particles = 1;
+			options->particles_supported = 1;
+			options->world_lod_level = 3;
+			options->car_lod_level = 1;
+			options->visual_treatment = 0;
+			options->visual_treatment_supported = 0;
+			options->shadow_detail = 0;
+			options->fsaa_level = 0;
+			options->rain_enabled = 1; // using shadermodel 1 disables these?
+			options->rain_supported = 1; // ^
+		}
 
 		renderer::get()->m_triggered_remix_injection = false;
 	}
 
 
-	// not needed
+	// keep game running when imgui open, can pause if imgui not open and wnd unfocused
+	int game_focused_hk() {
+		return shared::globals::imgui_menu_open || *game::game_input_allowed;
+	}
+
+	int game_focused_helper = 0;
+	__declspec (naked) void game_focused_stub()
+	{
+		__asm
+		{
+			pushad;
+			call	game_focused_hk;
+			mov		game_focused_helper, eax;
+			popad;
+			cmp		game_focused_helper, ebx;
+
+			//mov		eax, game::game_input_allowed; // og
+			//cmp		dword ptr[eax], ebx;
+
+			jz		PREVENT_INPUT;
+
+			mov		eax, game::retn_addr__game_focused_stub;
+			add		eax, 2; // instruction after jz (0x711F12)
+			jmp		eax;
+
+		PREVENT_INPUT:
+			jmp		game::skip_addr__game_focused_stub; // 0x711F20
+		}
+	}
+
+
+	// not needed - debug only
 	int compute_visibility_of_cell(game::vis_struct* vis, float* pos, float bounding_radius, float* out_distance)
 	{
 		const auto im = imgui::get();
@@ -411,6 +387,10 @@ namespace comp
 
 		// ---
 
+		// keep game running when imgui open, can pause if imgui not open and wnd unfocused
+		shared::utils::hook::nop(game::retn_addr__game_focused_stub - 6u, 6);
+		shared::utils::hook(game::retn_addr__game_focused_stub - 6u, game_focused_stub, HOOK_JUMP).install()->quick();
+
 #if 0
 		// let GetVisibleStateSB always return 1 - 0x71B630
 		shared::utils::hook::set(game::mem_addr__get_vis_state_sb, 
@@ -423,7 +403,7 @@ namespace comp
 #endif
 
 		// 'DrawAScenery' - redirect get_pixel_size check func to our own
-		shared::utils::hook(game::hk_addr__draw_scenery_comp_vis_fn_call, compute_visibility_of_cell, HOOK_CALL).install()->quick();
+		shared::utils::hook(game::hk_addr__draw_scenery_comp_vis_fn_call, compute_visibility_of_cell, HOOK_CALL).install()->quick(); // 0x79FB30
 
 		// 'TreeCull' pre visibility check - mid hook
 		shared::utils::hook::nop(game::retn_addr__tree_cull - 7u, 7); 

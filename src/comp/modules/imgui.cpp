@@ -59,8 +59,10 @@ namespace comp
 		if (message_type == WM_KEYUP && wparam == VK_F4) 
 		{
 			const auto& io = ImGui::GetIO();
-			if (!io.MouseDown[1]) {
+			if (!io.MouseDown[1]) 
+			{
 				shared::globals::imgui_menu_open = !shared::globals::imgui_menu_open;
+				*game::game_input_allowed = !shared::globals::imgui_menu_open;
 			} else {
 				ImGui_ImplWin32_WndProcHandler(shared::globals::main_window, message_type, wparam, lparam);
 			}
@@ -279,33 +281,6 @@ namespace comp
 
 			SPACEY8;
 		}
-
-#if 0
-		if (ImGui::CollapsingHeader("Camera"))
-		{
-			SPACEY4;
-
-			ImGui::Checkbox("Use Game Camera Matrices", &im->m_dbg_use_game_matrices);
-
-			ImGui::Checkbox("Use Fake Camera", &im->m_dbg_use_fake_camera);
-			ImGui::BeginDisabled(!im->m_dbg_use_fake_camera);
-			{
-				ImGui::SliderFloat3("Camera Position (X, Y, Z)", im->m_dbg_camera_pos, -10000.0f, 10000.0f);
-				ImGui::SliderFloat("Yaw (Y-axis)", &im->m_dbg_camera_yaw, -180.0f, 180.0f);
-				ImGui::SliderFloat("Pitch (X-axis)", &im->m_dbg_camera_pitch, -90.0f, 90.0f);
-
-				// Projection matrix adjustments
-				ImGui::SliderFloat("FOV", &im->m_dbg_camera_fov, 1.0f, 180.0f);
-				ImGui::SliderFloat("Aspect Ratio", &im->m_dbg_camera_aspect, 0.2f, 3.555f);
-				ImGui::SliderFloat("Near Plane", &im->m_dbg_camera_near_plane, 0.1f, 1000.0f);
-				ImGui::SliderFloat("Far Plane", &im->m_dbg_camera_far_plane, 1.0f, 100000.0f);
-
-				ImGui::EndDisabled();
-			}
-
-			SPACEY8;
-		}
-#endif
 
 		if (ImGui::CollapsingHeader("Culling Debug"))
 		{
@@ -1518,6 +1493,8 @@ namespace comp
 
 					if (shared::globals::imgui_menu_open) 
 					{
+						//*game::game_input_allowed = shared::globals::imgui_allow_input_bypass;
+
 						io.MouseDrawCursor = true;
 						im->devgui();
 
@@ -1538,6 +1515,7 @@ namespace comp
 							{
 								ImGui::SetWindowFocus(); // unfocus input text
 								shared::globals::imgui_allow_input_bypass = true;
+								*game::game_input_allowed = shared::globals::imgui_allow_input_bypass;
 							}
 						}
 
@@ -1546,10 +1524,16 @@ namespace comp
 						{
 							shared::globals::imgui_allow_input_bypass_timeout = 2u;
 							shared::globals::imgui_allow_input_bypass = false;
+							*game::game_input_allowed = 0;
 						}
 					}
 					else 
 					{
+						// so we only write this once
+						/*if (shared::globals::imgui_allow_input_bypass) {
+							*game::game_input_allowed = 1;
+						}*/
+						
 						io.MouseDrawCursor = false;
 						shared::globals::imgui_allow_input_bypass_timeout = 0u;
 						shared::globals::imgui_allow_input_bypass = false;

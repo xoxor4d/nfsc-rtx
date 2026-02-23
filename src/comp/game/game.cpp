@@ -6,7 +6,8 @@ namespace comp::game
 	// --------------
 	// game variables
 
-	//DWORD* d3d_dev_sample_addr = nullptr;
+	int* game_input_allowed = nullptr;
+
 	float* drawscenery_cell_dist_check_01 = nullptr; // used for compare of out dist of vis func
 	float* drawscenery_cell_dist_check_02 = nullptr; // used for compare of out dist/drawscenery_cell_dist_check_03 of vis func
 	float* drawscenery_cell_dist_check_03 = nullptr; // bounding radius related (goes into vis func and used for comp later)
@@ -16,8 +17,7 @@ namespace comp::game
 
 	int* always_rain = nullptr;
 
-	int* options_rain_supported = nullptr;
-	int* options_rain_enabled = nullptr;
+	options* game_options = nullptr;
 
 	// --------------
 	// game functions
@@ -28,8 +28,23 @@ namespace comp::game
 	// --------------
 	// game asm offsets
 
-	//uint32_t retn_addr__func1 = 0u;
-	//uint32_t nop_addr__func2 = 0u;
+	uint32_t nop_addr__set_transforms_01 = 0u;
+	uint32_t nop_addr__set_transforms_02 = 0u;
+	uint32_t nop_addr__set_transforms_03 = 0u;
+	uint32_t nop_addr__set_transforms_04 = 0u;
+
+	uint32_t retn_addr__pre_draw_particle = 0u;
+	uint32_t fn_addr__pre_draw_particle = 0u;
+	uint32_t retn_addr__post_draw_particle = 0u;
+	uint32_t fn_addr__post_draw_particle = 0u;
+	uint32_t retn_addr__on_handle_material_data = 0u;
+	uint32_t retn_addr__on_rain_render = 0u;
+	uint32_t func_addr__on_rain_render = 0u;
+
+	// comp
+	uint32_t retn_addr__game_focused_stub = 0u;
+	uint32_t skip_addr__game_focused_stub = 0u;
+
 	uint32_t mem_addr__get_vis_state_sb = 0u;
 	uint32_t nop_addr__draw_scenery_chk01 = 0u;
 	uint32_t nop_addr__draw_scenery_chk02 = 0u;
@@ -87,9 +102,8 @@ namespace comp::game
 		// Or via macro
 			//PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(d3d_dev_sample_addr, DWORD*, "? ? ? ? ?", 1, 0xDEADBEEF);
 
-
-		// Another example with a structure object
-			//PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(vp, some_struct_containing_matrices*, "? ? ? ? ?", 0, 0xDEADBEEF);
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(game_input_allowed, int*,
+				"39 1D ? ? ? ? 74 ? 6A ? 8D 4C 24", 2, 0x711E90);
 
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(drawscenery_cell_dist_check_01, float*, 
 			"? ? ? ? ? ? DF E0 F6 C4 ? 7B ? ? ? ? ? ? ? DF E0 F6 C4 ? 0F 85 ? ? ? ? EB ? ? ? E8", 2, 0x79FC56);
@@ -109,12 +123,8 @@ namespace comp::game
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(always_rain, int*,
 			"A1 ? ? ? ? 85 C0 56 8B F1 74 ? A1 ? ? ? ? 89 86", 1, 0x7B3B60);
 
-		if (const auto offset = shared::utils::mem::find_pattern("89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 89 1D ? ? ? ? 5F", 2, "options_rain", use_pattern, 0x712E64); offset)
-		{
-			options_rain_enabled = (int*)*(DWORD*)offset;
-			options_rain_supported = (int*)*(DWORD*)(offset + 0xC); 
-			found_pattern_count++;
-		} total_pattern_count++;
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(game_options, options*,
+			"68 ? ? ? ? 8D 54 24 ? 52 50 8B 44 24 ? 68 ? ? ? ? BF", 1, 0x711844);
 
 		// end GAME_VARIABLES
 #pragma endregion
@@ -148,9 +158,45 @@ namespace comp::game
 			//	nop_addr__func2 = offset; found_pattern_count++;
 			//} total_pattern_count++;
 
-		PATTERN_OFFSET_SIMPLE(mem_addr__get_vis_state_sb, "55 8B EC 83 E4 ? 83 EC ? 8B 45 ? 8B 50 ? 56", 0, 0x71B630);
-		PATTERN_OFFSET_SIMPLE(nop_addr__draw_scenery_chk01, "7C ? 8B 43 ? 85 C0", 0, 0x79FC1C);
-		PATTERN_OFFSET_SIMPLE(nop_addr__draw_scenery_chk02, "0F 8E ? ? ? ? 8B 56", 0, 0x79FB3F);
+		// renderer
+
+		PATTERN_OFFSET_SIMPLE(nop_addr__set_transforms_01, 
+			"75 ? 8B 54 24 ? A1 ? ? ? ? ? ? 52 6A ? 50 FF 91 ? ? ? ? A1 ? ? ? ? ? ? 57 6A ? 50 FF 91 ? ? ? ? 8B 86", 0, 0x71E736);
+
+		PATTERN_OFFSET_SIMPLE(nop_addr__set_transforms_02,
+			"75 ? 8B 54 24 ? A1 ? ? ? ? ? ? 52 6A ? 50 FF 91 ? ? ? ? A1 ? ? ? ? ? ? 57 6A ? 50 FF 91 ? ? ? ? 8B CB", 0, 0x71E6ED);
+
+		PATTERN_OFFSET_SIMPLE(nop_addr__set_transforms_03, "75 ? A1 ? ? ? ? ? ? 57 68", 0, 0x71E82F);
+		PATTERN_OFFSET_SIMPLE(nop_addr__set_transforms_04, "EB ? 8B 54 24 ? 52 57", 0, 0x71E845);
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__pre_draw_particle, "8B 56 ? 52 E8 ? ? ? ? 83 C4 ? 50", 0, 0x72EA9F);
+		PATTERN_OFFSET_SIMPLE(fn_addr__pre_draw_particle, "81 EC ? ? ? ? A0 ? ? ? ? 84 C0 53 8B D9", 0, 0x75AA10);
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__post_draw_particle, "83 3D ? ? ? ? ? 0F 85 ? ? ? ? 39 1D", 0, 0x72EAC6);
+		if (retn_addr__post_draw_particle) {
+			fn_addr__post_draw_particle = shared::utils::mem::resolve_relative_call_address(retn_addr__post_draw_particle - 5u); // 0x72C9B0
+		}
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__on_handle_material_data, 
+			"? ? ? ? ? ? 8B 86 ? ? ? ? 89 44 24 ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? E8", 
+			0, 0x71E06B);
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__on_rain_render, "83 C4 ? 84 C0 74 ? E8 ? ? ? ? 8A 44 24", 0, 0x729863);
+		if (retn_addr__on_rain_render) {
+			func_addr__on_rain_render = shared::utils::mem::resolve_relative_call_address(retn_addr__on_rain_render - 5u); // 0x722CB0
+		}
+
+		// ----
+		// comp
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__game_focused_stub, "74 ? 6A ? 53 53 53", 0, 0x711F10);
+		if (retn_addr__game_focused_stub) {
+			skip_addr__game_focused_stub = shared::utils::mem::resolve_relative_jump_address(retn_addr__game_focused_stub, 2, 1); // 0x711F20
+		}
+
+		//PATTERN_OFFSET_SIMPLE(mem_addr__get_vis_state_sb, "55 8B EC 83 E4 ? 83 EC ? 8B 45 ? 8B 50 ? 56", 0, 0x71B630);
+		//PATTERN_OFFSET_SIMPLE(nop_addr__draw_scenery_chk01, "7C ? 8B 43 ? 85 C0", 0, 0x79FC1C);
+		//PATTERN_OFFSET_SIMPLE(nop_addr__draw_scenery_chk02, "0F 8E ? ? ? ? 8B 56", 0, 0x79FB3F);
 		PATTERN_OFFSET_SIMPLE(hk_addr__draw_scenery_comp_vis_fn_call, "E8 ? ? ? ? 83 C4 ? 83 F8 ? 89 44 24", 0, 0x79FB30);
 
 		PATTERN_OFFSET_SIMPLE(retn_addr__tree_cull, "75 ? 8B 94 24 ? ? ? ? 6A", 0, 0x79FDDF);

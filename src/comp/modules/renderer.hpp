@@ -4,12 +4,8 @@
 namespace comp
 {
 	extern int g_is_rendering_particle;
-	extern int g_is_rendering_car;
-	extern int g_is_rendering_car_normalmap;
-	extern int g_is_rendering_world;
-
+	extern int g_is_rendering_rain;
 	extern bool g_rendered_first_primitive;
-	extern bool g_applied_hud_hack;
 	extern bool g_is_in_endscene;
 
 	namespace tex_addons
@@ -401,7 +397,6 @@ namespace comp
 		struct modifiers_s
 		{
 			bool do_not_render = false;
-
 			bool dual_render = false;
 			bool dual_render_mode_blend_add = false;
 			bool dual_render_mode_blend_diffuse = false;

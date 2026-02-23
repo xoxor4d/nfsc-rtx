@@ -82,21 +82,6 @@ namespace comp
 
 		// ---
 
-		bool m_dbg_use_fake_camera = false;
-
-		// View matrix parameters
-		float m_dbg_camera_pos[3] = { 0.0f, 0.0f, 1.0f }; // X, Y, Z
-		float m_dbg_camera_yaw = 0.0f;   // Rotation around Y (degrees)
-		float m_dbg_camera_pitch = 0.0f; // Rotation around X (degrees, downward tilt)
-
-		// Projection matrix parameters
-		float m_dbg_camera_fov = 60.0f;         // Vertical FOV in degrees
-		float m_dbg_camera_aspect = 1.777f;     // 16:9 aspect ratio
-		float m_dbg_camera_near_plane = 1.0f;   // Near clipping plane
-		float m_dbg_camera_far_plane = 1000.0f; // Far clipping plane
-
-		// ---
-
 		bool m_dbg_manual_compute_vis = false;
 		int m_dbg_manual_compute_vis_num = 0;
 
