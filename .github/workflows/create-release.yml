@@ -25,7 +25,7 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          $content = Get-Content -Path "src/gta4/std_include.hpp" -Raw
+          $content = Get-Content -Path "src/comp/std_include.hpp" -Raw
           $major = [regex]::Match($content, 'COMP_MOD_VERSION_MAJOR\s*=\s*(\d+)').Groups[1].Value
           $minor = [regex]::Match($content, 'COMP_MOD_VERSION_MINOR\s*=\s*(\d+)').Groups[1].Value
           $patch = [regex]::Match($content, 'COMP_MOD_VERSION_PATCH\s*=\s*(\d+)').Groups[1].Value
@@ -52,7 +52,7 @@ jobs:
         uses: ammaraskar/msvc-problem-matcher@master
 
       - name: Build Release binaries
-        run: msbuild /m /v:minimal /p:Configuration=Release /p:Platform=Win32 build/gta4-rtx.sln
+        run: msbuild /m /v:minimal /p:Configuration=Release /p:Platform=Win32 build/nfsc-rtx.sln
 
       - name: Extract d3d9 runtime
         shell: pwsh
