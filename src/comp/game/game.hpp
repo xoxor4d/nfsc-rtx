@@ -18,6 +18,7 @@ namespace comp::game
 	extern int* always_rain;
 
 	extern options* game_options;
+	extern int* g_shaderDetailLevel;
 
 	// --------------
 	// game functions

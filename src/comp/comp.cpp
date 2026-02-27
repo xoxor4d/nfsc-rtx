@@ -36,6 +36,7 @@ namespace comp
 		//*game::drawscenery_cell_dist_check_01 = cs->nocull_distance_scenery._float();
 		//*game::drawscenery_cell_dist_check_02 = cs->nocull_distance._float();
 
+#if 1
 		if (const auto options = game::game_options; options)
 		{
 			options->car_env_map_enabled = 0;
@@ -51,10 +52,16 @@ namespace comp
 			options->fsaa_level = 0;
 			options->rain_enabled = 1; // using shadermodel 1 disables these?
 			options->rain_supported = 1; // ^
-		}
 
+			options->bone_anims_enabled = 1;
+			options->bone_anims_supported = 1;
+
+			*game::g_shaderDetailLevel = 1; // 3 also works
+		}
+#endif
 		renderer::get()->m_triggered_remix_injection = false;
 	}
+
 
 
 	// keep game running when imgui open, can pause if imgui not open and wnd unfocused

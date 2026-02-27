@@ -18,6 +18,7 @@ namespace comp::game
 	int* always_rain = nullptr;
 
 	options* game_options = nullptr;
+	int* g_shaderDetailLevel = nullptr;
 
 	// --------------
 	// game functions
@@ -125,6 +126,9 @@ namespace comp::game
 
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(game_options, options*,
 			"68 ? ? ? ? 8D 54 24 ? 52 50 8B 44 24 ? 68 ? ? ? ? BF", 1, 0x711844);
+
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(g_shaderDetailLevel, int*,
+			"89 35 ? ? ? ? E8 ? ? ? ? A1 ? ? ? ? 83 C4", 2, 0x711652);
 
 		// end GAME_VARIABLES
 #pragma endregion
