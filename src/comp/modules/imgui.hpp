@@ -120,6 +120,7 @@ namespace comp
 
 		bool m_vis_imgui_open = false;
 		std::unordered_set<std::string> m_vis_used_mat_names;
+		std::unordered_set<std::string> m_vis_used_shader_techniques;
 
 		float m_vis_out_roughness = 0.0f;
 		float m_vis_out_metalness = 0.0f;

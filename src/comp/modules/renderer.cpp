@@ -600,6 +600,15 @@ namespace comp
 
 			const auto tech = effects::get_current_tech();
 
+			if (im->m_stats.is_tracking_enabled()) {
+				im->m_vis_used_shader_techniques.insert(effects::get_current_tech_name());
+			}
+
+			if (tech == effects::ETECH::SKINNED)
+			{
+				int x = 1;
+			}
+
 			auto& mat = g_current_material_data;
 			const auto mat_name = std::string_view(g_current_material_data.name);
 

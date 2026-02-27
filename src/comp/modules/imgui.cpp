@@ -395,6 +395,14 @@ namespace comp
 			SPACEY4;
 			im->m_stats.enable_tracking(true);
 			im->m_stats.draw_stats();
+
+			ImGui::SeparatorText("  Shader Techniques this Frame  ");
+			for (auto& s : im->m_vis_used_shader_techniques) {
+				ImGui::Text("%s", s.c_str());
+			}
+
+			im->m_vis_used_shader_techniques.clear();
+
 			SPACEY8;
 		} else {
 			im->m_stats.enable_tracking(false);
