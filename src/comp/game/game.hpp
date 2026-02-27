@@ -46,6 +46,8 @@ namespace comp::game
 	extern uint32_t retn_addr__on_rain_render;
 	extern uint32_t func_addr__on_rain_render;
 
+	extern uint32_t retn_addr__on_world_internal_render;
+
 	// comp
 
 	extern uint32_t retn_addr__game_focused_stub;

@@ -104,6 +104,34 @@ namespace comp
 
 		// -----
 
+		bool m_dbg_tech_ignore_logic_enabled = false;
+		bool m_dbg_tech_ignore_world = false;
+		bool m_dbg_tech_ignore_world_1_1 = false;
+		bool m_dbg_tech_ignore_world_fixed = false;
+		bool m_dbg_tech_ignore_world_min = false;
+		bool m_dbg_tech_ignore_world_masked = false;
+		bool m_dbg_tech_ignore_lowlod = false;
+		bool m_dbg_tech_ignore_dryroad = false;
+		bool m_dbg_tech_ignore_raining_on_road = false;
+		bool m_dbg_tech_ignore_car = false;
+		bool m_dbg_tech_ignore_car_normalmap = false;
+		bool m_dbg_tech_ignore_main = false;
+		bool m_dbg_tech_ignore_main_1_1 = false;
+		bool m_dbg_tech_ignore_glassreflect = false;
+		bool m_dbg_tech_ignore_water = false;
+		bool m_dbg_tech_ignore_ghostcar = false;
+		bool m_dbg_tech_ignore_sky = false;
+		bool m_dbg_tech_ignore_fuzzz = false;
+		bool m_dbg_tech_ignore_no_fuzzz = false;
+		bool m_dbg_tech_ignore_flares = false;
+		bool m_dbg_tech_ignore_streak_flares = false;
+		bool m_dbg_tech_ignore_skinned = false;
+		bool m_dbg_tech_ignore_depth_noalpha = false;
+		bool m_dbg_tech_ignore_tshader_instance = false;
+		bool m_dbg_tech_ignore_blend_textures = false;
+
+		// -----
+
 		bool m_vis_drawcall01 = false;
 		Vector4D m_vis_cvDiffuseMin;
 		Vector4D m_vis_cvDiffuseRange;

@@ -42,6 +42,8 @@ namespace comp::game
 	uint32_t retn_addr__on_rain_render = 0u;
 	uint32_t func_addr__on_rain_render = 0u;
 
+	uint32_t retn_addr__on_world_internal_render = 0u;
+
 	// comp
 	uint32_t retn_addr__game_focused_stub = 0u;
 	uint32_t skip_addr__game_focused_stub = 0u;
@@ -189,6 +191,10 @@ namespace comp::game
 		if (retn_addr__on_rain_render) {
 			func_addr__on_rain_render = shared::utils::mem::resolve_relative_call_address(retn_addr__on_rain_render - 5u); // 0x722CB0
 		}
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__on_world_internal_render,
+			"8B 7E ? 0F 85 ? ? ? ? 8B 46 ? 8B 0D ? ? ? ? 50 56 E8 ? ? ? ? 8B 46 ? 85 C0 74 ? 57 50 E8 ? ? ? ? 83 C4 ? 8B 47 ? 85 C0 75 ? 8B 47 ? 85 C0 76 ? 83 3D ? ? ? ? ? 0F 8D ? ? ? ? 8B 43 ? 85 C0 0F 84 ? ? ? ? 8B CB E8 ? ? ? ? FF 05 ? ? ? ? 8B 4F ? 85 C9 74 ? 8B 6E ? 8B 6D ? A1 ? ? ? ? ? ? 55 6A ? 51 6A ? 50 FF 92 ? ? ? ? 8B 47 ? 8B 6C 24",
+			0, 0x727376);
 
 		// ----
 		// comp

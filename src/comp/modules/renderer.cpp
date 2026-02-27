@@ -16,6 +16,8 @@ namespace comp
 	game::material_instance g_current_material_data = {};
 	game::effect* g_curr_effect_ptr = nullptr;
 
+	game::rendering_model* g_rendering_mdl = nullptr;
+
 	namespace tex_addons
 	{
 		bool initialized = false;
@@ -413,7 +415,113 @@ namespace comp
 	{
 		auto& ctx = renderer::dc_ctx;
 		ctx.info.device_ptr = dev;
-		// any additional info about the current drawcall here
+	
+		const auto im = imgui::get();
+		if (im->m_dbg_tech_ignore_logic_enabled)
+		{
+			const auto tech = effects::g_current_tech;
+			switch (tech)
+			{
+			case effects::ETECH::WORLD:
+				if (im->m_dbg_tech_ignore_world) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::WORLD_1_1:
+				if (im->m_dbg_tech_ignore_world_1_1) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::WORLD_FIXED:
+				if (im->m_dbg_tech_ignore_world_fixed) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::WORLD_MIN:
+				if (im->m_dbg_tech_ignore_world_min) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::WORLD_MASKED:
+				if (im->m_dbg_tech_ignore_world_masked) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::LOWLOD:
+				if (im->m_dbg_tech_ignore_lowlod) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::DRYROAD:
+				if (im->m_dbg_tech_ignore_dryroad) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::RAINING_ON_ROAD:
+				if (im->m_dbg_tech_ignore_raining_on_road) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::CAR:
+				if (im->m_dbg_tech_ignore_car) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::CAR_NORMALMAP:
+				if (im->m_dbg_tech_ignore_car_normalmap) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::MAIN:
+				if (im->m_dbg_tech_ignore_main) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::MAIN_1_1:
+				if (im->m_dbg_tech_ignore_main_1_1) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::GLASSREFLECT:
+				if (im->m_dbg_tech_ignore_glassreflect) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::WATER:
+				if (im->m_dbg_tech_ignore_water) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::GHOSTCAR:
+				if (im->m_dbg_tech_ignore_ghostcar) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::SKY:
+				if (im->m_dbg_tech_ignore_sky) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::FUZZZ:
+				if (im->m_dbg_tech_ignore_fuzzz) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::NO_FUZZZ:
+				if (im->m_dbg_tech_ignore_no_fuzzz) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::FLARES:
+				if (im->m_dbg_tech_ignore_flares) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::STREAK_FLARES:
+				if (im->m_dbg_tech_ignore_streak_flares) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::SKINNED:
+				if (im->m_dbg_tech_ignore_skinned) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::DEPTH_TECHNIQUE_NOALPHA:
+				if (im->m_dbg_tech_ignore_depth_noalpha) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::TSHADER_INSTANCING:
+				if (im->m_dbg_tech_ignore_tshader_instance) ctx.modifiers.do_not_render = true;
+				break;
+
+			case effects::ETECH::BLEND_TEXTURES:
+				if (im->m_dbg_tech_ignore_blend_textures) ctx.modifiers.do_not_render = true;
+				break;
+
+			default:
+				break;
+			}
+		}
 
 		return ctx;
 	}
@@ -507,6 +615,12 @@ namespace comp
 
 		if (g_is_rendering_particle && im->m_dbg_force_ff_indexed_prim) {
 			render_with_ff = true;
+		}
+
+		//const auto tech = effects::get_current_tech();
+
+		if (im->m_stats.is_tracking_enabled()) {
+			im->m_vis_used_shader_techniques.insert(effects::get_current_tech_name());
 		}
 
 		D3DXMATRIX proj;
@@ -604,16 +718,43 @@ namespace comp
 				im->m_vis_used_shader_techniques.insert(effects::get_current_tech_name());
 			}
 
-			if (tech == effects::ETECH::SKINNED)
-			{
-				int x = 1;
-			}
-
 			auto& mat = g_current_material_data;
 			const auto mat_name = std::string_view(g_current_material_data.name);
 
 			if (im->m_dbg_force_ff_indexed_prim) {
 				render_with_ff = true;
+			}
+
+			if (g_rendering_mdl && g_rendering_mdl->blending_matrices && g_rendering_mdl->mesh.entry 
+				&& (g_rendering_mdl->mesh.entry->type == game::WorldBoneShader || g_rendering_mdl->mesh.entry->type == game::UCAP))
+			{
+				// render skinned stuff via shader
+				render_with_ff = false;
+
+				//shared::utils::lookat_vertex_decl(dev);
+
+				// in correct position but no face anims
+				/*if (im->m_dbg_debug_bool04)
+				{
+					ctx.save_rs(dev, D3DRS_VERTEXBLEND);
+					ctx.save_rs(dev, D3DRS_INDEXEDVERTEXBLENDENABLE);
+
+					dev->SetRenderState(D3DRS_VERTEXBLEND, D3DVBF_1WEIGHTS);
+					dev->SetRenderState(D3DRS_INDEXEDVERTEXBLENDENABLE, TRUE);
+					
+					D3DXMATRIX world;
+					dev->GetTransform(D3DTS_WORLD, &world);
+
+					D3DXMATRIX bone;
+					for (auto i = 0; i < 15; i++) 
+					{
+						bone = g_rendering_mdl->blending_matrices[i] * world;
+
+						if (&g_rendering_mdl->blending_matrices[i]) {
+							dev->SetTransform(D3DTS_WORLDMATRIX(i), &bone);
+						}
+					}
+				}*/
 			}
 
 			// Globally enable vertex colors
@@ -1047,6 +1188,7 @@ namespace comp
 				ctx.save_vs(dev);
 				dev->SetVertexShader(nullptr);
 			}
+
 		} // end !imgui-is-rendering
 
 
@@ -1401,6 +1543,19 @@ namespace comp
 		}
 	}
 
+	__declspec (naked) void get_current_render_model_stub()
+	{
+		__asm
+		{
+			mov		g_rendering_mdl, esi;
+			mov     eax, [esi + 0x20];
+			test    eax, eax;
+			jmp		game::retn_addr__on_world_internal_render; // 0x727376
+		}
+	}
+
+	// ----------------
+	
 	renderer::renderer()
 	{
 		p_this = this;
@@ -1423,6 +1578,9 @@ namespace comp
 
 
 		shared::utils::hook(game::retn_addr__on_rain_render - 5u, on_rain_render_stub, HOOK_JUMP).install()->quick(); // 0x72985E
+
+		// get current rendering model
+		shared::utils::hook(game::retn_addr__on_world_internal_render - 5u, get_current_render_model_stub, HOOK_JUMP).install()->quick(); // 0x727371
 
 		// -----
 		m_initialized = true;

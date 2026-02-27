@@ -647,4 +647,423 @@ namespace comp::game
 	public:
 		static inline linked_list<scenery_pack>& list = *reinterpret_cast<linked_list<scenery_pack>*>(0x00B70640);
 	};
+
+	// ----------------------------------
+	// (c) github.com/MaxHwoy/hyperlinked
+
+	struct info;
+
+	struct render_state
+	{
+		/* 0b00000001 */ uint32_t z_write_enabled : 1;
+		/* 0b00000002 */ uint32_t is_backface_culled : 1;
+		/* 0b00000004 */ uint32_t alpha_test_enabled : 1;
+		/* 0b00000008 */ uint32_t alpha_blend_enabled : 1;
+		/* 0b00000010 */ uint32_t alpha_blend_src : 4;
+		/* 0b00000100 */ uint32_t alpha_blend_dest : 4;
+		/* 0b00001000 */ uint32_t texture_address_u : 2;
+		/* 0b00004000 */ uint32_t texture_address_v : 2;
+		/* 0b00010000 */ uint32_t has_texture_animation : 1;
+		/* 0b00020000 */ uint32_t is_additive_blend : 1;
+		/* 0b00040000 */ uint32_t wants_auxiliary_textures : 1;
+		/* 0b00080000 */ uint32_t bias_level : 2;
+		/* 0b00200000 */ uint32_t multi_pass_blend : 1;
+		/* 0b00400000 */ uint32_t colour_write_alpha : 1;
+		/* 0b00800000 */ uint32_t sub_sort_key : 1;
+		/* 0b01000000 */ uint32_t alpha_test_ref : 4;
+		/* 0b10000000 */ uint32_t padding : 4;
+	};
+
+	enum compression_type : uint8_t
+	{
+		default_ = 0,
+		p4 = 4,
+		p8 = 8,
+		p16 = 16,
+		p16_1555 = 17,
+		p16_565 = 18,
+		p16_3555 = 19,
+		rgb24 = 24,
+		rgba32 = 32,
+		dxt = 33,
+		dxt1 = 34,
+		dxt3 = 36,
+		dxt5 = 38,
+		ati2 = 39, // ATI2
+		l8 = 40,
+		dxt1_air = 41,
+		dxt1_aig = 42,
+		dxt1_aib = 43,
+		ati1 = 44, // ATI1
+		p8_16 = 128,
+		p8_64 = 129,
+		p8_ia8 = 130,
+		p4_ia8 = 131,
+		p4_rgb24_a8 = 140,
+		p8_rgb24_a8 = 141,
+		p4_rgb16_a8 = 142,
+		p8_rgb16_a8 = 143,
+		invalid = 255,
+	};
+
+	enum lock_type : uint8_t
+	{
+		read = 0x0,
+		write = 0x1,
+		read_write = 0x2,
+	};
+
+	enum tileable_type : uint8_t
+	{
+		clamp = 0x00,
+		u_repeat = 0x01,
+		v_repeat = 0x02,
+		u_mirror = 0x04,
+		v_mirror = 0x08,
+	};
+
+	enum scroll_type : uint8_t
+	{
+		none = 0x00,
+		smooth = 0x01,
+		snap = 0x02,
+		offset_scale = 0x03,
+	};
+
+	enum alpha_blend_type : uint8_t
+	{
+		src_copy = 0,
+		blend = 1,
+		additive = 2,
+		subtractive = 3,
+		overbright = 4,
+		dest_blend = 5,
+		dest_additive = 6,
+		dest_subtractive = 7,
+		dest_overbright = 8,
+	};
+
+	enum alpha_usage_type : uint8_t
+	{
+		none_ = 0,
+		punchthru = 1,
+		modulated = 2,
+	};
+
+	enum bit_flags : uint8_t
+	{
+		unknown = 0x01,
+		disable_culling = 0x02,
+	};
+
+	struct page_range
+	{
+		float u0;
+		float u1;
+		float v0;
+		float v1;
+		uint32_t flags;
+		uint32_t key;
+		uint32_t pad1;
+		uint32_t pad2;
+	};
+
+	struct platform_info
+	{
+		int pad1;
+		int pad2;
+		render_state state;
+		uint32_t type;
+		IDirect3DTexture9* texture;
+		uint16_t punchthru_value;
+		uint16_t format;
+	};
+
+	struct platform_interface
+	{
+		platform_info* pinfo;
+	};
+
+	struct texture_info : public platform_interface
+	{
+		int pad1;
+		int pad2;
+		uint32_t key;
+		uint32_t class_key;
+		int32_t image_placement;
+		int32_t palette_placement;
+		int32_t image_size;
+		int32_t palette_size;
+		int32_t base_image_size;
+		uint16_t width;
+		uint16_t height;
+		uint8_t shift_width;
+		uint8_t shift_height;
+		compression_type image_compression_type;
+		uint8_t palette_compression_type;
+		uint16_t num_palette_entries;
+		uint8_t num_mipmap_levels;
+		tileable_type tilable_uv;
+		uint8_t bias_level;
+		uint8_t rendering_order;
+		scroll_type scroll;
+		uint8_t used_flag;
+		uint8_t apply_alpha_sorting;
+		alpha_usage_type usage_type;
+		alpha_blend_type blend_type;
+		bit_flags flags;
+		int16_t scroll_time_step;
+		int16_t scroll_speed_s;
+		int16_t scroll_speed_t;
+		int16_t offset_s;
+		int16_t offset_t;
+		int16_t scale_s;
+		int16_t scale_t;
+		int16_t unknown;
+		struct pack* pack;
+		void* image_data;
+		void* weights;
+		uint8_t name_len;
+		char name[35];
+	};
+
+	struct index_entry
+	{
+		uint32_t key;
+		texture_info* texture;
+	};
+
+	struct e_texture
+	{
+		int pad1;
+		int pad2;
+		uint32_t key;
+		texture_info* texture;
+	};
+
+	struct pack_header
+	{
+		int32_t version;
+		char name[28];
+		char filename[64];
+		uint32_t key;
+		uint32_t perm_chunk_byte_offset;
+		uint32_t perm_chunk_byte_size;
+		bool endian_swapped;
+		__declspec(align(0x04)) struct pack* pack;
+		index_entry* texture_index_entry_table;
+		struct e_streaming_entry* texture_stream_entry_table;
+	};
+
+	struct vram_data_header
+	{
+		int pad1;
+		int pad2;
+		uint32_t version;
+		uint32_t key;
+		bool endian_swapped;
+		void* vram_data_chunk;
+	};
+
+	struct pack
+	{
+		int pad1;
+		int pad2;
+		const char* name;
+		const char* filename;
+		uint32_t key;
+		pack_header* header;
+		uint32_t textures_count;
+		uint32_t texture_data_size;
+		e_texture* next;
+		e_texture* prev;
+	};
+
+	enum time_base : uint8_t
+	{
+		world,
+		real,
+	};
+
+	struct plat
+	{
+		IDirect3DTexture9* attached;
+	};
+
+	struct entry
+	{
+		uint32_t key;
+		texture_info* texture;
+		plat* data;
+	};
+
+	struct animation
+	{
+		int pad1;
+		int pad2;
+		char name[16];
+		uint32_t key;
+		uint8_t frame_count;
+		uint8_t fps;
+		time_base base;
+		uint8_t pad0;
+		bool endian_swapped;
+		bool valid;
+		uint8_t current_frame;
+		uint8_t pad3;
+		void* parent_pack;
+		entry* table;
+	};
+
+	struct color32
+	{
+		uint8_t r;
+		uint8_t g;
+		uint8_t b;
+		uint8_t a;
+	};
+
+	struct vertex
+	{
+		Vector position;
+		color32 color;
+		Vector2D uv;
+	};
+
+	struct strip
+	{
+		uint32_t vertex_count;
+		vertex vertices[0x40];
+	};
+
+	enum shader_type : uint32_t
+	{
+		WorldShader,
+		WorldReflectShader,
+		WorldBoneShader,
+		WorldNormalMap,
+		CarShader,
+		CARNORMALMAP,
+		WorldMinShader,
+		FEShader,
+		FEMaskShader,
+		FilterShader,
+		ScreenFilterShader,
+		RainDropShader,
+		VisualTreatmentShader,
+		WorldPrelitShader,
+		ParticlesShader,
+		skyshader,
+		shadow_map_mesh,
+		CarShadowMapShader,
+		WorldDepthShader,
+		shadow_map_mesh_depth,
+		NormalMapNoFog,
+		InstanceMesh,
+		ScreenEffectShader,
+		HDRShader,
+		UCAP,
+		GLASS_REFLECT,
+		WATER,
+		RVMPIP,
+		GHOSTCAR,
+		count,
+		first = 0,
+	};
+
+	struct mesh_entry
+	{
+		Vector bbox_min;
+		Vector bbox_max;
+		uint8_t diffuse_texture_index;
+		uint8_t normal_texture_index;
+		uint8_t height_texture_index;
+		uint8_t specular_texture_index;
+		uint8_t opacity_texture_index;
+		uint8_t light_material_table_index;
+		unsigned char blend_matrix_indices[16];
+		uint16_t padding;
+		shader_type type;
+		effect* effect;
+		uint32_t flags;
+		uint32_t material_key;
+		uint32_t vertex_count;
+		char* chunk_data; // #TODO
+		uint32_t chunk_data_size;
+		uint32_t unknown_4;
+		uint32_t unknown_5;
+		uint32_t unknown_6;
+		uint32_t unknown_7;
+		uint32_t unknown_8;
+		uint32_t triangle_count;
+		uint32_t index_start;
+		uint32_t idk_yet;
+		void* file_vertex_buffer;
+		uint32_t file_vertex_buffer_size;
+		IDirect3DVertexBuffer9* d3d_vertex_buffer;
+		uint32_t d3d_vertex_count;
+		uint32_t index_count;
+		const char* vlt_material_name;
+		uint32_t overriden_material_key;
+		void* vertex_buffer_data;
+		uint32_t vertex_offset;
+	};
+
+	enum draw_flags : uint32_t
+	{
+		fully_visible = 1u << 2,
+
+		rear_view_drawn = 1u << 8,
+		always_facing = 1u << 9,
+		render_ai_npc = 1u << 10,
+		render_ai_racer = 1u << 11,
+		some_flag_0x1000 = 1u << 12,
+		chopped_roadway = 1u << 13,
+
+		cast_shadows = 1u << 16,
+		sky_shade = 1u << 17,
+		inverted_culling = 1u << 18,
+		dynamic_placement = 1u << 19,
+		reflect_in_ocean = 1u << 20,
+
+		high_quality = 1u << 22,
+		dont_receive_shadows = 1u << 23,
+		envmap_shadow = 1u << 24,
+		use_ghost_shader = 1u << 25,
+
+		dont_fix_replacement_tex = 1u << 31,
+	};
+
+	struct rendering_model
+	{
+		render_state render_bits;
+		texture_info* base_texture_info;
+		IDirect3DTexture9* d3d9_diffuse_texture;
+		IDirect3DTexture9* d3d9_normal_texture;
+		IDirect3DTexture9* d3d9_height_texture;
+		IDirect3DTexture9* d3d9_specular_texture;
+		IDirect3DTexture9* d3d9_opacity_texture;
+		union {
+			mesh_entry* entry;
+			strip* strip;
+		} mesh;
+		bool is_tri_stripped;
+		void* solid; // geometry::solid
+		draw_flags flags;
+		effect* effect;
+		const void* light_context; // light::context::dynamic
+		const void* light_material; // light_material::instance
+		const D3DXMATRIX* local_to_world;
+		const D3DXMATRIX* blending_matrices;
+		const texture_info* diffuse_texture_info;
+		const texture_info* normal_texture_info;
+		const texture_info* height_texture_info;
+		const texture_info* specular_texture_info;
+		const texture_info* opacity_texture_info;
+		int32_t sort_flags;
+		void* null;
+		float negative_one;
+		void* blend_data; // pca::blend_data
+		bool use_low_lod;
+	};
 }

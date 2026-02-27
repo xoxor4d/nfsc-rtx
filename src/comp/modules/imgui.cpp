@@ -408,6 +408,47 @@ namespace comp
 			im->m_stats.enable_tracking(false);
 		}
 
+		if (ImGui::CollapsingHeader("Shader Tech Ignore ..."))
+		{
+			SPACEY4;
+
+			ImGui::Checkbox("Enable Logic", &im->m_dbg_tech_ignore_logic_enabled);
+			ImGui::BeginDisabled(!im->m_dbg_tech_ignore_logic_enabled);
+			{
+				ImGui::Checkbox("WORLD", &im->m_dbg_tech_ignore_world);
+				ImGui::Checkbox("WORLD_1_1", &im->m_dbg_tech_ignore_world_1_1);
+				ImGui::Checkbox("WORLD_FIXED", &im->m_dbg_tech_ignore_world_fixed);
+				ImGui::Checkbox("WORLD_MIN", &im->m_dbg_tech_ignore_world_min);
+				ImGui::Checkbox("WORLD_MASKED", &im->m_dbg_tech_ignore_world_masked);
+				ImGui::Checkbox("LOWLOD", &im->m_dbg_tech_ignore_lowlod);
+				ImGui::Checkbox("DRYROAD", &im->m_dbg_tech_ignore_dryroad);
+				ImGui::Checkbox("RAINING_ON_ROAD", &im->m_dbg_tech_ignore_raining_on_road);
+				ImGui::Checkbox("CAR", &im->m_dbg_tech_ignore_car);
+				ImGui::Checkbox("CAR_NORMALMAP", &im->m_dbg_tech_ignore_car_normalmap);
+				ImGui::Checkbox("MAIN", &im->m_dbg_tech_ignore_main);
+				ImGui::Checkbox("MAIN_1_1", &im->m_dbg_tech_ignore_main_1_1);
+				ImGui::Checkbox("GLASSREFLECT", &im->m_dbg_tech_ignore_glassreflect);
+				ImGui::Checkbox("WATER", &im->m_dbg_tech_ignore_water);
+				ImGui::Checkbox("GHOSTCAR", &im->m_dbg_tech_ignore_ghostcar);
+				ImGui::Checkbox("SKY", &im->m_dbg_tech_ignore_sky);
+				ImGui::Checkbox("FUZZZ", &im->m_dbg_tech_ignore_fuzzz);
+				ImGui::Checkbox("NO_FUZZZ", &im->m_dbg_tech_ignore_no_fuzzz);
+				ImGui::Checkbox("FLARES", &im->m_dbg_tech_ignore_flares);
+				ImGui::Checkbox("STREAK_FLARES", &im->m_dbg_tech_ignore_streak_flares);
+				ImGui::Checkbox("SKINNED", &im->m_dbg_tech_ignore_skinned);
+				ImGui::Checkbox("DEPTH_TECHNIQUE_NOALPHA", &im->m_dbg_tech_ignore_depth_noalpha);
+				ImGui::Checkbox("TSHADER_INSTANCING", &im->m_dbg_tech_ignore_tshader_instance);
+				ImGui::Checkbox("BLEND_TEXTURES", &im->m_dbg_tech_ignore_blend_textures);
+
+				ImGui::EndDisabled();
+			}
+			
+			SPACEY8;
+		}
+		
+
+
+
 		if (ImGui::CollapsingHeader("ImGui"))
 		{
 			SPACEY4;

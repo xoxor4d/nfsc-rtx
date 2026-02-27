@@ -8,6 +8,8 @@ namespace comp
 	extern bool g_rendered_first_primitive;
 	extern bool g_is_in_endscene;
 
+	extern game::rendering_model* g_rendering_mdl;
+
 	namespace tex_addons
 	{
 		extern bool initialized;
