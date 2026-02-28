@@ -7,6 +7,7 @@ namespace shared::utils
 	
 	std::string str_to_lower(std::string input);
 	std::string convert_wstring(const std::wstring& wstr);
+	std::wstring string_to_wstring(const std::string& str);
 
 	std::string& ltrim(std::string& s);
 	std::string& rtrim(std::string& s);

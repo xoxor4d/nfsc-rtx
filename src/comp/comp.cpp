@@ -3,6 +3,7 @@
 #include "modules/comp_settings.hpp"
 #include "modules/imgui.hpp"
 #include "modules/map_settings.hpp"
+#include "modules/rain.hpp"
 #include "modules/remix_vars.hpp"
 #include "modules/renderer.hpp"
 #include "shared/common/remix_api.hpp"
@@ -375,22 +376,23 @@ namespace comp
 		}
 	}
 
+	void on_begin_scene()
+	{
+		rain::get()->on_draw();
+	}
+
 	void main()
 	{
 		// #Step 2: init remix api if you want to use it or comment it otherwise
 		// Requires "exposeRemixApi = True" in the "bridge.conf" that is located in the .trex folder
-		shared::common::remix_api::initialize(nullptr, nullptr, nullptr, false);
+		shared::common::remix_api::initialize(on_begin_scene, nullptr, nullptr, false);
 
 		// init modules which do not need to be initialized, before the game inits, here
 		shared::common::loader::module_loader::register_module(std::make_unique<map_settings>());
 		shared::common::loader::module_loader::register_module(std::make_unique<imgui>());
 		shared::common::loader::module_loader::register_module(std::make_unique<renderer>());
-
-		// #Step 3: hook dinput if your game uses direct input (for ImGui) - ONLY USE ONE
-		//shared::common::loader::module_loader::register_module(std::make_unique<shared::common::dinput_v1>()); // v1: might cause issues with the Alt+X menu
-		//shared::common::loader::module_loader::register_module(std::make_unique<shared::common::dinput_v2>()); // v2: better but might need further tweaks
-
 		shared::common::loader::module_loader::register_module(std::make_unique<remix_vars>());
+		shared::common::loader::module_loader::register_module(std::make_unique<rain>());
 
 		// ---
 

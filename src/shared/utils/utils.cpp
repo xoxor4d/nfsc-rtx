@@ -38,6 +38,14 @@ namespace shared::utils
 		return result;
 	}
 
+	std::wstring string_to_wstring(const std::string& str)
+	{
+		const auto size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
+		std::wstring wstr(size_needed, 0);
+		MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &wstr[0], size_needed);
+		return wstr;
+	}
+
 	int is_space(int c)
 	{
 		if (c < -1) {

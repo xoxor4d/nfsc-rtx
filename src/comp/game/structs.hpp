@@ -172,27 +172,88 @@ namespace comp::game
 	struct camera
 	{
 		D3DXMATRIX view_matrix;
-		Vector4D position;
-		Vector4D direction;
-		Vector4D target;
+		Vector position;
+		int pad_pos;
+		Vector direction;
+		int pad_dir;
+		Vector target;
+		int pad_target;
 	};
 
+	// ----------------------------------
+	// (c) github.com/MaxHwoy/hyperlinked
+
+	struct texture
+	{
+		
+	};
+
+	struct view_base;
 	struct rain
 	{
-		char pad0[564];
-		int no_rain; // 0x234
-		int no_rain_ahead;
-		int in_tunnel;
-		int in_overpass;
-		char pad1[72];
-		float rain_intensity;
-		float cloud_intensity;// 0x28C
-		char pad2[13312];
-		float desired_intensity;
-		float desired_cloudyness;
-		float desired_road_dampness;
-		float road_dampness; // 0x36A0
-	};
+		char pad_0x0000[0x234]; //0x0000
+		int no_rain; //0x0234 
+		int no_rain_ahead; //0x0238 
+		int in_tunnel; //0x023C 
+		int in_overpass; //0x0240 
+		char pad_0x0244[0xC]; //0x0244
+		Vector4D out_vex; //0x0250 
+		Vector2D position; //0x0260 
+		char pad_0x0268[0x8]; //0x0268
+		Vector4D local_cam_velocity; //0x0270 
+		int rain_curtain; //0x0280 
+		int render_count; //0x0284 
+		view_base* view; //0x0288 
+		float rain_intensity; //0x028C 
+		float cloud_intensity; //0x0290 
+		int desired_active; //0x0294 
+		int raindrop_count1; //0x0298 
+		int raindrop_count2; //0x029C 
+		char pad_0x02A0[0x314C]; //0x02A0 
+		float percentages1; //0x33EC 
+		float percentages2; //0x33F0 
+		Vector4D precip_wind_effect; //0x33F4 
+		texture* textures1; //0x3404 
+		texture* textures2; //0x3408 
+		char pad_0x340C[0x4]; //0x340C
+		Vector4D old_car_dir; //0x3410 
+		Vector4D precip_radius1; //0x3420 
+		Vector4D precip_radius2; //0x3430 
+		Vector4D precip_speed_range1; //0x3440 
+		Vector4D precip_speed_range2; //0x3450 
+		Vector2D precip_z_constant; //0x3460 
+		int wind_type1; //0x3468 
+		int wind_type2; //0x346C 
+		float camera_speed; //0x3470 
+		char pad_0x3474[0xC]; //0x3474
+		Vector4D wind_speed; //0x3480 
+		Vector4D desired_wind_speed; //0x3490 
+		float desired_wind_time; //0x34A0 
+		float wind_time; //0x34A4 
+		int fog_r; //0x34A8 
+		int fog_g; //0x34AC 
+		int fog_b; //0x34B0 
+		Vector2D bbox_max; //0x34B4 
+		Vector2D bbox_min; //0x34BC 
+		int precip_poly1; //0x34C4 
+		char pad_0x34C8[0x9C]; //0x34C8
+		int precip_poly2; //0x3564 
+		char pad_0x3568[0xA8]; //0x3568
+		D3DXMATRIX local_to_world; //0x3610 
+		D3DXMATRIX world_to_local; //0x3650 
+		float len_modifier; //0x3690 
+		float desired_intensity; //0x3694 
+		float desired_cloudyness; //0x3698 
+		float desired_road_dampness; //0x369C 
+		float road_dampness; //0x36A0 
+		float precip_percent1; //0x36A4 
+		float precip_percent2; //0x36A8 
+		char pad_0x36AC[0x4]; //0x36AC
+		Vector4D prevail_wind_speed; //0x36B0 
+		float weather_time; //0x36C0 
+		float desired_weather_time; //0x36C4 
+		char pad_0x36C8[0x5BC]; //0x36C8
+	}; //Size=0x3C84
 	STATIC_ASSERT_OFFSET(rain, rain_intensity, 0x28C);
 	STATIC_ASSERT_OFFSET(rain, road_dampness, 0x36A0);
 
@@ -225,87 +286,67 @@ namespace comp::game
 
 		inline span& operator=(span&& other) = default;
 
-		inline span(T* ptr, size_t length) : ptr_(ptr), length_(length)
-		{
-		}
+		inline span(T* ptr, size_t length) : ptr_(ptr), length_(length) {}
 
-		inline span(intptr_t address, size_t length) : ptr_(reinterpret_cast<T*>(address)), length_(length)
-		{
-		}
+		inline span(intptr_t address, size_t length) : ptr_(reinterpret_cast<T*>(address)), length_(length) {}
 
-		inline span(uintptr_t address, size_t length) : ptr_(reinterpret_cast<T*>(address)), length_(length)
-		{
-		}
+		inline span(uintptr_t address, size_t length) : ptr_(reinterpret_cast<T*>(address)), length_(length) {}
 
-		template <size_t Length> inline span(T(&array)[Length]) : ptr_(reinterpret_cast<T*>(array)), length_(Length)
-		{
-		}
+		template <size_t Length> inline span(T(&array)[Length]) : ptr_(reinterpret_cast<T*>(array)), length_(Length) {}
 
 		template <typename Index> inline auto operator[](Index index) -> T&
 		{
 			assert(static_cast<size_t>(index) < this->length_);
-
 			return this->ptr_[static_cast<size_t>(index)];
 		}
 
 		template <typename Index> inline auto operator[](Index index) const -> const T&
 		{
 			assert(static_cast<size_t>(index) < this->length_);
-
 			return this->ptr_[static_cast<size_t>(index)];
 		}
 
-		inline auto length() const -> size_t
-		{
+		inline auto length() const -> size_t {
 			return this->length_;
 		}
 
-		inline bool is_empty() const
-		{
+		inline bool is_empty() const {
 			return this->length_ == 0u;
 		}
 
-		inline void clear()
-		{
+		inline void clear() {
 			::memset(this->ptr_, 0, this->length_ * sizeof(T));
 		}
 
-		inline void fill(const T& value)
-		{
+		inline void fill(const T& value) {
 			std::fill_n(this->ptr_, this->length_, value);
 		}
 
-		inline auto begin() -> T*
-		{
+		inline auto begin() -> T* {
 			return this->ptr_;
 		}
 
-		inline auto begin() const -> const T*
-		{
+		inline auto begin() const -> const T* {
 			return this->ptr_;
 		}
 
-		inline auto end() -> T*
-		{
+		inline auto end() -> T* {
 			return this->ptr_ + this->length_;
 		}
 
-		inline auto end() const -> const T*
-		{
+		inline auto end() const -> const T* {
 			return this->ptr_ + this->length_;
 		}
 
 		inline auto slice(size_t start) -> span<T>
 		{
 			assert(start <= this->length_);
-
 			return { this->ptr_ + start, this->length_ - start };
 		}
 
 		inline auto slice(size_t start, size_t count) -> span<T>
 		{
 			assert(start + count <= this->length_);
-
 			return { this->ptr_ + start, count };
 		}
 
@@ -315,64 +356,51 @@ namespace comp::game
 	};
 
 	template <typename T> class linked_list;
-
 	template <typename T> class linked_node
 	{
 	public:
-		inline linked_node() : next_(nullptr), prev_(nullptr)
-		{
-		}
+		inline linked_node() : next_(nullptr), prev_(nullptr) {}
 
-		inline auto next() -> T*
-		{
+		inline auto next() -> T* {
 			return static_cast<T*>(this->next_);
 		}
 
-		inline auto next() const -> const T*
-		{
+		inline auto next() const -> const T* {
 			return static_cast<const T*>(this->next_);
 		}
 
-		inline auto prev() -> T*
-		{
+		inline auto prev() -> T* {
 			return static_cast<T*>(this->prev_);
 		}
 
-		inline auto prev() const -> const T*
-		{
+		inline auto prev() const -> const T* {
 			return static_cast<const T*>(this->prev_);
 		}
 
-		inline auto next_node() -> linked_node*&
-		{
+		inline auto next_node() -> linked_node*& {
 			return this->next_;
 		}
 
-		inline auto prev_node() -> linked_node*&
-		{
+		inline auto prev_node() -> linked_node*& {
 			return this->prev_;
 		}
 
 		inline void disconnect()
 		{
-			if (this->prev_ != nullptr)
-			{
+			if (this->prev_ != nullptr) {
 				this->prev_->next_ = this->next_;
 			}
 
-			if (this->next_ != nullptr)
-			{
+			if (this->next_ != nullptr) {
 				this->next_->prev_ = this->prev_;
 			}
 		}
 
-		inline auto next_ref() const -> linked_node<T>* const*
-		{
+		inline auto next_ref() const -> linked_node<T>* const* {
 			return &this->next_;
 		}
 
-		inline auto prev_ref() const -> linked_node<T>* const*
-		{
+		inline auto prev_ref() const -> linked_node<T>* const* {
 			return &this->prev_;
 		}
 
@@ -399,61 +427,48 @@ namespace comp::game
 			this->head_.prev_ = nullptr;
 		}
 
-		inline auto head() -> T*
-		{
+		inline auto head() -> T* {
 			return static_cast<T*>(&this->head_);
 		}
 
-		inline auto head() const -> const T*
-		{
+		inline auto head() const -> const T* {
 			return static_cast<const T*>(&this->head_);
 		}
 
-		inline auto begin() -> T*
-		{
+		inline auto begin() -> T* {
 			return this->head_.next();
 		}
 
-		inline auto begin() const -> const T*
-		{
+		inline auto begin() const -> const T* {
 			return this->head_.next();
 		}
 
-		inline auto tail() -> T*
-		{
+		inline auto tail() -> T* {
 			return this->head_.prev();
 		}
 
-		inline auto tail() const -> const T*
-		{
+		inline auto tail() const -> const T* {
 			return this->head_.prev();
 		}
 
-		inline auto end() -> T*
-		{
+		inline auto end() -> T* {
 			return static_cast<T*>(&this->head_);
 		}
 
-		inline auto end() const -> const T*
-		{
+		inline auto end() const -> const T* {
 			return static_cast<const T*>(&this->head_);
 		}
 
-		inline bool empty() const
-		{
+		inline bool empty() const {
 			return this->head_.next_ == &this->head_;
 		}
 
 		inline void add(T* val)
 		{
 			linked_node<T>* node = static_cast<linked_node<T>*>(val);
-
 			node->prev_ = this->head_.prev_;
-
 			this->head_.prev_->next_ = node;
-
 			this->head_.prev_ = node;
-
 			node->next_ = &this->head_;
 		}
 
@@ -491,11 +506,8 @@ namespace comp::game
 			linked_node<T>* node_node = static_cast<linked_node<T>*>(node);
 
 			val_node->prev_ = node_node;
-
 			val_node->next_ = node_node->next_;
-
 			node_node->next_->prev_ = val_node;
-
 			node_node->next_ = val_node;
 		}
 
@@ -505,11 +517,8 @@ namespace comp::game
 			linked_node<T>* node_node = static_cast<linked_node<T>*>(node);
 
 			val_node->next_ = node_node;
-
 			val_node->prev_ = node_node->prev_;
-
 			node_node->prev_->next_ = val_node;
-
 			node_node->prev_ = val_node;
 		}
 
@@ -533,16 +542,14 @@ namespace comp::game
 
 		template <typename F> inline void foreach(F action)
 		{
-			for (T* i = this->begin(); i != this->end(); i = i->next())
-			{
+			for (T* i = this->begin(); i != this->end(); i = i->next()) {
 				action(i);
 			}
 		}
 
 		template <typename F> inline void foreach_reverse(F action)
 		{
-			for (const T* i = this->tail(); i != this->end(); i = i->prev())
-			{
+			for (const T* i = this->tail(); i != this->end(); i = i->prev()) {
 				action(i);
 			}
 		}
@@ -552,7 +559,6 @@ namespace comp::game
 			if (this->head_.next_ != &this->head_)
 			{
 				linked_node<T>* root = this->head_.next_;
-
 				linked_node<T>* curr = root->next_;
 
 				root->prev_ = &this->head_;
@@ -564,13 +570,11 @@ namespace comp::game
 				while (curr != &this->head_)
 				{
 					linked_node<T>* next = curr->next_;
-
 					linked_node<T>* temp = root;
 
 					while (temp != &this->head_)
 					{
-						if (predicate(static_cast<T*>(temp), static_cast<T*>(curr)) >= 0)
-						{
+						if (predicate(static_cast<T*>(temp), static_cast<T*>(curr)) >= 0) {
 							break;
 						}
 
@@ -578,15 +582,10 @@ namespace comp::game
 					}
 
 					curr->next_ = temp;
-
 					curr->prev_ = temp->prev_;
-
 					temp->prev_->next_ = curr;
-
 					temp->prev_ = curr;
-
 					curr = next;
-
 					root = this->head_.next_;
 				}
 			}
@@ -648,11 +647,7 @@ namespace comp::game
 		static inline linked_list<scenery_pack>& list = *reinterpret_cast<linked_list<scenery_pack>*>(0x00B70640);
 	};
 
-	// ----------------------------------
-	// (c) github.com/MaxHwoy/hyperlinked
-
 	struct info;
-
 	struct render_state
 	{
 		/* 0b00000001 */ uint32_t z_write_enabled : 1;
