@@ -22,11 +22,103 @@ namespace comp
 			return false;
 		}
 
+		void setup_particle_system(const game::view_base& view);
 		void on_draw();
 		bool init_spawner_mesh();
 		
-	private:
+		struct rain_particle_sys
+		{
+			bool enabled = true;
+			
+			// following vars need a re-create
+			bool recreate_material = false;
+			float spawner_scale = 10.0f;
+			bool use_drawcall_alpha = true;
+			int blendtype = 0;
+			float metallic_constant = 0.8f;
+			float emissive_intensity = 0.0f;
+			remixapi_Float3D emissive_color = { 0.1f, 0.1f, 0.1f };
+			bool use_emissive_texture = false;
 
+			// ----
+
+			int category = 9;
+
+			bool use_tfactor = false;
+			Vector4D tfactor_col = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+			bool alpha_blend = true;
+			bool alpha_test = false;
+			int  alpha_test_op = 7; // ALWAYS
+			int  alpha_test_val = 255;
+
+			int col_src_blend = 6; // VK_BLEND_FACTOR_SRC_ALPHA
+			int col_dst_blend = 7; // VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+			int col_blend_op = 0;
+			int col_arg1 = 1; // Texture
+			int col_arg2 = 3; // TFactor
+			int col_op = 1; // SelectArg1, 3 = Modulate, 6 = Add
+
+			int alpha_src_blend = 6; // VK_BLEND_FACTOR_SRC_ALPHA
+			int alpha_dst_blend = 7; // VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+			int alpha_blend_op = 0;
+			int alpha_arg1 = 1; // Texture
+			int alpha_arg2 = 3; // TFactor
+			int alpha_op = 0; // SelectArg1, 3 = Modulate, 6 = Add
+
+			// --
+
+			int   num_particles = 1000;
+			bool  align_to_velocity = true;
+			bool  use_spawn_texcoords = false;
+			bool  enable_collision = true;
+			bool  enable_motion_trail = true;
+			bool  hide_emitter = false;
+			bool  restrict_velocity_x = false;
+			bool  restrict_velocity_y = false;
+			bool  restrict_velocity_z = false;
+
+			remixapi_Float4D min_color[1] = {{ 0.90f, 0.96f, 1.00f, 1.00f }};
+			remixapi_Float4D max_color[1] = {{ 0.92f, 0.98f, 1.00f, 1.00f }};
+			remixapi_Float2D min_size[1] = {{ 0.07f, 0.4f }};
+			remixapi_Float2D max_size[1] = {{ 0.08f, 0.6f }};
+			remixapi_Float3D max_velocity[1] = {{ 5.0f, 5.0f, 30.0f }};
+			remixapi_Float3D attractor_position = { 0.0f, 0.0f, 0.0f };
+
+			float min_time = 4.0f;
+			float max_time = 5.0f;
+			float initial_vel_from_normal = -20.0f;
+			float initial_vel_cone_ang_deg = 0.0f;
+			float drag = 0.0f;
+			float initial_rot_deg = 0.0f;
+			float gravity_force = -10.0f;
+			float turbulence_freq = 0.0f;
+			float turbulence_force = 0.0f;
+			float spawn_rate = 100.0f;
+			float collision_thickness = 0.01f;
+			float collision_restitution = 0.1f;
+			float motion_trail_multi = 1.0f;
+			float initial_vel_from_motion = 0.0f;
+			float spawn_burst_duration = 0.0f;
+			float attractor_radius = 0.0f;
+			float attractor_force = 0.0f;
+			uint8_t billboard_type = 1u;
+			uint8_t sprite_sheet_mode = 0u;
+			uint8_t collision_mode = 2u; // Kill
+			uint8_t random_flip_axis = 0u;
+
+			Vector position_offset = { 0.0f, 0.0f, 6.0f };
+			Vector rotation_offset = { -90.0f, 0.0f, 0.0f };
+			float cam_forward_offset = 10.0f;
+			float cam_velocity_forward_scale = 0.0f;
+			bool use_cam_as_attractor = false;
+		};
+
+		rain_particle_sys m_remix_particle = {};
+
+	private:
+		bool m_spawner_mesh_created = false;
+		remixapi_InstanceInfoBlendEXT m_spawner_material_info_blend = {};
 		remixapi_MaterialInfoOpaqueEXT m_spawner_material_info_opaque = {};
 		remixapi_MaterialInfo m_spawner_material_info = {};
 		remixapi_MaterialHandle m_spawner_material_handle = nullptr;
@@ -36,10 +128,7 @@ namespace comp
 		remixapi_MeshInfoSurfaceTriangles m_spawner_triangles = {};
 		remixapi_MeshInfo m_spawner_mesh_info = {};
 		remixapi_MeshHandle m_spawner_mesh_handle = nullptr;
-
 		remixapi_InstanceInfoParticleSystemEXT m_spawner_particle_info = {};
-
-		bool m_spawner_mesh_created = false;
 
 		bool m_initialized = false;
 	};

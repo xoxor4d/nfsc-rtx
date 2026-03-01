@@ -5,6 +5,7 @@
 #include "d3dxeffects.hpp"
 #include "imgui_internal.h"
 #include "map_settings.hpp"
+#include "rain.hpp"
 #include "renderer.hpp"
 #include "shared/common/imgui_helper.hpp"
 #include "shared/common/font_awesome_solid_900.hpp"
@@ -406,6 +407,227 @@ namespace comp
 			SPACEY8;
 		} else {
 			im->m_stats.enable_tracking(false);
+		}
+
+		if (ImGui::CollapsingHeader("Particle System ..."))
+		{
+			SPACEY4;
+			auto& p = rain::get()->m_remix_particle;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Spawner/Material", [&]()
+				{
+					ImGui::PushID("spawnmat");
+
+					ImGui::Checkbox("Use Drawcall Alpha", &p.use_drawcall_alpha);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("BlendType", &p.blendtype, 0, 12);
+
+					SPACEY4;
+					ImGui::Checkbox("Use Emissive Texture", &p.use_emissive_texture);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Emissive Intensity", &p.emissive_intensity, 0.01f, 0.0f, 1.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit3("Emissive Color", &p.emissive_color.x, ImGuiColorEditFlags_Float);
+				
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Metallic Constant", &p.metallic_constant, 0.01f, 0.0f, 1.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawner Scale", &p.spawner_scale, 0.05f, 0.0f, 100.0f);
+
+					SPACEY4;
+					if (ImGui::Button("Recreate System", ImVec2(ImGui::GetContentRegionAvail().x, 0.0f))) {
+						p.recreate_material = true;
+					} TT("Mesh/Material need to be recreated for these settings to apply.");
+
+					ImGui::PopID();
+				});
+
+			SPACEY12;
+			ImGui::Widget_CategoryWithVerticalLabel("General", [&]()
+				{
+					ImGui::PushID("general");
+
+					ImGui::Checkbox("Use TFACTOR", &p.use_tfactor);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("TFACTOR Color", &p.tfactor_col.x);
+
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Category", &p.category, 0, 24);
+
+					ImGui::PopID();
+				});
+
+			SPACEY12;
+			ImGui::Widget_CategoryWithVerticalLabel("Alpha", [&]()
+				{
+					ImGui::PushID("alpha");
+
+					ImGui::Checkbox("Alpha Blending", &p.alpha_blend);
+					ImGui::Checkbox("Alpha Test", &p.alpha_test);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha Test OP", &p.alpha_test_op, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Alpha Test Val", &p.alpha_test_val, 0.2f, 0, 255);
+
+					ImGui::PopID();
+				});
+
+			SPACEY12;
+			ImGui::Widget_CategoryWithVerticalLabel("Tex OP", [&]()
+				{
+					ImGui::PushID("texop");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col SRC Blend", &p.col_src_blend, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col DEST Blend", &p.col_dst_blend, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col Blend OP", &p.col_blend_op, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col ARG1", &p.col_arg1, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col ARG2", &p.col_arg2, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col OP", &p.col_op, 0, 12);
+
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha SRC Blend", &p.alpha_src_blend, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha DEST Blend", &p.alpha_dst_blend, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha Blend OP", &p.alpha_blend_op, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha ARG1", &p.alpha_arg1, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha ARG2", &p.alpha_arg2, 0, 12);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha OP", &p.alpha_op, 0, 12);
+
+					ImGui::PopID();
+				});
+
+			SPACEY12;
+			ImGui::Widget_CategoryWithVerticalLabel("Remix Particle Settings", [&]()
+				{
+					ImGui::PushID("remixparticle");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Position Offset", &p.position_offset.x, 0.05f, 0.0f, 100.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Rotaion Offset", &p.rotation_offset.x, 0.05f, 0.0f, 360.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Forward Offset", &p.cam_forward_offset, 0.05f, -1000.0f, 1000.0f);
+					TT("Offset particle spawner in camera direction based on fixed offset.");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Forward Scale", &p.cam_velocity_forward_scale, 0.05f, -1000.0f, 1000.0f);
+					TT("Offset particle spawner in camera direction based on camera velocity.");
+
+					ImGui::Text("Cam Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_pos.x, im->m_dbg_vis_camera_pos.y, im->m_dbg_vis_camera_pos.z);
+					ImGui::Text("Cam Dir: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_dir.x, im->m_dbg_vis_camera_dir.y, im->m_dbg_vis_camera_dir.z);
+					ImGui::Text("Cam Target: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_target.x, im->m_dbg_vis_camera_target.y, im->m_dbg_vis_camera_target.z);
+					ImGui::Text("Cam Velocity: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_velocity.x, im->m_dbg_vis_camera_velocity.y, im->m_dbg_vis_camera_velocity.z);
+					ImGui::Separator();
+					ImGui::Text("Final Rain Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_final_rain_pos.x, im->m_dbg_vis_camera_final_rain_pos.y, im->m_dbg_vis_camera_final_rain_pos.z);
+					
+					{
+						SPACEY8;
+						ImGui::SeparatorText("  Spawn Settings  ");
+						SPACEY4;
+
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Num Particles", &p.num_particles);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Rate", &p.spawn_rate, 0.25f, 0.0f, 10000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Burst Duration", &p.spawn_burst_duration, 0.01f, 0.0f, 1000.0f);
+
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Min Lifetime", &p.min_time, 0.05f, 0.01f, 20.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Max Lifetime", &p.max_time, 0.05f, 0.01f, 20.0f);
+
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Rotation Deg", &p.initial_rot_deg, 0.05f, 0.001f, 360.0f);
+
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Min Size", &p.min_size->x, 0.05f, 0.001f, 5.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Max Size", &p.max_size->x, 0.05f, 0.001f, 5.0f);
+					}
+
+					// ----
+
+					{
+						SPACEY8;
+						ImGui::SeparatorText("  Visuals  ");
+						SPACEY4;
+
+						ImGui::Checkbox("Use Spawn Texcoords", &p.use_spawn_texcoords);
+						ImGui::Checkbox("Hide Emitter", &p.hide_emitter);
+
+						SPACEY4;
+						ImGui::Checkbox("Enable Motion Trail", &p.enable_motion_trail);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Motion Trail Multiplier", &p.motion_trail_multi, 0.01f, 0.0f, 100.0f);
+
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Min Particle Color", &p.min_color->x);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Max Particle Color", &p.max_color->x);
+
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
+						int temp_billboard_type = p.billboard_type;
+						if (ImGui::DragInt("Billboard Type", &temp_billboard_type)) {
+							p.billboard_type = static_cast<::uint8_t>(temp_billboard_type);
+						}
+
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
+						int temp_spritesheet = p.sprite_sheet_mode;
+						if (ImGui::DragInt("Spritesheet Mode", &temp_spritesheet)) {
+							p.sprite_sheet_mode = static_cast<::uint8_t>(temp_spritesheet);
+						}
+
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
+						int temp_flipaxis = p.random_flip_axis;
+						if (ImGui::DragInt("Random Flip Axis", &temp_flipaxis)) {
+							p.random_flip_axis = static_cast<::uint8_t>(temp_flipaxis);
+						}
+					}
+					
+					// ----
+
+					{
+						SPACEY8;
+						ImGui::SeparatorText("  Velocity  ");
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Max Velocity", &p.max_velocity->x, 0.05f, 0.0f, 1000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Normal", &p.initial_vel_from_normal, 0.05f, -1000.0f, 1000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel Cone Angle", &p.initial_vel_cone_ang_deg, 0.05f, -1000.0f, 1000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Motion", &p.initial_vel_from_motion, 0.01f, -1000.0f, 1000.0f);
+
+						SPACEY4;
+						ImGui::Checkbox("Align to Velocity", &p.align_to_velocity);
+						ImGui::Checkbox("Restrict Velocity X", &p.restrict_velocity_x);
+						ImGui::Checkbox("Restrict Velocity Y", &p.restrict_velocity_y);
+						ImGui::Checkbox("Restrict Velocity Z", &p.restrict_velocity_z);
+					}
+
+					// ----
+
+					{
+						SPACEY8;
+						ImGui::SeparatorText("  Force  ");
+						SPACEY4;
+
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Attractor Position", &p.attractor_position.x, 0.05f, -FLT_MAX, FLT_MAX);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Radius", &p.attractor_radius, 0.01f, 0.0f, 100000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Force", &p.attractor_force, 0.01f, 0.0f, 100000.0f);
+						ImGui::Checkbox("Use Camera Pos as Attractor", &p.use_cam_as_attractor);
+
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Gravity Force", &p.gravity_force, 0.05f, -1000.0f, 1000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Freq", &p.turbulence_freq, 0.05f, -1000.0f, 1000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Force", &p.turbulence_force, 0.05f, -1000.0f, 1000.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Drag", &p.drag, 0.05f, 0.001f, 100.0f);
+					}
+					
+					// ----
+
+					{
+						SPACEY8;
+						ImGui::SeparatorText("  Collision  ");
+						SPACEY4;
+
+						ImGui::Checkbox("Enable Collision", &p.enable_collision);
+						
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); 
+						int temp_collision_mode = p.collision_mode;
+						if (ImGui::DragInt("Collision Mode", &temp_collision_mode)) {
+							p.collision_mode = static_cast<::uint8_t>(temp_collision_mode);
+						}
+
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Collision Thickness", &p.collision_thickness, 0.01f, 0.0f, 10.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Collision Restitution", &p.collision_restitution, 0.01f, 0.0f, 100.0f);
+					}
+
+
+					ImGui::PopID();
+				});
+
+			SPACEY8;
 		}
 
 		if (ImGui::CollapsingHeader("Shader Tech Ignore ..."))

@@ -8,7 +8,10 @@ namespace comp
 {
 	bool rain::init_spawner_mesh()
 	{
-		if (m_spawner_mesh_created) {
+		//const auto im = imgui::get();
+		auto& p = m_remix_particle;
+
+		if (m_spawner_mesh_created && !p.recreate_material) {
 			return true;
 		}
 		
@@ -32,15 +35,70 @@ namespace comp
 					emissive_path_w = L"";
 				}
 
+				/*
+				 enum class BlendType : uint8_t {
+				  kAlpha = 0,
+				  kAlphaEmissive = 1,
+				  kReverseAlphaEmissive = 2,
+				  kColor = 3,
+				  kColorEmissive = 4,
+				  kReverseColorEmissive = 5,
+				  kEmissive = 6,
+				  kMultiplicative = 7,
+				  kDoubleMultiplicative = 8,
+				  kReverseAlpha = 9,
+				  kReverseColor = 10,
+				
+				  kMinValue = 0, // kAlpha
+				  kMaxValue = 10, // kReverseColor
+				};
+
+				enum class AlphaTestType : uint8_t {
+				  kNever = 0,
+				  kLess = 1,
+				  kEqual = 2,
+				  kLessOrEqual = 3,
+				  kGreater = 4,
+				  kNotEqual = 5,
+				  kGreaterOrEqual = 6,
+				  kAlways = 7,
+				
+				  kMinValue = 0, // kNever
+				  kMaxValue = 7, // kAlways
+				};
+				
+				static const uint32_t alphaTestTypeMask = 0x7u;
+				
+				enum class RtTextureArgSource : uint8_t {
+				  None = 0,
+				  Texture,
+				  VertexColor0,
+				  TFactor
+				};
+
+				enum class DxvkRtTextureOperation : uint8_t {
+				  Disable = 0,
+				  SelectArg1,
+				  SelectArg2,
+				  Modulate,
+				  Modulate2x,
+				  Modulate4x,
+				  Add,
+				  Force_Modulate2x,
+				};
+				*/
+
 				auto& mat_info_ext = m_spawner_material_info_opaque;
 				mat_info_ext.sType = REMIXAPI_STRUCT_TYPE_MATERIAL_INFO_OPAQUE_EXT;
-				mat_info_ext.useDrawCallAlphaState = 1;
+				mat_info_ext.pNext = nullptr;
+				mat_info_ext.useDrawCallAlphaState = p.use_drawcall_alpha ? 1 : 0;
+				mat_info_ext.blendType_hasvalue = p.use_drawcall_alpha ? 1 : 0;
+				mat_info_ext.blendType_value = p.blendtype; // kAlpha
 				mat_info_ext.opacityConstant = 1.0f;
 				mat_info_ext.roughnessConstant = 1.0f;
-				mat_info_ext.metallicConstant = 0.0f;
+				mat_info_ext.metallicConstant = p.metallic_constant;
 				mat_info_ext.roughnessTexture = L"";
 				mat_info_ext.metallicTexture = L"";
-				mat_info_ext.heightTexture = L"";
 				mat_info_ext.heightTexture = L"";
 
 				auto& mat_info = m_spawner_material_info;
@@ -50,9 +108,13 @@ namespace comp
 				mat_info.albedoTexture = albedo_path_w.c_str();
 				mat_info.normalTexture = L"";
 				mat_info.tangentTexture = L"";
-				mat_info.emissiveTexture = emissive_path_w.c_str();
-				mat_info.emissiveIntensity = 0.2f;
-				mat_info.emissiveColorConstant = { 0.1f, 0.1f, 0.1f };
+				mat_info.emissiveTexture = p.use_emissive_texture ? emissive_path_w.c_str() : L"";
+				mat_info.emissiveIntensity = p.emissive_intensity;
+				mat_info.emissiveColorConstant = p.emissive_color;
+
+				if (p.recreate_material) {
+					api.m_bridge.DestroyMaterial(m_spawner_material_handle);
+				}
 
 				if (const auto code = api.m_bridge.CreateMaterial(&mat_info, &m_spawner_material_handle);
 					code != REMIXAPI_ERROR_CODE_SUCCESS)
@@ -64,21 +126,27 @@ namespace comp
 			
 			// Mesh
 			{
-				api.create_quad(&m_spawner_triangles_verts[0], &m_spawner_triangles_indices[0], 1.0f);
+				api.create_quad(&m_spawner_triangles_verts[0], &m_spawner_triangles_indices[0], p.spawner_scale);
 
-				m_spawner_triangles.vertices_values = m_spawner_triangles_verts;
-				m_spawner_triangles.vertices_count = ARRAYSIZE(m_spawner_triangles_verts);
-				m_spawner_triangles.indices_values = m_spawner_triangles_indices;
-				m_spawner_triangles.indices_count = 6;
-				m_spawner_triangles.material = m_spawner_material_handle;
+				auto& tri = m_spawner_triangles;
+				tri.vertices_values = m_spawner_triangles_verts;
+				tri.vertices_count = ARRAYSIZE(m_spawner_triangles_verts);
+				tri.indices_values = m_spawner_triangles_indices;
+				tri.indices_count = 6;
+				tri.material = m_spawner_material_handle;
 
-				m_spawner_mesh_info.sType = REMIXAPI_STRUCT_TYPE_MESH_INFO;
-				m_spawner_mesh_info.pNext = nullptr;
-				m_spawner_mesh_info.hash = shared::utils::string_hash64("rain_spawner_mesh");
-				m_spawner_mesh_info.surfaces_values = &m_spawner_triangles;
-				m_spawner_mesh_info.surfaces_count = 1;
+				auto& mesh_info = m_spawner_mesh_info;
+				mesh_info.sType = REMIXAPI_STRUCT_TYPE_MESH_INFO;
+				mesh_info.pNext = nullptr;
+				mesh_info.hash = shared::utils::string_hash64("rain_spawner_mesh");
+				mesh_info.surfaces_values = &m_spawner_triangles;
+				mesh_info.surfaces_count = 1;
 
-				if (const auto code = api.m_bridge.CreateMesh(&m_spawner_mesh_info, &m_spawner_mesh_handle);
+				if (p.recreate_material) {
+					api.m_bridge.DestroyMesh(m_spawner_mesh_handle);
+				}
+
+				if (const auto code = api.m_bridge.CreateMesh(&mesh_info, &m_spawner_mesh_handle);
 					code != REMIXAPI_ERROR_CODE_SUCCESS)
 				{
 					shared::common::log("rain", std::format("init_spawner_mesh: CreateMesh() failed: {}", static_cast<int>(code)), shared::common::LOG_TYPE::LOG_TYPE_ERROR);
@@ -86,11 +154,63 @@ namespace comp
 				}
 			}
 
+			p.recreate_material = false;
 			m_spawner_mesh_created = true;
 			return true;
 		}
 
 		return false;
+	}
+
+	void rain::setup_particle_system(const game::view_base& view)
+	{
+		auto& p = m_remix_particle;
+		auto& pinfo = m_spawner_particle_info;
+
+		pinfo.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO_PARTICLE_SYSTEM_EXT;
+		pinfo.maxNumParticles = p.num_particles;
+		pinfo.alignParticlesToVelocity = p.align_to_velocity;
+		pinfo.useSpawnTexcoords = p.use_spawn_texcoords;
+		pinfo.enableCollisionDetection = p.enable_collision;
+		pinfo.enableMotionTrail = p.enable_motion_trail;
+		pinfo.hideEmitter = p.hide_emitter;
+		pinfo.restrictVelocityX = p.restrict_velocity_x;
+		pinfo.restrictVelocityY = p.restrict_velocity_y;
+		pinfo.restrictVelocityZ = p.restrict_velocity_z;
+
+		pinfo.minColor = { p.min_color, 1 };
+		pinfo.maxColor = { p.max_color, 1 };
+		pinfo.minSize = { p.min_size, 1 };
+		pinfo.maxSize = { p.max_size, 1 };
+		pinfo.maxVelocity = { p.max_velocity, 1 };
+
+		if (p.use_cam_as_attractor) {
+			pinfo.attractorPosition = view.camera->position.ToRemixFloat3D();
+		} else {
+			pinfo.attractorPosition = p.attractor_position;
+		}
+
+		pinfo.minTimeToLive = p.min_time;
+		pinfo.maxTimeToLive = p.max_time;
+		pinfo.initialVelocityFromNormal = p.initial_vel_from_normal;
+		pinfo.initialVelocityConeAngleDegrees = p.initial_vel_cone_ang_deg;
+		pinfo.dragCoefficient = p.drag;
+		pinfo.initialRotationDeviationDegrees = p.initial_rot_deg;
+		pinfo.gravityForce = p.gravity_force;
+		pinfo.turbulenceFrequency = p.turbulence_freq;
+		pinfo.turbulenceForce = p.turbulence_force;
+		pinfo.spawnRatePerSecond = p.spawn_rate;
+		pinfo.collisionThickness = p.collision_thickness;
+		pinfo.collisionRestitution = p.collision_restitution;
+		pinfo.motionTrailMultiplier = p.motion_trail_multi;
+		pinfo.initialVelocityFromMotion = p.initial_vel_from_motion;
+		pinfo.spawnBurstDuration = p.spawn_burst_duration;
+		pinfo.attractorRadius = p.attractor_radius;
+		pinfo.attractorForce = p.attractor_force;
+		pinfo.billboardType = p.billboard_type;
+		pinfo.spriteSheetMode = p.sprite_sheet_mode;
+		pinfo.collisionMode = p.collision_mode;
+		pinfo.randomFlipAxis = p.random_flip_axis;
 	}
 
 	void rain::on_draw()
@@ -104,47 +224,70 @@ namespace comp
 				{
 					if (const auto r = p1.rain; r)
 					{
+						auto& p = m_remix_particle;
 						const auto im = imgui::get();
-						//if (!r->no_rain)
-						if (im->m_dbg_debug_bool03)
+
+						if (p.enabled)
 						{
-							const uint32_t count = static_cast<uint32_t>((r->raindrop_count1 + r->raindrop_count2));
+							//const uint32_t count = static_cast<uint32_t>((r->raindrop_count1 + r->raindrop_count2));
 
-							remixapi_Float4D particleMinColor[] = { { 1.f, 1.f, 1.f, 1.f } };
-							remixapi_Float4D particleMaxColor[] = { { 1.f, 1.f, 1.f, 1.f } };
-							remixapi_Float2D particleMinSize[] = { { 1.f, 1.f } };
-							remixapi_Float2D particleMaxSize[] = { { 2.f, 2.f } };
-							remixapi_Float3D particleMaxVelocity[] = { { 1.f, 1.f, 1.f } };
-
-							auto& pinfo = m_spawner_particle_info;
-							pinfo.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO_PARTICLE_SYSTEM_EXT;
-							pinfo.maxNumParticles = 1000;
-							pinfo.hideEmitter = 0;
-							pinfo.minColor = { particleMinColor, 1 };
-							pinfo.maxColor = { particleMaxColor, 1 };
-							pinfo.minSize = { particleMinSize, 1 };
-							pinfo.maxSize = { particleMaxSize, 1 };
-							pinfo.maxVelocity = { particleMaxVelocity, 1 };
-							pinfo.minTimeToLive = 7.0f;
-							pinfo.maxTimeToLive = 10.0f;
-							pinfo.gravityForce = 1.0f;
-							pinfo.spawnRatePerSecond = 300.0f;
+							setup_particle_system(p1);
 
 							shared::utils::vector::matrix3x3 mtx;
 							mtx.scale(1.0f, 1.0f, 1.0f);
-							mtx.rotate_z(DEG2RAD(im->m_debug_vector2.z));
-							mtx.rotate_y(DEG2RAD(im->m_debug_vector2.y));
-							mtx.rotate_x(DEG2RAD(im->m_debug_vector2.x));
+							mtx.rotate_z(DEG2RAD(p.rotation_offset.z));
+							mtx.rotate_y(DEG2RAD(p.rotation_offset.y));
+							mtx.rotate_x(DEG2RAD(p.rotation_offset.x));
 							mtx.transpose();
 
+							// Fixed offset
+							Vector cam_forward_pos = p1.camera->direction.Scale(p.cam_forward_offset) + p1.camera->position + p.position_offset;
+							
+							// Offset in cam dir based on camera velocity
+							if (p.cam_velocity_forward_scale > 0.0f) {
+								cam_forward_pos += Vector(p1.rain->local_cam_velocity.x, p1.rain->local_cam_velocity.y, 0.0f).Scale(p.cam_velocity_forward_scale);
+							}
+
+							im->m_dbg_vis_camera_pos = p1.camera->position;
+							im->m_dbg_vis_camera_dir = p1.camera->direction;
+							im->m_dbg_vis_camera_target = p1.camera->target;
+							im->m_dbg_vis_camera_velocity = p1.rain->local_cam_velocity;
+							im->m_dbg_vis_camera_final_rain_pos = cam_forward_pos;
+
 							remixapi_Transform t = {};
-							t = mtx.to_remixapi_transform(p1.camera->position + im->m_debug_vector);
+							t = mtx.to_remixapi_transform(cam_forward_pos);
+
+							auto& mat_info_blend = m_spawner_material_info_blend;
+							mat_info_blend.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO_BLEND_EXT;
+							mat_info_blend.alphaBlendEnabled = p.alpha_blend ? 1 : 0;
+							mat_info_blend.alphaTestEnabled = p.alpha_test ? 1 : 0;
+							mat_info_blend.alphaTestCompareOp = p.alpha_test_op;
+							mat_info_blend.alphaTestReferenceValue = static_cast<uint8_t>(p.alpha_test_val);
+							mat_info_blend.writeMask = 0x7FFFFFFF; // VkColorComponentFlagBits: VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM
+							mat_info_blend.pNext = nullptr;
+
+							mat_info_blend.srcColorBlendFactor = p.col_src_blend; // VK_BLEND_FACTOR_ONE 
+							mat_info_blend.dstColorBlendFactor = p.col_dst_blend; // VK_BLEND_FACTOR_ZERO
+							mat_info_blend.colorBlendOp = p.col_blend_op; // VK_BLEND_OP_ADD
+							mat_info_blend.textureColorArg1Source = p.col_arg1; // RtTextureArgSource::Texture
+							mat_info_blend.textureColorArg2Source = p.col_arg2; // RtTextureArgSource::None
+							mat_info_blend.textureColorOperation = p.col_op;  // DxvkRtTextureOperation::SelectArg1
+
+							mat_info_blend.srcAlphaBlendFactor = p.alpha_src_blend; // VK_BLEND_FACTOR_ONE 
+							mat_info_blend.dstAlphaBlendFactor = p.alpha_dst_blend; // VK_BLEND_FACTOR_ZERO
+							mat_info_blend.alphaBlendOp = p.alpha_blend_op; // VK_BLEND_OP_ADD 
+							mat_info_blend.textureAlphaArg1Source = p.alpha_arg1; // RtTextureArgSource::Texture
+							mat_info_blend.textureAlphaArg2Source = p.alpha_arg2; // RtTextureArgSource::None
+							mat_info_blend.textureAlphaOperation = p.alpha_op;  // DxvkRtTextureOperation::SelectArg1
+
+							mat_info_blend.tFactor = D3DCOLOR_COLORVALUE(p.tfactor_col.x, p.tfactor_col.y, p.tfactor_col.z, p.tfactor_col.w);
+							mat_info_blend.isTextureFactorBlend = p.use_tfactor ? 1 : 0;
 
 							remixapi_InstanceInfo instance_info =
 							{
 								.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO,
-								//.pNext = &pinfo,
-								.categoryFlags = 0,
+								.pNext = &m_spawner_material_info_blend,
+								.categoryFlags = p.category >= 0 ? (remixapi_InstanceCategoryFlags)(1 << p.category) : 0,
 								.mesh = m_spawner_mesh_handle,
 								.transform = t,
 								.doubleSided = 1,
@@ -152,7 +295,10 @@ namespace comp
 
 							api.m_bridge.DrawInstance(&instance_info);
 
-							instance_info.pNext = &m_spawner_particle_info;
+							// --
+
+							mat_info_blend.pNext = &m_spawner_particle_info;
+							instance_info.pNext = &mat_info_blend;
 
 							if (m_spawner_mesh_handle && m_spawner_material_handle) {
 								api.m_bridge.DrawInstance(&instance_info);

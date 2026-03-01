@@ -173,6 +173,16 @@ namespace comp
 		};
 		std::vector<visualized_model_info_s> visualized_model_infos;
 
+		// ---
+
+		Vector m_dbg_vis_camera_pos = {};
+		Vector m_dbg_vis_camera_dir = {};
+		Vector m_dbg_vis_camera_target = {};
+		Vector m_dbg_vis_camera_velocity = {};
+		Vector m_dbg_vis_camera_final_rain_pos = {};
+
+		// ---
+
 		class ImGuiStats
 		{
 		private:
