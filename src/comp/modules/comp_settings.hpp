@@ -393,7 +393,7 @@ namespace comp
 			{
 				"flare_alpha_multiplier",
 				("Alpha multiplier for flares"),
-				0.6f
+				0.3f
 			};
 
 			// ---

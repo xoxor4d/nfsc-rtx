@@ -11,7 +11,7 @@ namespace comp
 		//const auto im = imgui::get();
 		auto& p = m_remix_particle;
 
-		if (m_spawner_mesh_created && !p.recreate_material) {
+		if (m_spawner_mesh_created && !p.internal_recreate_material) {
 			return true;
 		}
 		
@@ -112,7 +112,7 @@ namespace comp
 				mat_info.emissiveIntensity = p.emissive_intensity;
 				mat_info.emissiveColorConstant = p.emissive_color;
 
-				if (p.recreate_material) {
+				if (p.internal_recreate_material) {
 					api.m_bridge.DestroyMaterial(m_spawner_material_handle);
 				}
 
@@ -142,7 +142,7 @@ namespace comp
 				mesh_info.surfaces_values = &m_spawner_triangles;
 				mesh_info.surfaces_count = 1;
 
-				if (p.recreate_material) {
+				if (p.internal_recreate_material) {
 					api.m_bridge.DestroyMesh(m_spawner_mesh_handle);
 				}
 
@@ -154,7 +154,7 @@ namespace comp
 				}
 			}
 
-			p.recreate_material = false;
+			p.internal_recreate_material = false;
 			m_spawner_mesh_created = true;
 			return true;
 		}
@@ -167,22 +167,53 @@ namespace comp
 		auto& p = m_remix_particle;
 		auto& pinfo = m_spawner_particle_info;
 
-		pinfo.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO_PARTICLE_SYSTEM_EXT;
-		pinfo.maxNumParticles = p.num_particles;
-		pinfo.alignParticlesToVelocity = p.align_to_velocity;
-		pinfo.useSpawnTexcoords = p.use_spawn_texcoords;
-		pinfo.enableCollisionDetection = p.enable_collision;
-		pinfo.enableMotionTrail = p.enable_motion_trail;
-		pinfo.hideEmitter = p.hide_emitter;
-		pinfo.restrictVelocityX = p.restrict_velocity_x;
-		pinfo.restrictVelocityY = p.restrict_velocity_y;
-		pinfo.restrictVelocityZ = p.restrict_velocity_z;
+		if (!p.internal_is_setup || p.edit_mode)
+		{
+			pinfo.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO_PARTICLE_SYSTEM_EXT;
+			pinfo.maxNumParticles = p.num_particles;
+			pinfo.alignParticlesToVelocity = p.align_to_velocity;
+			pinfo.useSpawnTexcoords = p.use_spawn_texcoords;
+			pinfo.enableCollisionDetection = p.enable_collision;
+			pinfo.enableMotionTrail = p.enable_motion_trail;
+			pinfo.hideEmitter = p.hide_emitter;
+			pinfo.restrictVelocityX = p.restrict_velocity_x;
+			pinfo.restrictVelocityY = p.restrict_velocity_y;
+			pinfo.restrictVelocityZ = p.restrict_velocity_z;
 
-		pinfo.minColor = { p.min_color, 2 };
-		pinfo.maxColor = { p.max_color, 2 };
-		pinfo.minSize = { p.min_size, 2 };
-		pinfo.maxSize = { p.max_size, 2 };
-		pinfo.maxVelocity = { p.max_velocity, 1 };
+			pinfo.minColor = { p.min_color, 2 };
+			pinfo.maxColor = { p.max_color, 2 };
+			pinfo.minSize = { p.min_size, 2 };
+			pinfo.maxSize = { p.max_size, 2 };
+			pinfo.maxVelocity = { p.max_velocity, 1 };
+
+			pinfo.minTimeToLive = p.min_time;
+			pinfo.maxTimeToLive = p.max_time;
+			pinfo.initialVelocityFromNormal = p.initial_vel_from_normal;
+			pinfo.initialVelocityConeAngleDegrees = p.initial_vel_cone_ang_deg;
+			pinfo.dragCoefficient = p.drag;
+			pinfo.initialRotationDeviationDegrees = p.initial_rot_deg;
+			pinfo.gravityForce = p.gravity_force;
+			pinfo.turbulenceFrequency = p.turbulence_freq;
+			pinfo.turbulenceForce = p.turbulence_force;
+
+			pinfo.collisionThickness = p.collision_thickness;
+			pinfo.collisionRestitution = p.collision_restitution;
+			pinfo.motionTrailMultiplier = p.motion_trail_multi;
+			pinfo.initialVelocityFromMotion = p.initial_vel_from_motion;
+			pinfo.spawnBurstDuration = p.spawn_burst_duration;
+			pinfo.attractorRadius = p.attractor_radius;
+			pinfo.attractorForce = p.attractor_force;
+			pinfo.billboardType = p.billboard_type;
+			pinfo.spriteSheetMode = p.sprite_sheet_mode;
+			pinfo.collisionMode = p.collision_mode;
+			pinfo.randomFlipAxis = p.random_flip_axis;
+
+			// general setup done, no need to re-set these every frame if not in edit mode
+			p.internal_is_setup = true;
+		}
+
+		// ---
+		// dynamic values
 
 		if (p.use_cam_as_attractor) {
 			pinfo.attractorPosition = view.camera->position.ToRemixFloat3D();
@@ -190,33 +221,47 @@ namespace comp
 			pinfo.attractorPosition = p.attractor_position;
 		}
 
-		pinfo.minTimeToLive = p.min_time;
-		pinfo.maxTimeToLive = p.max_time;
-		pinfo.initialVelocityFromNormal = p.initial_vel_from_normal;
-		pinfo.initialVelocityConeAngleDegrees = p.initial_vel_cone_ang_deg;
-		pinfo.dragCoefficient = p.drag;
-		pinfo.initialRotationDeviationDegrees = p.initial_rot_deg;
-		pinfo.gravityForce = p.gravity_force;
-		pinfo.turbulenceFrequency = p.turbulence_freq;
-		pinfo.turbulenceForce = p.turbulence_force;
-
 		if (p.force_enable) {
 			pinfo.spawnRatePerSecond = p.spawn_rate;
-		} else {
-			pinfo.spawnRatePerSecond = view.rain->render_count * p.spawn_rate_game_multi;
 		}
+		else
+		{
+			float scalar = p.spawn_rate_game_multi + (p.spawn_rate_game_multi_speed_scalar * view.rain->local_cam_velocity.x * -1.0f);
+			scalar = std::clamp(scalar, p.spawn_rate_game_multi_lower_limit, p.spawn_rate_game_multi_upper_limit);
+			pinfo.spawnRatePerSecond = static_cast<float>(view.rain->render_count) * scalar;
+		}
+	}
 
-		pinfo.collisionThickness = p.collision_thickness;
-		pinfo.collisionRestitution = p.collision_restitution;
-		pinfo.motionTrailMultiplier = p.motion_trail_multi;
-		pinfo.initialVelocityFromMotion = p.initial_vel_from_motion;
-		pinfo.spawnBurstDuration = p.spawn_burst_duration;
-		pinfo.attractorRadius = p.attractor_radius;
-		pinfo.attractorForce = p.attractor_force;
-		pinfo.billboardType = p.billboard_type;
-		pinfo.spriteSheetMode = p.sprite_sheet_mode;
-		pinfo.collisionMode = p.collision_mode;
-		pinfo.randomFlipAxis = p.random_flip_axis;
+	void rain::setup_blend_settings()
+	{
+		auto& p = m_remix_particle;
+		auto& mat_info_blend = m_spawner_material_info_blend;
+		mat_info_blend.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO_BLEND_EXT;
+		mat_info_blend.alphaBlendEnabled = p.alpha_blend ? 1 : 0;
+		mat_info_blend.alphaTestEnabled = p.alpha_test ? 1 : 0;
+		mat_info_blend.alphaTestCompareOp = p.alpha_test_op;
+		mat_info_blend.alphaTestReferenceValue = static_cast<uint8_t>(p.alpha_test_val);
+		mat_info_blend.writeMask = 0x7FFFFFFF; // VkColorComponentFlagBits: VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM
+		mat_info_blend.pNext = nullptr;
+
+		mat_info_blend.srcColorBlendFactor = p.col_src_blend; // VK_BLEND_FACTOR_ONE 
+		mat_info_blend.dstColorBlendFactor = p.col_dst_blend; // VK_BLEND_FACTOR_ZERO
+		mat_info_blend.colorBlendOp = p.col_blend_op; // VK_BLEND_OP_ADD
+		mat_info_blend.textureColorArg1Source = p.col_arg1; // RtTextureArgSource::Texture
+		mat_info_blend.textureColorArg2Source = p.col_arg2; // RtTextureArgSource::None
+		mat_info_blend.textureColorOperation = p.col_op;  // DxvkRtTextureOperation::SelectArg1
+
+		mat_info_blend.srcAlphaBlendFactor = p.alpha_src_blend; // VK_BLEND_FACTOR_ONE 
+		mat_info_blend.dstAlphaBlendFactor = p.alpha_dst_blend; // VK_BLEND_FACTOR_ZERO
+		mat_info_blend.alphaBlendOp = p.alpha_blend_op; // VK_BLEND_OP_ADD 
+		mat_info_blend.textureAlphaArg1Source = p.alpha_arg1; // RtTextureArgSource::Texture
+		mat_info_blend.textureAlphaArg2Source = p.alpha_arg2; // RtTextureArgSource::None
+		mat_info_blend.textureAlphaOperation = p.alpha_op;  // DxvkRtTextureOperation::SelectArg1
+
+		mat_info_blend.isTextureFactorBlend = p.use_tfactor ? 1 : 0;
+		if (p.use_tfactor) {
+			mat_info_blend.tFactor = D3DCOLOR_COLORVALUE(p.tfactor_col.x, p.tfactor_col.y, p.tfactor_col.z, p.tfactor_col.w);
+		}
 	}
 
 	void rain::on_draw()
@@ -237,19 +282,22 @@ namespace comp
 						{
 							setup_particle_system(p1);
 
-							shared::utils::vector::matrix3x3 mtx;
-							mtx.scale(1.0f, 1.0f, 1.0f);
+							// Setup blending info
+							setup_blend_settings();
 
+							shared::utils::vector::matrix3x3 mtx;
+							//mtx.scale(1.0f, 1.0f, 1.0f);
+
+							// Rotate spawner Pitch
 							if (p.pitch_rotate_spawner_based_on_cam)
 							{
 								const float pitch = std::clamp(p1.rain->local_cam_velocity.x * -1.0f * p.cam_velocity_spawner_pitch_scale, 0.0f, p.cam_velocity_spawner_pitch_max) + p.rotation_offset.z;
 								mtx.rotate_z(DEG2RAD(pitch));
-							}
-							else {
+							} else {
 								mtx.rotate_z(DEG2RAD(p.rotation_offset.z));
 							}
 
-							// atan2_fast
+							// Rotate spawner YAW
 							if (p.yaw_rotate_spawner_based_on_cam)
 							{
 								const float yaw = shared::utils::vector::atan2_fast(p1.camera->direction.x, p1.camera->direction.y) + p.rotation_offset.y;
@@ -261,7 +309,8 @@ namespace comp
 							mtx.rotate_x(DEG2RAD(p.rotation_offset.x));
 							mtx.transpose();
 
-							// Fixed offset
+
+							// Fixed forward offset
 							Vector cam_forward_pos = p1.camera->direction.Scale(p.cam_forward_offset) + p1.camera->position + p.position_offset;
 							
 							// Offset in cam dir based on camera velocity
@@ -269,44 +318,8 @@ namespace comp
 								cam_forward_pos += p1.camera->direction.Scale(p1.rain->local_cam_velocity.x * -1.0f * p.cam_velocity_forward_scale);
 							}
 
-							if (shared::globals::imgui_menu_open)
-							{
-								im->m_dbg_vis_camera_pos = p1.camera->position;
-								im->m_dbg_vis_camera_dir = p1.camera->direction;
-								im->m_dbg_vis_camera_target = p1.camera->target;
-								im->m_dbg_vis_camera_velocity = p1.rain->local_cam_velocity;
-								im->m_dbg_vis_camera_final_rain_pos = cam_forward_pos;
-								im->m_dbg_vis_game_raindrop_count = p1.rain->render_count;
-							}
-
 							remixapi_Transform t = {};
 							t = mtx.to_remixapi_transform(cam_forward_pos);
-
-							auto& mat_info_blend = m_spawner_material_info_blend;
-							mat_info_blend.sType = REMIXAPI_STRUCT_TYPE_INSTANCE_INFO_BLEND_EXT;
-							mat_info_blend.alphaBlendEnabled = p.alpha_blend ? 1 : 0;
-							mat_info_blend.alphaTestEnabled = p.alpha_test ? 1 : 0;
-							mat_info_blend.alphaTestCompareOp = p.alpha_test_op;
-							mat_info_blend.alphaTestReferenceValue = static_cast<uint8_t>(p.alpha_test_val);
-							mat_info_blend.writeMask = 0x7FFFFFFF; // VkColorComponentFlagBits: VK_COLOR_COMPONENT_FLAG_BITS_MAX_ENUM
-							mat_info_blend.pNext = nullptr;
-
-							mat_info_blend.srcColorBlendFactor = p.col_src_blend; // VK_BLEND_FACTOR_ONE 
-							mat_info_blend.dstColorBlendFactor = p.col_dst_blend; // VK_BLEND_FACTOR_ZERO
-							mat_info_blend.colorBlendOp = p.col_blend_op; // VK_BLEND_OP_ADD
-							mat_info_blend.textureColorArg1Source = p.col_arg1; // RtTextureArgSource::Texture
-							mat_info_blend.textureColorArg2Source = p.col_arg2; // RtTextureArgSource::None
-							mat_info_blend.textureColorOperation = p.col_op;  // DxvkRtTextureOperation::SelectArg1
-
-							mat_info_blend.srcAlphaBlendFactor = p.alpha_src_blend; // VK_BLEND_FACTOR_ONE 
-							mat_info_blend.dstAlphaBlendFactor = p.alpha_dst_blend; // VK_BLEND_FACTOR_ZERO
-							mat_info_blend.alphaBlendOp = p.alpha_blend_op; // VK_BLEND_OP_ADD 
-							mat_info_blend.textureAlphaArg1Source = p.alpha_arg1; // RtTextureArgSource::Texture
-							mat_info_blend.textureAlphaArg2Source = p.alpha_arg2; // RtTextureArgSource::None
-							mat_info_blend.textureAlphaOperation = p.alpha_op;  // DxvkRtTextureOperation::SelectArg1
-
-							mat_info_blend.tFactor = D3DCOLOR_COLORVALUE(p.tfactor_col.x, p.tfactor_col.y, p.tfactor_col.z, p.tfactor_col.w);
-							mat_info_blend.isTextureFactorBlend = p.use_tfactor ? 1 : 0;
 
 							remixapi_InstanceInfo instance_info =
 							{
@@ -318,15 +331,27 @@ namespace comp
 								.doubleSided = 1,
 							};
 
+							// Draw spawner
 							api.m_bridge.DrawInstance(&instance_info);
 
-							// --
+							// Assign particle ext to blend ext
+							m_spawner_material_info_blend.pNext = &m_spawner_particle_info;
+							instance_info.pNext = &m_spawner_material_info_blend;
 
-							mat_info_blend.pNext = &m_spawner_particle_info;
-							instance_info.pNext = &mat_info_blend;
-
+							// Use same instance info to draw particle system
 							if (m_spawner_mesh_handle && m_spawner_material_handle) {
 								api.m_bridge.DrawInstance(&instance_info);
+							}
+
+							// ----- Debug vis
+							if (shared::globals::imgui_menu_open)
+							{
+								im->m_dbg_vis_camera_pos = p1.camera->position;
+								im->m_dbg_vis_camera_dir = p1.camera->direction;
+								im->m_dbg_vis_camera_target = p1.camera->target;
+								im->m_dbg_vis_camera_velocity = p1.rain->local_cam_velocity;
+								im->m_dbg_vis_camera_final_rain_pos = cam_forward_pos;
+								im->m_dbg_vis_game_raindrop_count = p1.rain->render_count;
 							}
 						}
 					}
