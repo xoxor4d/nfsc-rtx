@@ -16,6 +16,7 @@ namespace comp::game
 	extern view_base* views;
 
 	extern int* always_rain;
+	extern float* always_rain_intensity;
 
 	extern options* game_options;
 	extern int* g_shaderDetailLevel;

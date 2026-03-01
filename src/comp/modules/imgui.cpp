@@ -199,20 +199,14 @@ namespace comp
 					}
 
 					ImGui::BeginDisabled(!temp_rain);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Wetness Value", &im->m_always_rain_wetness_value, 0.01f, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); 
+					if (ImGui::DragFloat("Wetness Value", &im->m_always_rain_wetness_value, 0.01f, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp)) {
+						*game::always_rain_intensity = im->m_always_rain_wetness_value; // adjust actual game rain intensity to also reduce rain
+					}
 					ImGui::EndDisabled();
 
 					ImGui::PopID();
 				});
-
-			/*bool temp_rain = *game::always_rain;
-			if (ImGui::Checkbox("Always Raining", &temp_rain)) {
-				*game::always_rain = temp_rain;
-			}
-
-			ImGui::BeginDisabled(!temp_rain);
-				ImGui::DragFloat("Wetness Value", &im->m_always_rain_wetness_value, 0.01f, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
-			ImGui::EndDisabled();*/
 
 			SPACEY4;
 		}

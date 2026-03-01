@@ -396,7 +396,7 @@ namespace comp
 					info.no_rain_ahead = r->no_rain_ahead;
 
 					if (*game::always_rain) {
-						info.rain_intensity = imgui::get()->m_always_rain_wetness_value;
+						info.rain_intensity = imgui::get()->m_always_rain_wetness_value; // same as *game::always_rain_intensity
 					} else {
 						info.rain_intensity = r->rain_intensity;
 					}

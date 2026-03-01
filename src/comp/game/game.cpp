@@ -16,6 +16,7 @@ namespace comp::game
 	view_base* views = nullptr;
 
 	int* always_rain = nullptr;
+	float* always_rain_intensity = nullptr;
 
 	options* game_options = nullptr;
 	int* g_shaderDetailLevel = nullptr;
@@ -125,6 +126,9 @@ namespace comp::game
 
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(always_rain, int*,
 			"A1 ? ? ? ? 85 C0 56 8B F1 74 ? A1 ? ? ? ? 89 86", 1, 0x7B3B60);
+
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(always_rain_intensity, float*,
+			"A1 ? ? ? ? 89 86 ? ? ? ? EB ? 8B 4C 24", 1, 0x7B3B6C);
 
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(game_options, options*,
 			"68 ? ? ? ? 8D 54 24 ? 52 50 8B 44 24 ? 68 ? ? ? ? BF", 1, 0x711844);

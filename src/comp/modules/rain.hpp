@@ -69,21 +69,21 @@ namespace comp
 
 			// --
 
-			int   num_particles = 10000;
+			int   num_particles = 20000;
 			bool  align_to_velocity = true;
 			bool  use_spawn_texcoords = false;
 			bool  enable_collision = true;
 			bool  enable_motion_trail = true;
-			bool  hide_emitter = false;
+			bool  hide_emitter = true;
 			bool  restrict_velocity_x = false;
 			bool  restrict_velocity_y = false;
 			bool  restrict_velocity_z = false;
 
-			remixapi_Float4D min_color[1] = {{ 0.96f, 0.96f, 1.00f, 0.70f }};
-			remixapi_Float4D max_color[1] = {{ 0.92f, 0.98f, 1.00f, 0.40f }};
+			remixapi_Float4D min_color[1] = {{ 0.96f, 0.96f, 1.00f, 0.64f }};
+			remixapi_Float4D max_color[1] = {{ 0.92f, 0.98f, 1.00f, 0.58f }};
 			remixapi_Float2D min_size[1] = {{ 0.20f, 0.10f }};
 			remixapi_Float2D max_size[1] = {{ 0.30f, 0.50f }};
-			remixapi_Float3D max_velocity[1] = {{ 20.0f, 20.0f, 30.0f }};
+			remixapi_Float3D max_velocity[1] = {{ 30.0f, 30.0f, 80.0f }};
 			remixapi_Float3D attractor_position = { 0.0f, 0.0f, 0.0f };
 
 			float min_time = 3.0f;
@@ -97,12 +97,12 @@ namespace comp
 			float turbulence_force = 0.0f;
 
 			float spawn_rate = 500.0f; // only used when forced on
-			float spawn_rate_game_multi = 2.0f; // game raindrop count * multi
+			float spawn_rate_game_multi = 4.0f; // game raindrop count * multi
 
 			float collision_thickness = 0.5f;
 			float collision_restitution = 0.1f;
 			float motion_trail_multi = 1.0f;
-			float initial_vel_from_motion = -1.0f;
+			float initial_vel_from_motion = -0.2f;
 			float spawn_burst_duration = 0.0f;
 			float attractor_radius = 0.0f;
 			float attractor_force = 0.0f;
@@ -115,7 +115,7 @@ namespace comp
 			Vector rotation_offset = { -90.0f, 0.0f, 0.0f };
 			float cam_forward_offset = 25.0f;
 			float cam_velocity_forward_scale = 120.0f;
-			bool rotate_spawner_based_on_cam = false;
+			bool rotate_spawner_based_on_cam = true;
 			bool use_cam_as_attractor = false;
 		};
 

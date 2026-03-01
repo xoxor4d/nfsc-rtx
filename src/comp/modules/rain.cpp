@@ -233,7 +233,7 @@ namespace comp
 						auto& p = m_remix_particle;
 						const auto im = imgui::get();
 
-						if (   p.enabled && r->render_count && !r->in_tunnel 
+						if (   p.enabled && r->render_count 
 							|| p.force_enable)
 						{
 							setup_particle_system(p1);
@@ -263,11 +263,15 @@ namespace comp
 								cam_forward_pos += p1.camera->direction.Scale(p1.rain->local_cam_velocity.x * -1.0f * p.cam_velocity_forward_scale);
 							}
 
-							im->m_dbg_vis_camera_pos = p1.camera->position;
-							im->m_dbg_vis_camera_dir = p1.camera->direction;
-							im->m_dbg_vis_camera_target = p1.camera->target;
-							im->m_dbg_vis_camera_velocity = p1.rain->local_cam_velocity;
-							im->m_dbg_vis_camera_final_rain_pos = cam_forward_pos;
+							if (shared::globals::imgui_menu_open)
+							{
+								im->m_dbg_vis_camera_pos = p1.camera->position;
+								im->m_dbg_vis_camera_dir = p1.camera->direction;
+								im->m_dbg_vis_camera_target = p1.camera->target;
+								im->m_dbg_vis_camera_velocity = p1.rain->local_cam_velocity;
+								im->m_dbg_vis_camera_final_rain_pos = cam_forward_pos;
+								im->m_dbg_vis_game_raindrop_count = p1.rain->render_count;
+							}
 
 							remixapi_Transform t = {};
 							t = mtx.to_remixapi_transform(cam_forward_pos);
