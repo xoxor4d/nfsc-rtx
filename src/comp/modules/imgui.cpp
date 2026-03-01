@@ -74,7 +74,7 @@ namespace comp
 			//auto& io = ImGui::GetIO();
 			ImGui_ImplWin32_WndProcHandler(shared::globals::main_window, message_type, wparam, lparam);
 		} else {
-			shared::globals::imgui_allow_input_bypass = false; // always reset if there is no imgui window open
+			shared::globals::imgui_allow_input_bypass =false; // always reset if there is no imgui window open
 		}
 
 		return shared::globals::imgui_menu_open;
@@ -414,6 +414,9 @@ namespace comp
 			SPACEY4;
 			auto& p = rain::get()->m_remix_particle;
 
+			ImGui::Checkbox("Enable Particle System", &p.enabled); TT("If game can trigger particle system");
+			ImGui::Checkbox("Force On", &p.force_enable); TT("Always create particles");
+
 			ImGui::Widget_CategoryWithVerticalLabel("Spawner/Material", [&]()
 				{
 					ImGui::PushID("spawnmat");
@@ -494,27 +497,47 @@ namespace comp
 					ImGui::PushID("remixparticle");
 
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Position Offset", &p.position_offset.x, 0.05f, 0.0f, 100.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Rotaion Offset", &p.rotation_offset.x, 0.05f, 0.0f, 360.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Rotation Offset", &p.rotation_offset.x, 0.05f, 0.0f, 360.0f);
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Forward Offset", &p.cam_forward_offset, 0.05f, -1000.0f, 1000.0f);
 					TT("Offset particle spawner in camera direction based on fixed offset.");
 
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Forward Scale", &p.cam_velocity_forward_scale, 0.05f, -1000.0f, 1000.0f);
-					TT("Offset particle spawner in camera direction based on camera velocity.");
+					TT("Offset particle spawner in camera direction based on camera velocity. 0.0 = No offset");
 
-					ImGui::Text("Cam Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_pos.x, im->m_dbg_vis_camera_pos.y, im->m_dbg_vis_camera_pos.z);
-					ImGui::Text("Cam Dir: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_dir.x, im->m_dbg_vis_camera_dir.y, im->m_dbg_vis_camera_dir.z);
-					ImGui::Text("Cam Target: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_target.x, im->m_dbg_vis_camera_target.y, im->m_dbg_vis_camera_target.z);
-					ImGui::Text("Cam Velocity: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_velocity.x, im->m_dbg_vis_camera_velocity.y, im->m_dbg_vis_camera_velocity.z);
-					ImGui::Separator();
-					ImGui::Text("Final Rain Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_final_rain_pos.x, im->m_dbg_vis_camera_final_rain_pos.y, im->m_dbg_vis_camera_final_rain_pos.z);
-					
+					ImGui::Checkbox("Rotate Spawner based on Camera", &p.rotate_spawner_based_on_cam);
+
+					SPACEY4;
+					if (ImGui::TreeNode("Camera / Rain Debug Info"))
+					{
+						SPACEY4;
+						ImGui::Text("Cam Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_pos.x, im->m_dbg_vis_camera_pos.y, im->m_dbg_vis_camera_pos.z);
+						ImGui::Text("Cam Dir: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_dir.x, im->m_dbg_vis_camera_dir.y, im->m_dbg_vis_camera_dir.z);
+						ImGui::Text("Cam Target: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_target.x, im->m_dbg_vis_camera_target.y, im->m_dbg_vis_camera_target.z);
+						ImGui::Text("Cam Velocity: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_velocity.x, im->m_dbg_vis_camera_velocity.y, im->m_dbg_vis_camera_velocity.z);
+						ImGui::Text("= Final Rain Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_final_rain_pos.x, im->m_dbg_vis_camera_final_rain_pos.y, im->m_dbg_vis_camera_final_rain_pos.z);
+						
+						SPACEY4;
+						ImGui::Separator();
+						SPACEY4;
+						ImGui::Text("Game Raindrop Count: %d", im->m_dbg_vis_game_raindrop_count);
+
+						ImGui::TreePop();
+						SPACEY4;
+					}
+
 					{
 						SPACEY8;
 						ImGui::SeparatorText("  Spawn Settings  ");
 						SPACEY4;
 
 						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Num Particles", &p.num_particles);
+
 						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Rate", &p.spawn_rate, 0.25f, 0.0f, 10000.0f);
+						TT("Spawn Rate when rain is forced on.");
+
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Game Spawn Rate Multi", &p.spawn_rate_game_multi, 0.01f, 0.0f, 100.0f);
+						TT("Game Raindrop Count * Multi = Final Spawn Rate. Only used when rain is not forced on.");
+
 						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Burst Duration", &p.spawn_burst_duration, 0.01f, 0.0f, 1000.0f);
 
 						SPACEY4;
@@ -1717,6 +1740,9 @@ namespace comp
 			}
 
 			ImGui::SameLine();
+			ImGui::Checkbox("##always_allow_input", &m_im_always_bypass_input); TT("Always pass input to the game");
+
+			ImGui::SameLine();
 			ImGui::TextUnformatted("Hold Right Mouse to enable Game Input");
 			ImGui::PopStyleVar(2);
 		}
@@ -1772,7 +1798,7 @@ namespace comp
 						// ---
 						// enable game input via right mouse button logic
 
-						if (!im->m_im_window_hovered && io.MouseDown[1])
+						if (!im->m_im_window_hovered && (io.MouseDown[1] || im->m_im_always_bypass_input))
 						{
 							// reset stuck rmb if timeout is active 
 							if (shared::globals::imgui_allow_input_bypass_timeout)
@@ -1791,7 +1817,7 @@ namespace comp
 						}
 
 						// ^ wait until mouse is up
-						else if (shared::globals::imgui_allow_input_bypass && !io.MouseDown[1] && !shared::globals::imgui_allow_input_bypass_timeout)
+						else if (shared::globals::imgui_allow_input_bypass && (!io.MouseDown[1] && !im->m_im_always_bypass_input) && !shared::globals::imgui_allow_input_bypass_timeout)
 						{
 							shared::globals::imgui_allow_input_bypass_timeout = 2u;
 							shared::globals::imgui_allow_input_bypass = false;

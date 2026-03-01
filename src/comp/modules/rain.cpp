@@ -199,7 +199,13 @@ namespace comp
 		pinfo.gravityForce = p.gravity_force;
 		pinfo.turbulenceFrequency = p.turbulence_freq;
 		pinfo.turbulenceForce = p.turbulence_force;
-		pinfo.spawnRatePerSecond = p.spawn_rate;
+
+		if (p.force_enable) {
+			pinfo.spawnRatePerSecond = p.spawn_rate;
+		} else {
+			pinfo.spawnRatePerSecond = view.rain->render_count * p.spawn_rate_game_multi;
+		}
+
 		pinfo.collisionThickness = p.collision_thickness;
 		pinfo.collisionRestitution = p.collision_restitution;
 		pinfo.motionTrailMultiplier = p.motion_trail_multi;
@@ -227,16 +233,25 @@ namespace comp
 						auto& p = m_remix_particle;
 						const auto im = imgui::get();
 
-						if (p.enabled)
+						if (   p.enabled && r->render_count && !r->in_tunnel 
+							|| p.force_enable)
 						{
-							//const uint32_t count = static_cast<uint32_t>((r->raindrop_count1 + r->raindrop_count2));
-
 							setup_particle_system(p1);
 
 							shared::utils::vector::matrix3x3 mtx;
 							mtx.scale(1.0f, 1.0f, 1.0f);
 							mtx.rotate_z(DEG2RAD(p.rotation_offset.z));
-							mtx.rotate_y(DEG2RAD(p.rotation_offset.y));
+
+							// atan2_fast
+							if (p.rotate_spawner_based_on_cam)
+							{
+								const float yaw = shared::utils::vector::atan2_fast(p1.camera->direction.x, p1.camera->direction.y) + p.rotation_offset.y;
+								mtx.rotate_y(-yaw); 
+							}
+							else {
+								mtx.rotate_y(DEG2RAD(p.rotation_offset.y));
+							}
+
 							mtx.rotate_x(DEG2RAD(p.rotation_offset.x));
 							mtx.transpose();
 
@@ -245,7 +260,7 @@ namespace comp
 							
 							// Offset in cam dir based on camera velocity
 							if (p.cam_velocity_forward_scale > 0.0f) {
-								cam_forward_pos += Vector(p1.rain->local_cam_velocity.x, p1.rain->local_cam_velocity.y, 0.0f).Scale(p.cam_velocity_forward_scale);
+								cam_forward_pos += p1.camera->direction.Scale(p1.rain->local_cam_velocity.x * -1.0f * p.cam_velocity_forward_scale);
 							}
 
 							im->m_dbg_vis_camera_pos = p1.camera->position;

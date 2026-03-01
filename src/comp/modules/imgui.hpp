@@ -180,6 +180,7 @@ namespace comp
 		Vector m_dbg_vis_camera_target = {};
 		Vector m_dbg_vis_camera_velocity = {};
 		Vector m_dbg_vis_camera_final_rain_pos = {};
+		int m_dbg_vis_game_raindrop_count = 0;
 
 		// ---
 
@@ -322,6 +323,7 @@ namespace comp
 		
 		bool m_im_window_focused = false;
 		bool m_im_window_hovered = false;
+		bool m_im_always_bypass_input = false;
 		std::string m_devgui_custom_footer_content;
 
 		bool m_initialized = false;
