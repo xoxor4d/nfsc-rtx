@@ -411,7 +411,11 @@ namespace comp
 			ImGui::Checkbox("Enable Particle System", &p.enabled); TT("If game can trigger particle system");
 			ImGui::Checkbox("Force On", &p.force_enable); TT("Always create particles");
 
-			ImGui::Widget_CategoryWithVerticalLabel("Spawner/Material", [&]()
+			SPACEY8;
+			ImGui::SeparatorText(" Spawner / Material ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Spawner / Material", [&]()
 				{
 					ImGui::PushID("spawnmat");
 
@@ -436,210 +440,280 @@ namespace comp
 				});
 
 			SPACEY12;
-			ImGui::Widget_CategoryWithVerticalLabel("General", [&]()
-				{
-					ImGui::PushID("general");
+			if (ImGui::TreeNode("Alpha / Blend / General Settings"))
+			{
+				ImGui::Widget_CategoryWithVerticalLabel("General", [&]()
+					{
+						ImGui::PushID("general");
 
-					ImGui::Checkbox("Use TFACTOR", &p.use_tfactor);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("TFACTOR Color", &p.tfactor_col.x);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Category", &p.category, 0, 24);
+						SPACEY4;
+						ImGui::Checkbox("Use TFACTOR", &p.use_tfactor);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("TFACTOR Color", &p.tfactor_col.x);
 
-					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Category", &p.category, 0, 24);
+						ImGui::PopID();
+					});
 
-					ImGui::PopID();
-				});
+				SPACEY8;
+				ImGui::Widget_CategoryWithVerticalLabel("Alpha / Blend", [&]()
+					{
+						ImGui::PushID("alphablend");
 
-			SPACEY12;
-			ImGui::Widget_CategoryWithVerticalLabel("Alpha", [&]()
-				{
-					ImGui::PushID("alpha");
+						ImGui::Checkbox("Alpha Blending", &p.alpha_blend);
+						ImGui::Checkbox("Alpha Test", &p.alpha_test);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha Test OP", &p.alpha_test_op, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Alpha Test Val", &p.alpha_test_val, 0.2f, 0, 255);
 
-					ImGui::Checkbox("Alpha Blending", &p.alpha_blend);
-					ImGui::Checkbox("Alpha Test", &p.alpha_test);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha Test OP", &p.alpha_test_op, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Alpha Test Val", &p.alpha_test_val, 0.2f, 0, 255);
+						ImGui::PopID();
+					});
 
-					ImGui::PopID();
-				});
-
-			SPACEY12;
-			ImGui::Widget_CategoryWithVerticalLabel("Tex OP", [&]()
-				{
-					ImGui::PushID("texop");
-
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col SRC Blend", &p.col_src_blend, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col DEST Blend", &p.col_dst_blend, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col Blend OP", &p.col_blend_op, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col ARG1", &p.col_arg1, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col ARG2", &p.col_arg2, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col OP", &p.col_op, 0, 12);
-
-					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha SRC Blend", &p.alpha_src_blend, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha DEST Blend", &p.alpha_dst_blend, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha Blend OP", &p.alpha_blend_op, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha ARG1", &p.alpha_arg1, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha ARG2", &p.alpha_arg2, 0, 12);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha OP", &p.alpha_op, 0, 12);
-
-					ImGui::PopID();
-				});
+				ImGui::TreePop();
+			}
 
 			SPACEY12;
-			ImGui::Widget_CategoryWithVerticalLabel("Remix Particle Settings", [&]()
-				{
-					ImGui::PushID("remixparticle");
+			if (ImGui::TreeNode("Texture OP"))
+			{
+				ImGui::Widget_CategoryWithVerticalLabel("Tex OP", [&]()
+					{
+						ImGui::PushID("texop");
 
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Position Offset", &p.position_offset.x, 0.05f, 0.0f, 100.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Rotation Offset", &p.rotation_offset.x, 0.05f, 0.0f, 360.0f);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col SRC Blend", &p.col_src_blend, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col DEST Blend", &p.col_dst_blend, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col Blend OP", &p.col_blend_op, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col ARG1", &p.col_arg1, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col ARG2", &p.col_arg2, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Col OP", &p.col_op, 0, 12);
+
+						SPACEY4;
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha SRC Blend", &p.alpha_src_blend, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha DEST Blend", &p.alpha_dst_blend, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha Blend OP", &p.alpha_blend_op, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha ARG1", &p.alpha_arg1, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha ARG2", &p.alpha_arg2, 0, 12);
+						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("Alpha OP", &p.alpha_op, 0, 12);
+
+						ImGui::PopID();
+					});
+
+				ImGui::TreePop();
+			}
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Spawn Position / Angle ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Position / Angle", [&]()
+				{
+					ImGui::PushID("partposangle");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Position Offset", &p.position_offset.x, 0.05f, -100.0f, 100.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Rotation Offset", &p.rotation_offset.x, 0.05f, -360.0f, 360.0f);
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Forward Offset", &p.cam_forward_offset, 0.05f, -1000.0f, 1000.0f);
 					TT("Offset particle spawner in camera direction based on fixed offset.");
 
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Forward Scale", &p.cam_velocity_forward_scale, 0.05f, -1000.0f, 1000.0f);
 					TT("Offset particle spawner in camera direction based on camera velocity. 0.0 = No offset");
 
-					ImGui::Checkbox("Rotate Spawner based on Camera", &p.rotate_spawner_based_on_cam);
+					ImGui::Checkbox("Rotate Spawner YAW based on Camera", &p.yaw_rotate_spawner_based_on_cam);
+					ImGui::Checkbox("Rotate Spawner PITCH based on Camera", &p.pitch_rotate_spawner_based_on_cam);
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Spawner Pitch Scale", &p.cam_velocity_spawner_pitch_scale, 0.05f, 0.0f, 500.0f);
+					TT("Scales pitch amount of particle spawner based on camera speed until pitch max is reached.");
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Spawner Pitch Max Deg", &p.cam_velocity_spawner_pitch_max, 0.05f, -90.0f, 90.0f);
+					TT("Max Angle (Deg) that particle spawner can pitch towards the cam.");
+					
+					ImGui::PopID();
+				});
+
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Spawn Settings ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Spawn Settings", [&]()
+				{
+					ImGui::PushID("partspawn");
+
+
+					ImGui::PopID();
+				});
+
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Spawn Settings ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Spawn Settings", [&]()
+				{
+					ImGui::PushID("partspawn");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Num Particles", &p.num_particles);
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Rate", &p.spawn_rate, 0.25f, 0.0f, 10000.0f);
+					TT("Spawn Rate when rain is forced on.");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Game Spawn Rate Multi", &p.spawn_rate_game_multi, 0.01f, 0.0f, 100.0f);
+					TT("Game Raindrop Count * Multi = Final Spawn Rate. Only used when rain is not forced on.");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Burst Duration", &p.spawn_burst_duration, 0.01f, 0.0f, 1000.0f);
 
 					SPACEY4;
-					if (ImGui::TreeNode("Camera / Rain Debug Info"))
-					{
-						SPACEY4;
-						ImGui::Text("Cam Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_pos.x, im->m_dbg_vis_camera_pos.y, im->m_dbg_vis_camera_pos.z);
-						ImGui::Text("Cam Dir: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_dir.x, im->m_dbg_vis_camera_dir.y, im->m_dbg_vis_camera_dir.z);
-						ImGui::Text("Cam Target: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_target.x, im->m_dbg_vis_camera_target.y, im->m_dbg_vis_camera_target.z);
-						ImGui::Text("Cam Velocity: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_velocity.x, im->m_dbg_vis_camera_velocity.y, im->m_dbg_vis_camera_velocity.z);
-						ImGui::Text("= Final Rain Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_final_rain_pos.x, im->m_dbg_vis_camera_final_rain_pos.y, im->m_dbg_vis_camera_final_rain_pos.z);
-						
-						SPACEY4;
-						ImGui::Separator();
-						SPACEY4;
-						ImGui::Text("Game Raindrop Count: %d", im->m_dbg_vis_game_raindrop_count);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Min Lifetime", &p.min_time, 0.05f, 0.01f, 20.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Max Lifetime", &p.max_time, 0.05f, 0.01f, 20.0f);
 
-						ImGui::TreePop();
-						SPACEY4;
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Rotation Deg", &p.initial_rot_deg, 0.05f, 0.001f, 360.0f);
+
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Min Size Start", &p.min_size[0].x, 0.05f, 0.001f, 5.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Min Size End", &p.min_size[1].x, 0.05f, 0.001f, 5.0f);
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Max Size Start", &p.max_size[0].x, 0.05f, 0.001f, 5.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Max Size End", &p.max_size[1].x, 0.05f, 0.001f, 5.0f);
+
+					ImGui::PopID();
+				});
+
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Visual Settings ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Visual Settings", [&]()
+				{
+					ImGui::PushID("partvisual");
+
+					ImGui::Checkbox("Use Spawn Texcoords", &p.use_spawn_texcoords);
+					ImGui::Checkbox("Hide Emitter", &p.hide_emitter);
+
+					SPACEY4;
+					ImGui::Checkbox("Enable Motion Trail", &p.enable_motion_trail);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Motion Trail Multiplier", &p.motion_trail_multi, 0.01f, 0.0f, 100.0f);
+
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Min Particle Color Start", &p.min_color[0].x);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Min Particle Color End", &p.min_color[1].x);
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Max Particle Color Start", &p.max_color[0].x);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Max Particle Color End", &p.max_color[1].x);
+
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
+					int temp_billboard_type = p.billboard_type;
+					if (ImGui::DragInt("Billboard Type", &temp_billboard_type)) {
+						p.billboard_type = static_cast<::uint8_t>(temp_billboard_type);
 					}
 
-					{
-						SPACEY8;
-						ImGui::SeparatorText("  Spawn Settings  ");
-						SPACEY4;
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragInt("Num Particles", &p.num_particles);
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Rate", &p.spawn_rate, 0.25f, 0.0f, 10000.0f);
-						TT("Spawn Rate when rain is forced on.");
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Game Spawn Rate Multi", &p.spawn_rate_game_multi, 0.01f, 0.0f, 100.0f);
-						TT("Game Raindrop Count * Multi = Final Spawn Rate. Only used when rain is not forced on.");
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Burst Duration", &p.spawn_burst_duration, 0.01f, 0.0f, 1000.0f);
-
-						SPACEY4;
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Min Lifetime", &p.min_time, 0.05f, 0.01f, 20.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Max Lifetime", &p.max_time, 0.05f, 0.01f, 20.0f);
-
-						SPACEY4;
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Rotation Deg", &p.initial_rot_deg, 0.05f, 0.001f, 360.0f);
-
-						SPACEY4;
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Min Size", &p.min_size->x, 0.05f, 0.001f, 5.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Max Size", &p.max_size->x, 0.05f, 0.001f, 5.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
+					int temp_spritesheet = p.sprite_sheet_mode;
+					if (ImGui::DragInt("Spritesheet Mode", &temp_spritesheet)) {
+						p.sprite_sheet_mode = static_cast<::uint8_t>(temp_spritesheet);
 					}
 
-					// ----
-
-					{
-						SPACEY8;
-						ImGui::SeparatorText("  Visuals  ");
-						SPACEY4;
-
-						ImGui::Checkbox("Use Spawn Texcoords", &p.use_spawn_texcoords);
-						ImGui::Checkbox("Hide Emitter", &p.hide_emitter);
-
-						SPACEY4;
-						ImGui::Checkbox("Enable Motion Trail", &p.enable_motion_trail);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Motion Trail Multiplier", &p.motion_trail_multi, 0.01f, 0.0f, 100.0f);
-
-						SPACEY4;
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Min Particle Color", &p.min_color->x);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Max Particle Color", &p.max_color->x);
-
-						SPACEY4;
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
-						int temp_billboard_type = p.billboard_type;
-						if (ImGui::DragInt("Billboard Type", &temp_billboard_type)) {
-							p.billboard_type = static_cast<::uint8_t>(temp_billboard_type);
-						}
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
-						int temp_spritesheet = p.sprite_sheet_mode;
-						if (ImGui::DragInt("Spritesheet Mode", &temp_spritesheet)) {
-							p.sprite_sheet_mode = static_cast<::uint8_t>(temp_spritesheet);
-						}
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
-						int temp_flipaxis = p.random_flip_axis;
-						if (ImGui::DragInt("Random Flip Axis", &temp_flipaxis)) {
-							p.random_flip_axis = static_cast<::uint8_t>(temp_flipaxis);
-						}
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
+					int temp_flipaxis = p.random_flip_axis;
+					if (ImGui::DragInt("Random Flip Axis", &temp_flipaxis)) {
+						p.random_flip_axis = static_cast<::uint8_t>(temp_flipaxis);
 					}
+
+					ImGui::PopID();
+				});
+
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Velocity Settings ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Velocity Settings", [&]()
+				{
+					ImGui::PushID("partvel");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Max Velocity", &p.max_velocity->x, 0.05f, 0.0f, 1000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Normal", &p.initial_vel_from_normal, 0.05f, -1000.0f, 1000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel Cone Angle", &p.initial_vel_cone_ang_deg, 0.05f, -1000.0f, 1000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Motion", &p.initial_vel_from_motion, 0.01f, -1000.0f, 1000.0f);
+
+					SPACEY4;
+					ImGui::Checkbox("Align to Velocity", &p.align_to_velocity);
+					ImGui::Checkbox("Restrict Velocity X", &p.restrict_velocity_x);
+					ImGui::Checkbox("Restrict Velocity Y", &p.restrict_velocity_y);
+					ImGui::Checkbox("Restrict Velocity Z", &p.restrict_velocity_z);
+
+					ImGui::PopID();
+				});
+
+
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Force Settings ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Force Settings", [&]()
+				{
+					ImGui::PushID("partforce");
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Attractor Position", &p.attractor_position.x, 0.05f, -FLT_MAX, FLT_MAX);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Radius", &p.attractor_radius, 0.01f, 0.0f, 100000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Force", &p.attractor_force, 0.01f, 0.0f, 100000.0f);
+					ImGui::Checkbox("Use Camera Pos as Attractor", &p.use_cam_as_attractor);
+
+					SPACEY4;
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Gravity Force", &p.gravity_force, 0.05f, -1000.0f, 1000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Freq", &p.turbulence_freq, 0.05f, -1000.0f, 1000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Force", &p.turbulence_force, 0.05f, -1000.0f, 1000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Drag", &p.drag, 0.05f, 0.001f, 100.0f);
+
+					ImGui::PopID();
+				});
+
+
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Collision Settings ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Collision Settings", [&]()
+				{
+					ImGui::PushID("partcollision");
+
+					ImGui::Checkbox("Enable Collision", &p.enable_collision);
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
+					int temp_collision_mode = p.collision_mode;
+					if (ImGui::DragInt("Collision Mode", &temp_collision_mode)) {
+						p.collision_mode = static_cast<::uint8_t>(temp_collision_mode);
+					}
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Collision Thickness", &p.collision_thickness, 0.01f, 0.0f, 10.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Collision Restitution", &p.collision_restitution, 0.01f, 0.0f, 100.0f);
+
+					ImGui::PopID();
+				});
+
+
+
+			SPACEY8;
+			ImGui::SeparatorText(" Particle Debug ");
+			SPACEY4;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Particle Debug", [&]()
+				{
+					ImGui::PushID("partdebug");
+
+					ImGui::Text("Cam Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_pos.x, im->m_dbg_vis_camera_pos.y, im->m_dbg_vis_camera_pos.z);
+					ImGui::Text("Cam Dir: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_dir.x, im->m_dbg_vis_camera_dir.y, im->m_dbg_vis_camera_dir.z);
+
+					SPACEY4;
+					ImGui::Text("Cam Target: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_target.x, im->m_dbg_vis_camera_target.y, im->m_dbg_vis_camera_target.z);
+					ImGui::Text("Cam Velocity: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_velocity.x, im->m_dbg_vis_camera_velocity.y, im->m_dbg_vis_camera_velocity.z);
 					
-					// ----
+					SPACEY4;
+					ImGui::Text("= Final Rain Pos: %.2f, %.2f, %.2f", im->m_dbg_vis_camera_final_rain_pos.x, im->m_dbg_vis_camera_final_rain_pos.y, im->m_dbg_vis_camera_final_rain_pos.z);
 
-					{
-						SPACEY8;
-						ImGui::SeparatorText("  Velocity  ");
-						SPACEY4;
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Max Velocity", &p.max_velocity->x, 0.05f, 0.0f, 1000.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Normal", &p.initial_vel_from_normal, 0.05f, -1000.0f, 1000.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel Cone Angle", &p.initial_vel_cone_ang_deg, 0.05f, -1000.0f, 1000.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Motion", &p.initial_vel_from_motion, 0.01f, -1000.0f, 1000.0f);
-
-						SPACEY4;
-						ImGui::Checkbox("Align to Velocity", &p.align_to_velocity);
-						ImGui::Checkbox("Restrict Velocity X", &p.restrict_velocity_x);
-						ImGui::Checkbox("Restrict Velocity Y", &p.restrict_velocity_y);
-						ImGui::Checkbox("Restrict Velocity Z", &p.restrict_velocity_z);
-					}
-
-					// ----
-
-					{
-						SPACEY8;
-						ImGui::SeparatorText("  Force  ");
-						SPACEY4;
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Attractor Position", &p.attractor_position.x, 0.05f, -FLT_MAX, FLT_MAX);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Radius", &p.attractor_radius, 0.01f, 0.0f, 100000.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Force", &p.attractor_force, 0.01f, 0.0f, 100000.0f);
-						ImGui::Checkbox("Use Camera Pos as Attractor", &p.use_cam_as_attractor);
-
-						SPACEY4;
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Gravity Force", &p.gravity_force, 0.05f, -1000.0f, 1000.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Freq", &p.turbulence_freq, 0.05f, -1000.0f, 1000.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Force", &p.turbulence_force, 0.05f, -1000.0f, 1000.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Drag", &p.drag, 0.05f, 0.001f, 100.0f);
-					}
-					
-					// ----
-
-					{
-						SPACEY8;
-						ImGui::SeparatorText("  Collision  ");
-						SPACEY4;
-
-						ImGui::Checkbox("Enable Collision", &p.enable_collision);
-						
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); 
-						int temp_collision_mode = p.collision_mode;
-						if (ImGui::DragInt("Collision Mode", &temp_collision_mode)) {
-							p.collision_mode = static_cast<::uint8_t>(temp_collision_mode);
-						}
-
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Collision Thickness", &p.collision_thickness, 0.01f, 0.0f, 10.0f);
-						SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Collision Restitution", &p.collision_restitution, 0.01f, 0.0f, 100.0f);
-					}
-
+					SPACEY4;
+					ImGui::Separator();
+					SPACEY4;
+					ImGui::Text("Game Raindrop Count: %d", im->m_dbg_vis_game_raindrop_count);
 
 					ImGui::PopID();
 				});
@@ -1792,7 +1866,7 @@ namespace comp
 						// ---
 						// enable game input via right mouse button logic
 
-						if (!im->m_im_window_hovered && (io.MouseDown[1] || im->m_im_always_bypass_input))
+						if (!im->m_im_window_hovered && io.MouseDown[1])
 						{
 							// reset stuck rmb if timeout is active 
 							if (shared::globals::imgui_allow_input_bypass_timeout)
@@ -1810,8 +1884,14 @@ namespace comp
 							}
 						}
 
+						else if (im->m_im_always_bypass_input)
+						{
+							shared::globals::imgui_allow_input_bypass_timeout = 0u;
+							*game::game_input_allowed = 1;
+						}
+
 						// ^ wait until mouse is up
-						else if (shared::globals::imgui_allow_input_bypass && (!io.MouseDown[1] && !im->m_im_always_bypass_input) && !shared::globals::imgui_allow_input_bypass_timeout)
+						else if (shared::globals::imgui_allow_input_bypass && !io.MouseDown[1] && !shared::globals::imgui_allow_input_bypass_timeout)
 						{
 							shared::globals::imgui_allow_input_bypass_timeout = 2u;
 							shared::globals::imgui_allow_input_bypass = false;

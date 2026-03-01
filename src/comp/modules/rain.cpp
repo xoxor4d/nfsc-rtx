@@ -178,10 +178,10 @@ namespace comp
 		pinfo.restrictVelocityY = p.restrict_velocity_y;
 		pinfo.restrictVelocityZ = p.restrict_velocity_z;
 
-		pinfo.minColor = { p.min_color, 1 };
-		pinfo.maxColor = { p.max_color, 1 };
-		pinfo.minSize = { p.min_size, 1 };
-		pinfo.maxSize = { p.max_size, 1 };
+		pinfo.minColor = { p.min_color, 2 };
+		pinfo.maxColor = { p.max_color, 2 };
+		pinfo.minSize = { p.min_size, 2 };
+		pinfo.maxSize = { p.max_size, 2 };
 		pinfo.maxVelocity = { p.max_velocity, 1 };
 
 		if (p.use_cam_as_attractor) {
@@ -233,22 +233,28 @@ namespace comp
 						auto& p = m_remix_particle;
 						const auto im = imgui::get();
 
-						if (   p.enabled && r->render_count 
-							|| p.force_enable)
+						if (p.enabled || p.force_enable)
 						{
 							setup_particle_system(p1);
 
 							shared::utils::vector::matrix3x3 mtx;
 							mtx.scale(1.0f, 1.0f, 1.0f);
-							mtx.rotate_z(DEG2RAD(p.rotation_offset.z));
+
+							if (p.pitch_rotate_spawner_based_on_cam)
+							{
+								const float pitch = std::clamp(p1.rain->local_cam_velocity.x * -1.0f * p.cam_velocity_spawner_pitch_scale, 0.0f, p.cam_velocity_spawner_pitch_max) + p.rotation_offset.z;
+								mtx.rotate_z(DEG2RAD(pitch));
+							}
+							else {
+								mtx.rotate_z(DEG2RAD(p.rotation_offset.z));
+							}
 
 							// atan2_fast
-							if (p.rotate_spawner_based_on_cam)
+							if (p.yaw_rotate_spawner_based_on_cam)
 							{
 								const float yaw = shared::utils::vector::atan2_fast(p1.camera->direction.x, p1.camera->direction.y) + p.rotation_offset.y;
 								mtx.rotate_y(-yaw); 
-							}
-							else {
+							} else {
 								mtx.rotate_y(DEG2RAD(p.rotation_offset.y));
 							}
 
