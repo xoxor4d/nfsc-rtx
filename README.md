@@ -25,7 +25,7 @@ Grab the latest [Release](https://github.com/xoxor4d/nfsc-rtx/releases) and foll
 
 #### Features:
 
-- Custom [Remix Runtime](https://github.com/xoxor4d/dxvk-remix/tree/game/nfsc_1) with:
+- Custom [Remix Runtime](https://github.com/xoxor4d/dxvk-remix/tree/game/nfsc_3) with:
   - custom car paint shader
   - dynamic wetness code with puddles, raindrops, occlusion checking ..
   - per drawcall tweaks
@@ -38,7 +38,7 @@ Grab the latest [Release](https://github.com/xoxor4d/nfsc-rtx/releases) and foll
 <br>
 
 > [!IMPORTANT] 
-> Recommended remix mod: https://www.moddb.com/mods/nfsc-remix-01-beta/downloads/nfsc-remix-012  
+> IF you use this remix mod: https://www.moddb.com/mods/nfsc-remix-01-beta/downloads/nfsc-remix-012  
 > ! **ONLY** extract `nfsc_remix` from `to the main\rtx-remix\mods\` to `your_game\rtx-remix\mods\`  
 > ! **Do NOT** extract anything else
 
