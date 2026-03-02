@@ -71,7 +71,7 @@ namespace shared::utils
 	void transpose_d3dxmatrix(const D3DXMATRIX* input, D3DXMATRIX* output, std::uint32_t count);
 	void transpose_float4x4(const float* row_major, float* column_major);
 	bool float_equal(float a, float b, float eps = 1.e-6f);
-	
+	float map_range_clamped(const float& value, const float& in_min, const float& in_max, const float& out_min, const float& out_max);
 	bool open_file_homepath(const std::string& sub_dir, const std::string& file_name, std::ifstream& file);
 
 	uint32_t data_hash32(const void* data, size_t size);

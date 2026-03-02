@@ -942,6 +942,29 @@ namespace comp
 				ImGui::EndTooltip();
 			};
 
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(spacing.x, 0.0f));
+		if (ImGui::CollapsingHeader(" Remix Variables", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ImGui::PopStyleVar();
+			ImGui::Widget_CategoryWithVerticalLabel("Remix Vars", [&]()
+				{
+					ImGui::PushID("remixvar");
+
+					compsettings_bool_widget("Volumetric Fog Influence", cs->rain_volumetric_fog_influence_enable); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Low Transmission Value", cs->rain_volumetric_fog_influence_low_transmission_val, 0.1f, 500.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("High Transmission Value", cs->rain_volumetric_fog_influence_high_transmission_val, 0.1f, 500.0f, 0.01f); save_logo();
+
+					ImGui::PopID();
+				});
+		}
+		else {
+			ImGui::PopStyleVar();
+		}
+
+		SPACEY12;
+		ImGui::Separator();
+
+		SPACEY12;
 		compsettings_bool_widget("Enable Particle System", cs->rain_enable); save_logo();
 		ImGui::Checkbox("Edit Mode", &p.edit_mode); TT("Always update the particle system variables.");
 		ImGui::Checkbox("Force On", &p.force_enable); TT("Always draw the rain particle system.");
@@ -1410,7 +1433,7 @@ namespace comp
 		// rain particle related
 		{
 			static float cont_cs_rain_height = 0.0f;
-			cont_cs_rain_height = ImGui::Widget_ContainerWithCollapsingTitle("Rain Particle Settings", cont_cs_rain_height,
+			cont_cs_rain_height = ImGui::Widget_ContainerWithCollapsingTitle("Rain Settings", cont_cs_rain_height,
 				compsettings_rain_container, false, ICON_FA_CLOUD_RAIN, &im->ImGuiCol_ContainerBackground, &im->ImGuiCol_ContainerBorder);
 		}
 

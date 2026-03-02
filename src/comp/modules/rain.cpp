@@ -3,6 +3,7 @@
 
 #include "comp_settings.hpp"
 #include "imgui.hpp"
+#include "remix_vars.hpp"
 #include "shared/common/remix_api.hpp"
 
 namespace comp
@@ -228,6 +229,21 @@ namespace comp
 						auto& p = m_remix_particle;
 						const auto im = imgui::get();
 						const auto& cs = comp_settings::get();
+						
+						// ---------------------
+						// Adjust volumetric fog based on rain intensity
+
+						if (remix_vars::is_initialized() && cs->rain_volumetric_fog_influence_enable._bool())
+						{
+							const float transmission = shared::utils::map_range_clamped(r->rain_intensity, 0.0f, 1.0f, cs->rain_volumetric_fog_influence_high_transmission_val._float(), cs->rain_volumetric_fog_influence_low_transmission_val._float());
+
+							static auto transmittance_dist = remix_vars::get_option("rtx.volumetrics.transmittanceMeasurementDistanceMeters");
+							remix_vars::option_value val { .value = transmission };
+							remix_vars::set_option(transmittance_dist, val, false, true);
+						}
+
+						// ---------------------
+						// Remix Particle System
 
 						if (cs->rain_enable._bool() || p.force_enable)
 						{

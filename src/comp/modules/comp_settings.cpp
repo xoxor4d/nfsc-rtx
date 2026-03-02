@@ -235,6 +235,10 @@ namespace comp
 
 				// rain related settings
 
+				ASSIGN(rain_volumetric_fog_influence_enable);
+				ASSIGN(rain_volumetric_fog_influence_low_transmission_val);
+				ASSIGN(rain_volumetric_fog_influence_high_transmission_val);
+
 				ASSIGN(rain_enable);
 				ASSIGN(rain_spawner_scale);
 				ASSIGN(rain_metallic_constant);

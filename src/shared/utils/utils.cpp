@@ -158,6 +158,16 @@ namespace shared::utils
 		return std::fabs(a - b) < eps;
 	}
 
+	float map_range_clamped(const float& value, const float& in_min, const float& in_max, const float& out_min, const float& out_max)
+	{
+		if (in_max == in_min) {
+			return out_min;
+		}
+
+		const float t = std::clamp((value - in_min) / (in_max - in_min), 0.0f, 1.0f);
+		return out_min + t * (out_max - out_min);
+	}
+
 	/**
 	* @brief			open handle to a file within the home-path (root)
 	* @param sub_dir	sub directory within home-path (root)

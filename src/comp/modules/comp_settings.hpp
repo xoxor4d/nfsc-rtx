@@ -615,6 +615,23 @@ namespace comp
 			// ----------------------------------
 			// rain related settings
 
+			variable rain_volumetric_fog_influence_enable = {
+				"rain_volumetric_fog_influence_enable", ("Enable Game Rain-Intensity influence on 'rtx.volumetrics.transmittanceMeasurementDistanceMeters'"),
+				true
+			};
+
+			variable rain_volumetric_fog_influence_low_transmission_val = {
+				"rain_volumetric_fog_influence_low_transmission_val", ("Value of 'rtx.volumetrics.transmittanceMeasurementDistanceMeters' when Game Rain-Intensity == 1"),
+				8.0f
+			};
+
+			variable rain_volumetric_fog_influence_high_transmission_val = {
+				"rain_volumetric_fog_influence_high_transmission_val", ("Value of 'rtx.volumetrics.transmittanceMeasurementDistanceMeters' when Game Rain-Intensity == 0"),
+				24.0f
+			};
+
+			// -----
+
 			variable rain_enable = {
 				"rain_enable", ("If game can trigger Remix Rain Particle Effect"),
 				true
