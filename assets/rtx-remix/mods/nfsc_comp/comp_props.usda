@@ -1,0 +1,83 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_B396757574144C62"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.275
+            }
+        }
+
+        over "mat_A2B9865184E8E6EA"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 0.815
+            }
+        }
+
+        over "mat_34738230B666ED7F"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 3
+                custom asset inputs:emissive_mask_texture = @./assets/world/lamps/34738230B666ED7F_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+                custom asset inputs:reflectionroughness_texture = @./assets/world/lamps/34738230B666ED7F_rough.r.rtex.dds@
+            }
+        }
+
+        over "mat_F4D6A659DEA06A5E"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 1
+            }
+        }
+
+        over "mat_895AF00A12BCE85F"
+        {
+            over "Shader"
+            {
+                custom color3f inputs:emissive_color_constant = (1, 0.01930499, 0.01930499)
+                custom float inputs:emissive_intensity = 0.5
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/895AF00A12BCE85F_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_74B2A03FBB202762"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.51
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/74B2A03FBB202762_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_35A2643E890D0197"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 1
+            }
+        }
+
+        over "mat_E163FECCAD2B90A2"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 1
+            }
+        }
+    }
+}
+

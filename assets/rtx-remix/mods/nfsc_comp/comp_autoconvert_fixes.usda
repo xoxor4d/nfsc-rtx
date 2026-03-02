@@ -1,0 +1,137 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_1F8D3AE29F8613BF"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.645
+                asset inputs:reflectionroughness_texture = @@
+            }
+        }
+
+        over "mat_16EF51F613C15F4C"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.12
+                custom float inputs:reflection_roughness_constant = 0.39999998
+                asset inputs:reflectionroughness_texture = @@
+            }
+        }
+
+        over "mat_77A32E49714DC88A"
+        {
+            over "Shader"
+            {
+                custom float inputs:displace_in = 0.005
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/77A32E49714DC88A_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_6F1398661F3AB9A6"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/6F1398661F3AB9A6_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_3513AF7AF8B8E4A0"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_703A5B314CAE2D7A"
+        {
+            over "Shader"
+            {
+                custom float inputs:displace_in = 0.002
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/703A5B314CAE2D7A_height.h.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/703A5B314CAE2D7A_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_3AAE992F672D90A2"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/3AAE992F672D90A2_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_7E89C4968A65DCA4"
+        {
+            over "Shader"
+            {
+                custom float inputs:displace_in = 0.002
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_706B882D342ADE89"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/706B882D342ADE89_albedo.a.rtex.dds@
+                custom float inputs:displace_in = 0.004
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/706B882D342ADE89_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/706B882D342ADE89_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/706B882D342ADE89_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/706B882D342ADE89_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_75CD49C260EBE59F"
+        {
+            over "Shader"
+            {
+                custom float inputs:displace_in = 0.002
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_D883C5545ACCECD8"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/D883C5545ACCECD8_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_E473697E2B5722F3"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/E473697E2B5722F3_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_28B05320FF6F55DD"
+        {
+            over "Shader"
+            {
+                custom float inputs:displace_in = 0.003
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_normal.n.rtex.dds@
+            }
+        }
+
+        over "mat_B8B5D457FF96DB4E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv_fixes/B8B5D457FF96DB4E_chA_rough.r.rtex.dds@
+            }
+        }
+    }
+}
+

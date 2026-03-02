@@ -17,6 +17,194 @@ over "RootNode"
                 custom bool inputs:use_legacy_alpha_state = 0
             }
         }
+
+        over "mat_F742481CC9F5DB1A"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/buildings/F742481CC9F5DB1A/F742481CC9F5DB1As_albedo.a.rtex.dds@
+                custom asset inputs:normalmap_texture = @./assets/world/buildings/F742481CC9F5DB1A/F742481CC9F5DB1As_normal_dx_OTH_Normal.n.rtex.dds@
+                custom asset inputs:reflectionroughness_texture = @./assets/world/buildings/F742481CC9F5DB1A/F742481CC9F5DB1A_rough.r.rtex.dds@
+            }
+        }
+
+        over "mat_DD37FD7913AA9BFD"
+        {
+            over "Shader"
+            {
+                custom color3f inputs:emissive_color_constant = (1, 0.9250906, 0.7104247)
+                custom float inputs:emissive_intensity = 2
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_A32F7BA7D7957624"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/buildings/emissives/A32F7BA7D7957624_albedo.a.rtex.dds@
+                custom float inputs:emissive_intensity = 0.2
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/A32F7BA7D7957624_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+                custom float inputs:metallic_constant = 0
+                asset inputs:reflectionroughness_texture = @./assets/world/buildings/emissives/A32F7BA7D7957624_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_802EE7DF7086DEDC"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/buildings/emissives/802EE7DF7086DEDC_albedo.a.rtex.dds@
+                custom float inputs:emissive_intensity = 5
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/802EE7DF7086DEDC_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_88A3FD71BD6DFB0B"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/buildings/emissives/88A3FD71BD6DFB0B_emissive.a.rtex.dds@
+                custom float inputs:emissive_intensity = 1
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/88A3FD71BD6DFB0B_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_EA81F59D3C6D4003"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.355
+                custom float inputs:reflection_roughness_constant = 0.12
+            }
+        }
+
+        over "mat_42440ADB15B54BC5"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 1
+            }
+        }
+
+        over "mat_F07E44A153417B56"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/buildings/F07E44A153417B56/F07E44A153417B56_albedo.a.rtex.dds@
+                custom float inputs:displace_in = 0.05
+                custom float inputs:displace_out = 0.005
+                custom asset inputs:height_texture = @./assets/world/buildings/F07E44A153417B56/F07E44A153417B56_height.h.rtex.dds@
+                custom asset inputs:normalmap_texture = @./assets/world/buildings/F07E44A153417B56/F07E44A153417B56_normal_dx_OTH_Normal.n.rtex.dds@
+                custom asset inputs:reflectionroughness_texture = @./assets/world/buildings/F07E44A153417B56/F07E44A153417B56_rough.r.rtex.dds@
+            }
+        }
+
+        over "mat_5862544DB3542276"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/logos/5862544DB3542276_albedo.a.rtex.dds@
+                custom asset inputs:normalmap_texture = @./assets/world/logos/5862544DB3542276_normal_dx_OTH_Normal.n.rtex.dds@
+                custom asset inputs:reflectionroughness_texture = @./assets/world/logos/5862544DB3542276_rough.r.rtex.dds@
+            }
+        }
+
+        over "mat_DF8B93BCB90E9050"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 0.08
+            }
+        }
+
+        over "mat_66D3475C4F47F667"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 0.081
+            }
+        }
+
+        over "mat_DB8D008C51A0A605"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 1.4
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/DB8D008C51A0A605_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_DE65E9CF2CBE7E02"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 1
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/DB8D008C51A0A605_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_FDF903C9CDE01112"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 2
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/FDF903C9CDE01112_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_908D9A96799E20E7"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.1
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/908D9A96799E20E7_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 0
+                custom asset inputs:reflectionroughness_texture = @./assets/world/buildings/emissives/908D9A96799E20E7_rough.r.rtex.dds@
+            }
+        }
+
+        over "mat_23B9695029EFE0D4"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/walls/23B9695029EFE0D4_albedo.a.rtex.dds@
+                custom asset inputs:normalmap_texture = @./assets/world/walls/23B9695029EFE0D4_normal_dx_OTH_Normal.n.rtex.dds@
+                custom asset inputs:reflectionroughness_texture = @./assets/world/walls/23B9695029EFE0D4_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_ECB8A7F58C9DC0C7"
+        {
+            over "Shader"
+            {
+                custom float inputs:reflection_roughness_constant = 0.11
+            }
+        }
+
+        over "mat_F9989CE8447F6E41"
+        {
+            over "Shader"
+            {
+                custom asset inputs:reflectionroughness_texture = @./assets/world/buildings/F9989CE8447F6E41/F9989CE8447F6E41_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_287CE33F8B3190E6"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 1.4
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/287CE33F8B3190E6_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
     }
 
     over "meshes"
@@ -26,6 +214,69 @@ over "RootNode"
             over "mesh"
             {
                 custom uniform bool remix_category:alpha_blend_to_cutout = 1
+            }
+        }
+
+        over "mesh_8928CD8A624CBE2B"
+        {
+            def CylinderLight "CylinderLight_01" (
+                prepend apiSchemas = ["ShapingAPI"]
+            )
+            {
+                float3[] extent = [(-5, -5, -5), (5, 5, 5)]
+                color3f inputs:color = (1, 0.8192185, 0.3011583)
+                float inputs:intensity = 120
+                float inputs:length = 100
+                float inputs:radius = 0.1
+                float inputs:shaping:cone:angle = 180
+                float inputs:shaping:cone:softness
+                float inputs:shaping:focus
+                color3f inputs:shaping:focusTint
+                asset inputs:shaping:ies:file
+                double3 xformOp:rotateXYZ = (0, 90, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (186.01866067353933, 132.44272336827513, 40)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def CylinderLight "CylinderLight_02" (
+                prepend apiSchemas = ["ShapingAPI"]
+            )
+            {
+                float3[] extent = [(-5, -5, -5), (5, 5, 5)]
+                color3f inputs:color = (1, 0.8192185, 0.3011583)
+                float inputs:intensity = 120
+                float inputs:length = 100
+                float inputs:radius = 0.1
+                float inputs:shaping:cone:angle = 180
+                float inputs:shaping:cone:softness
+                float inputs:shaping:focus
+                color3f inputs:shaping:focusTint
+                asset inputs:shaping:ies:file
+                double3 xformOp:rotateXYZ = (0, 90, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (203.37366239557105, 167.5691890104652, 39.99999999999999)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+
+            def CylinderLight "CylinderLight_03" (
+                prepend apiSchemas = ["ShapingAPI"]
+            )
+            {
+                float3[] extent = [(-5, -5, -5), (5, 5, 5)]
+                color3f inputs:color = (1, 0.8192185, 0.3011583)
+                float inputs:intensity = 120
+                float inputs:length = 100.2
+                float inputs:radius = 0.1
+                float inputs:shaping:cone:angle = 180
+                float inputs:shaping:cone:softness
+                float inputs:shaping:focus
+                color3f inputs:shaping:focusTint
+                asset inputs:shaping:ies:file
+                double3 xformOp:rotateXYZ = (0, 90, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (343.80419387928947, 0.10503246520045528, 40.000000000000064)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
             }
         }
     }

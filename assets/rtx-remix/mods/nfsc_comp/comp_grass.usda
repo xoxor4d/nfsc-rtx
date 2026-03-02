@@ -1,0 +1,31 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_D883C5545ACCECD8"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/D883C5545ACCECD8_albedo.a.rtex.dds@
+                custom float inputs:displace_in = 0.003
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/D883C5545ACCECD8_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/D883C5545ACCECD8_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/D883C5545ACCECD8_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/D883C5545ACCECD8_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_28B05320FF6F55DD"
+        {
+            over "Shader"
+            {
+            }
+        }
+    }
+}
+

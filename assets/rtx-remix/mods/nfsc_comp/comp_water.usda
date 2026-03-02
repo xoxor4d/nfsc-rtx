@@ -1,0 +1,20 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_87DD7134C041F319"
+        {
+            over "Shader"
+            {
+                custom float inputs:metallic_constant = 0.19
+                custom float inputs:reflection_roughness_constant = 0.065
+            }
+        }
+    }
+}
+

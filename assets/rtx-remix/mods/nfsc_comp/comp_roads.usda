@@ -1,0 +1,140 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_7E89C4968A65DCA4"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_albedo.a.rtex.dds@
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_1A316A4C86A88594"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/roads/1A316A4C86A88594_albedo.a.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/world/roads/1A316A4C86A88594_rough.r.rtex.dds@
+            }
+        }
+
+        over "mat_703A5B314CAE2D7A"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/703A5B314CAE2D7A_albedo.a.rtex.dds@
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/703A5B314CAE2D7A_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/703A5B314CAE2D7A_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/703A5B314CAE2D7A_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/703A5B314CAE2D7A_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_3AAE992F672D90A2"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/3AAE992F672D90A2_albedo.a.rtex.dds@
+                custom float inputs:displace_in = 0.002
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/3AAE992F672D90A2_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/3AAE992F672D90A2_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/3AAE992F672D90A2_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/3AAE992F672D90A2_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_77A32E49714DC88A"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/77A32E49714DC88A_albedo.a.rtex.dds@
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/77A32E49714DC88A_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/77A32E49714DC88A_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/77A32E49714DC88A_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/77A32E49714DC88A_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_6F1398661F3AB9A6"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/6F1398661F3AB9A6_albedo.a.rtex.dds@
+                custom float inputs:displace_in = 0.002
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/6F1398661F3AB9A6_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/6F1398661F3AB9A6_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/6F1398661F3AB9A6_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/6F1398661F3AB9A6_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_28B05320FF6F55DD"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_albedo.a.rtex.dds@
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_3513AF7AF8B8E4A0"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_albedo.a.rtex.dds@
+                custom float inputs:displace_in = 0.003
+                custom asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_height.h.rtex.dds@
+                custom asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/28B05320FF6F55DD_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_E473697E2B5722F3"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/E473697E2B5722F3_albedo.a.rtex.dds@
+                custom float inputs:displace_in = 0.002
+                asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/E473697E2B5722F3_height.h.rtex.dds@
+                asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/E473697E2B5722F3_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/E473697E2B5722F3_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/E473697E2B5722F3_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_75CD49C260EBE59F"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_albedo.a.rtex.dds@
+                custom asset inputs:height_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_height.h.rtex.dds@
+                custom asset inputs:metallic_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_metallic.m.rtex.dds@
+                asset inputs:normalmap_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_normal.n.rtex.dds@
+                asset inputs:reflectionroughness_texture = @./assets/ingested/Textures/PainterConnector_Ingested/7E89C4968A65DCA4_roughness.r.rtex.dds@
+            }
+        }
+
+        over "mat_D27175F8C278AF51"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/world/roads/D27175F8C278AF51_albedo.a.rtex.dds@
+            }
+        }
+    }
+}
+

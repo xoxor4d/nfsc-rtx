@@ -3,16 +3,23 @@
     customLayerData = {
         string lightspeed_game_name = "Need for Speed Carbon"
         string lightspeed_layer_type = "replacement"
-        dictionary lightspeed_mod_dependencies = {
-        }
         string lightspeed_mod_name = "nfsc_comp"
         string lightspeed_mod_notes = "made for https://github.com/xoxor4d/nfsc-rtx"
         string lightspeed_mod_version = "0.8.0"
     }
     subLayers = [
+        @./comp_lights.usda@,
         @./comp_effects.usda@,
         @./comp_cars.usda@,
-        @./comp_world.usda@
+        @./comp_props.usda@,
+        @./comp_world.usda@,
+        @./comp_roads.usda@,
+        @./comp_grass.usda@,
+        @./comp_subsurfacescatter.usda@,
+        @./comp_water.usda@,
+        @./comp_decals.usda@,
+        @./comp_autoconvert_fixes.usda@,
+        @./comp_autoconvert.usda@
     ]
     timeCodesPerSecond = 24
     upAxis = "Z"

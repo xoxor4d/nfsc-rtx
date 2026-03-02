@@ -27,7 +27,20 @@ over "RootNode"
         {
             over "Shader"
             {
-                custom float inputs:metallic_constant = 0.73499995
+                asset inputs:diffuse_texture = @./assets/effects/F1F1F9A8140155A2_albedo.a.rtex.dds@
+                custom float inputs:metallic_constant = 0.885
+            }
+        }
+
+        over "mat_BB8A3337E66FEE40"
+        {
+            over "Shader"
+            {
+                asset inputs:diffuse_texture = @./assets/effects/BB8A3337E66FEE40_half_albedo.a.rtex.dds@
+                custom float inputs:emissive_intensity = 0.07
+                custom asset inputs:emissive_mask_texture = @./assets/effects/BB8A3337E66FEE40_albedo.a.rtex.dds@
+                custom bool inputs:enable_emission = 1
+                custom float inputs:metallic_constant = 1
             }
         }
     }
@@ -40,6 +53,22 @@ over "RootNode"
             {
                 custom uniform bool remix_category:alpha_blend_to_cutout = 0
                 custom uniform bool remix_category:particle = 0
+            }
+        }
+
+        over "mesh_9974125827141BFB"
+        {
+            over "mesh"
+            {
+                custom uniform bool remix_category:particle = 1
+            }
+        }
+
+        over "mesh_7FDC73AFE3A49815"
+        {
+            over "mesh"
+            {
+                custom uniform bool remix_category:world_ui = 0
             }
         }
     }

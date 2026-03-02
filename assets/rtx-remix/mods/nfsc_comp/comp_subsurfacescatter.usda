@@ -1,0 +1,163 @@
+#usda 1.0
+(
+    upAxis = "Z"
+)
+
+over "RootNode"
+{
+    over "Looks"
+    {
+        over "mat_74AB8E28DBE35D8D"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9, 0.05)
+                custom asset inputs:subsurface_thickness_texture = @@
+                custom color3f inputs:subsurface_transmittance_color = (0.1, 0.1, 0.9)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_0833063BC0C1AC58"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9, 0.05)
+                custom color3f inputs:subsurface_transmittance_color = (0.1, 0.1, 0.9)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_5F59CCE9B75EC7B3"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_radius = (0.5, 0.5, 0.5)
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_551480169917B33B"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_7E2EBD38867FB1DA"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_E9CACDBD403A1BF3"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_8CBABB6AAB996445"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_65151A237FB38EF2"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_35A2643E890D0197"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_radius = (0.5, 0.5, 0.5)
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_F3A0DD713B627960"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_985A3A77D62F3657"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_E163FECCAD2B90A2"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+                custom float inputs:subsurface_volumetric_anisotropy = -0.1
+            }
+        }
+
+        over "mat_60302489679C629D"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 0.75
+                custom color3f inputs:subsurface_single_scattering_albedo = (1, 0.9019608, 0.050980393)
+                custom color3f inputs:subsurface_transmittance_color = (0.101960786, 0.101960786, 0.9019608)
+            }
+        }
+
+        over "mat_E473697E2B5722F3"
+        {
+            over "Shader"
+            {
+            }
+        }
+    }
+}
+
