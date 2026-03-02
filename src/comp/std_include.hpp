@@ -2,7 +2,7 @@
 
 constexpr auto COMP_MOD_VERSION_MAJOR = 0;
 constexpr auto COMP_MOD_VERSION_MINOR = 9;
-constexpr auto COMP_MOD_VERSION_PATCH = 0;
+constexpr auto COMP_MOD_VERSION_PATCH = 3;
 
 #define _CRT_SECURE_NO_WARNINGS
 #define WIN32_LEAN_AND_MEAN
