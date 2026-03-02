@@ -1,22 +1,22 @@
 <h1 align="center">NFS Carbon - RTX Remix Compatibility Mod</h1>
 
-<br>
-
 <div align="center" markdown="1"> 
 
-A mod to make NFSC more compatible with NVIDIA's [RTX Remix](https://github.com/NVIDIAGameWorks/rtx-remix).  
+<img src=".github/img/logo.png" alt="Description" width="30%">  
 
-If you want to support my work,   
-consider buying me a [Coffee](https://ko-fi.com/xoxor4d) or by becoming a [Patreon](https://patreon.com/xoxor4d)
+<br>
+
+A mod to make Need for Speed Carbon **(1.4)** more compatible with NVIDIA's [RTX Remix](https://github.com/NVIDIAGameWorks/rtx-remix).  
+If you want to support my work, consider buying me a [Coffee](https://ko-fi.com/xoxor4d) or by becoming a [Patreon](https://patreon.com/xoxor4d).
 
 Feel free to join the discord server: https://discord.gg/FMnfhpfZy9
 
 <br>
 
-![img](.github/img/01.jpg)
-
+<img src=".github/img/01.jpg" alt="Description" width="100%">
 </div>
 
+<br>
 
 ### Installing
 Grab the latest [Release](https://github.com/xoxor4d/nfsc-rtx/releases) and follow the instructions found there
@@ -32,7 +32,8 @@ Grab the latest [Release](https://github.com/xoxor4d/nfsc-rtx/releases) and foll
 
 - Logic to aid with drawcall modifications
 - Anti Culling code + per mesh adjustable preculling (occlusion)
-- FF rendering in shadermode 1
+- Fixed Function rendering in Shadermode
+- Dynamic, fully customizable Rain using a Remix Particle-System created via the remixApi
 - ImGui menu to tweak settings and for debugging purposes
 
 <br>
@@ -51,7 +52,7 @@ Grab the latest [Release](https://github.com/xoxor4d/nfsc-rtx/releases) and foll
 
 #### Cons:
 - Autosculpt does not work (something on remix' side)
-- Large amount of drawcalls (also dues to anti culling) can result in a cpu bottleneck
+- Large amount of drawcalls (due to anti culling) can result in a cpu bottleneck
 
 <br>
 
@@ -79,7 +80,9 @@ Grab the latest [Release](https://github.com/xoxor4d/nfsc-rtx/releases) and foll
 - [ThirteenAG - Widescreen Fix](https://fusionfix.io/wfp#nfsc)
 - [nlgzrgn- HUD Adapter](https://nfsmods.xyz/mod/364)
 - [Archie - Help/Guiding](https://github.com/ArchieGoldmill)
-- [galagandaniloff - remix mod](https://www.moddb.com/mods/nfsc-remix-01-beta)
+- skurtyyskirts - [Manual Texturing](https://github.com/skurtyyskirts/Substance2Remix) / various PBR Materials for the Remix Mod [YouTube](https://www.youtube.com/@skurtyyskirts) - [ModDB](https://www.youtube.com/@skurtyyskirts)
+
+<br>
 
 <div align="center" markdown="1"> 
 
