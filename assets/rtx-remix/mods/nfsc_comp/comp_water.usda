@@ -15,6 +15,148 @@ over "RootNode"
                 custom float inputs:reflection_roughness_constant = 0.065
             }
         }
+
+        over "mat_FFB33DD0A05AAA58" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom asset inputs:normalmap_texture = @./assets/world/water/water_slow_shallow_16x4_OTH_Normal.n.rtex.dds@
+                custom int inputs:sprite_sheet_cols = 16
+                custom int inputs:sprite_sheet_fps = 24
+                custom int inputs:sprite_sheet_rows = 4
+                custom bool inputs:thin_walled = 0
+                custom float inputs:transmittance_measurement_distance = 1
+            }
+        }
+
+        over "mat_24F8A2F41632E2E9" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 3
+                custom asset inputs:normalmap_texture = @./assets/world/water/water_normal_anim_03_16x4_16x4_OTH_Normal.n.rtex.dds@
+                custom int inputs:sprite_sheet_cols = 16
+                custom int inputs:sprite_sheet_fps = 24
+                custom int inputs:sprite_sheet_rows = 4
+                custom bool inputs:thin_walled = 0
+                custom color3f inputs:transmittance_color = (0.76447874, 0.7644711, 0.7644711)
+                custom float inputs:transmittance_measurement_distance = 0.5
+                custom asset inputs:transmittance_texture = @@
+                custom bool inputs:use_diffuse_layer = 0
+            }
+        }
+    }
+
+    over "meshes"
+    {
+        over "mesh_D9AEE5FF8EEBC27F"
+        {
+            over "mesh"
+            {
+                custom uniform bool remix_category:animated_water = 0
+            }
+
+            def Xform "ref_6d799c4d21674f7bbb954edbef9d9e7e" (
+                prepend references = @./assets/helper/square_plane.usda@
+            )
+            {
+                custom bool IsRemixRef = 1
+                double3 xformOp:rotateXYZ = (0, 0, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                over "XForms"
+                {
+                    float3 xformOp:rotateXYZ = (0, 0, 0)
+                    float3 xformOp:scale = (1000, 1000, 1)
+                    double3 xformOp:translate = (0, 1.7053025658242404e-13, -256.4154084470867)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                    over "World"
+                    {
+                        over "Plane"
+                        {
+                            float3 xformOp:rotateXYZ = (0, -0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 1.3322676295501878e-15, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                            over "Plane"
+                            {
+                                uniform bool doubleSided = 1
+                            }
+                        }
+                    }
+
+                    over "AssetImporter"
+                    {
+                        over "Looks"
+                        {
+                            over "Plane__"
+                            {
+                                over "Shader"
+                                {
+                                    custom color3f inputs:diffuse_color_constant = (0.4324324, 0.4324281, 0.4324281)
+                                    custom float inputs:reflection_roughness_constant = 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        over "mesh_2D1023B0417520D3"
+        {
+            def Xform "ref_b56a396fe57145388b5c3579b899afa9" (
+                prepend references = @./assets/helper/square_plane.usda@
+            )
+            {
+                custom bool IsRemixRef = 1
+                double3 xformOp:rotateXYZ = (0, 0, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                over "XForms"
+                {
+                    float3 xformOp:rotateXYZ = (0, 0, -14.666)
+                    float3 xformOp:scale = (0.8, 1.3, 1)
+                    double3 xformOp:translate = (2785.857743682839, 619.3697496499664, 16.666396385129016)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                    over "World"
+                    {
+                        over "Plane"
+                        {
+                            float3 xformOp:rotateXYZ = (0, -0, 0)
+                            float3 xformOp:scale = (10, 10, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                        }
+                    }
+
+                    over "AssetImporter"
+                    {
+                        over "Looks"
+                        {
+                            over "Plane__"
+                            {
+                                over "Shader"
+                                {
+                                    custom float inputs:reflection_roughness_constant = 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

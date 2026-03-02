@@ -1,0 +1,147 @@
+{
+    "src_hash": "6d74b28020f637af94ef9cf8476db9ab",
+    "base_hash": "51efd2d99672a6d2c91ff23805e50b2f",
+    "validation_passed": true,
+    "validation_extensions": [
+        {
+            "id": "omni.flux.validator.factory-2.4.1",
+            "package_id": "omni.flux.validator.factory-2.4.1",
+            "version": [
+                2,
+                4,
+                1,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.factory",
+            "title": "Flux Validator Factory"
+        },
+        {
+            "id": "omni.flux.validator.manager.core-1.16.1",
+            "package_id": "omni.flux.validator.manager.core-1.16.1",
+            "version": [
+                1,
+                16,
+                1,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.manager.core",
+            "title": "Flux Validator Manager Core"
+        },
+        {
+            "id": "omni.flux.validator.manager.widget-1.6.4",
+            "package_id": "omni.flux.validator.manager.widget-1.6.4",
+            "version": [
+                1,
+                6,
+                4,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.manager.widget",
+            "title": "Flux Validator Manager Widget"
+        },
+        {
+            "id": "omni.flux.validator.mass.core-1.10.2",
+            "package_id": "omni.flux.validator.mass.core-1.10.2",
+            "version": [
+                1,
+                10,
+                2,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.mass.core",
+            "title": "Flux Validator Mass Core"
+        },
+        {
+            "id": "omni.flux.validator.mass.queue.widget-1.4.0",
+            "package_id": "omni.flux.validator.mass.queue.widget-1.4.0",
+            "version": [
+                1,
+                4,
+                0,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.mass.queue.widget",
+            "title": "Flux Panel widget"
+        },
+        {
+            "id": "omni.flux.validator.mass.widget-1.7.0",
+            "package_id": "omni.flux.validator.mass.widget-1.7.0",
+            "version": [
+                1,
+                7,
+                0,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.mass.widget",
+            "title": "Flux Validator Mass Widget"
+        },
+        {
+            "id": "omni.flux.validator.plugin.check.usd-3.10.0",
+            "package_id": "omni.flux.validator.plugin.check.usd-3.10.0",
+            "version": [
+                3,
+                10,
+                0,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.plugin.check.usd",
+            "title": "USD Check Validator Plugins"
+        },
+        {
+            "id": "omni.flux.validator.plugin.context.usd_stage-2.7.2",
+            "package_id": "omni.flux.validator.plugin.context.usd_stage-2.7.2",
+            "version": [
+                2,
+                7,
+                2,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.plugin.context.usd_stage",
+            "title": "USD Stage Validator Plugins"
+        },
+        {
+            "id": "omni.flux.validator.plugin.resultor.file-1.5.4",
+            "package_id": "omni.flux.validator.plugin.resultor.file-1.5.4",
+            "version": [
+                1,
+                5,
+                4,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.plugin.resultor.file",
+            "title": "USD Selector Validator Plugins"
+        },
+        {
+            "id": "omni.flux.validator.plugin.selector.usd-1.7.1",
+            "package_id": "omni.flux.validator.plugin.selector.usd-1.7.1",
+            "version": [
+                1,
+                7,
+                1,
+                "",
+                ""
+            ],
+            "enabled": true,
+            "name": "omni.flux.validator.plugin.selector.usd",
+            "title": "USD Selector Validator Plugins"
+        }
+    ]
+}

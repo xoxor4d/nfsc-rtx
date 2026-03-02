@@ -78,6 +78,20 @@ over "RootNode"
                 custom float inputs:reflection_roughness_constant = 1
             }
         }
+
+        over "mat_8ECE5D0C8424C8DA"
+        {
+            over "Shader"
+            {
+                custom int inputs:alpha_test_type = 4
+                custom bool inputs:blend_enabled = 1
+                custom int inputs:blend_type = 1
+                custom float inputs:emissive_intensity = 7
+                custom asset inputs:emissive_mask_texture = @./assets/world/lamps/8ECE5D0C8424C8DA_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+                custom bool inputs:use_legacy_alpha_state = 0
+            }
+        }
     }
 }
 

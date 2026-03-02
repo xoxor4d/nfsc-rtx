@@ -7,8 +7,8 @@
                 double radius = 500
             }
             dictionary Perspective = {
-                double3 position = (4798.719410070687, 747.7263890716514, 51.34334158451096)
-                double3 target = (355.00780816335373, 2261.1056076406426, -1115.2318673307752)
+                double3 position = (5494.381136696145, 575.5675919742105, 58.95497075624013)
+                double3 target = (2340.140441096815, -4087.9332407162765, -173.5311301073265)
             }
             dictionary Right = {
                 double3 position = (0, -500, 0)
@@ -22,8 +22,9 @@
         }
         string lightspeed_layer_type = "workfile"
         dictionary omni_layer = {
-            string authoring_layer = "./comp_cars.usda"
+            string authoring_layer = "./comp_effects.usda"
             dictionary locked = {
+                bool "./deps/captures/4_light___17.usd" = 1
                 bool "./deps/captures/aaaaaaa2026-02-26_19-36-27.usd" = 1
             }
         }
@@ -35,7 +36,7 @@
     startTimeCode = 0
     subLayers = [
         @./mod.usda@,
-        @./deps/captures/aaaaaaa2026-02-26_19-36-27.usd@
+        @./deps/captures/4_light___17.usd@
     ]
     timeCodesPerSecond = 24
     upAxis = "Z"

@@ -608,7 +608,7 @@ namespace comp
 			variable enable_camera_raindrops = {
 				"enable_camera_raindrops",
 				("Enable Raindrops on the Camera Lense. Does not look good until we have cutout translucents."),
-				false
+				true
 			};
 
 

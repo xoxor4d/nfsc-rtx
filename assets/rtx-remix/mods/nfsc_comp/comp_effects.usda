@@ -8,18 +8,32 @@ over "RootNode"
     over "Looks"
     {
         over "mat_29AEB5805A5933AA" (
-            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+            references = @./materials/AperturePBR_Opacity.usda@</Looks/mat_AperturePBR_Opacity>
         )
         {
             over "Shader"
             {
-                asset inputs:diffuse_texture = @./assets/effects/rain/raindrop_albedo.a.rtex.dds@
+                custom int inputs:alpha_test_type = 4
+                custom bool inputs:blend_enabled = 1
+                custom int inputs:blend_type = 0
+                asset inputs:diffuse_texture = @./assets/effects/rain/new/raindrop_white_trans_albedo.a.rtex.dds@
+                custom float inputs:emissive_intensity = 0.001
+                custom asset inputs:emissive_mask_texture = @./assets/effects/rain/new/raindrop_white_trans_albedo.a.rtex.dds@
+                custom bool inputs:enable_emission = 0
                 custom float inputs:ior_constant = 1.4
+                custom float inputs:metallic_constant = 0.98
+                custom asset inputs:metallic_texture = @@
                 custom asset inputs:normalmap_texture = @./assets/effects/rain/raindrop_normal_dx_OTH_Normal.n.rtex.dds@
-                custom float inputs:reflection_roughness_constant = 0.515
-                custom asset inputs:reflectionroughness_texture = @./assets/effects/rain/raindrop_roughness.r.rtex.dds@
+                custom float inputs:reflection_roughness_constant = 0.096
+                custom asset inputs:reflectionroughness_texture = @@
+                custom float inputs:subsurface_measurement_distance = 1.92
+                custom color3f inputs:subsurface_single_scattering_albedo = (0.8996139, 0.8996049, 0.8996049)
+                custom color3f inputs:subsurface_transmittance_color = (0.9034749, 0.90346587, 0.90346587)
+                custom asset inputs:subsurface_transmittance_texture = @./assets/effects/rain/new/raindrop_full_roughness.r.rtex.dds@
+                custom float inputs:subsurface_volumetric_anisotropy = 0
                 custom bool inputs:thin_walled = 0
                 custom color3f inputs:transmittance_color = (1, 0.99999, 0.99999)
+                custom bool inputs:use_legacy_alpha_state = 0
             }
         }
 
