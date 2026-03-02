@@ -601,6 +601,12 @@ namespace comp
 			}
 		}
 
+		SPACEY4;
+		ImGui::PushFont(shared::common::font::BOLD);
+		ImGui::CenterText("Use Middle Mouse Button to Reset Variables.");
+		ImGui::PopFont();
+		SPACEY4;
+
 		// popup
 		if (ImGui::BeginPopupModal("Reload CompSettings?", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings))
 		{
@@ -644,11 +650,55 @@ namespace comp
 	}
 
 
+	void compsettings_var_reset_logic(comp_settings::variable& var)
+	{
+		std::string popup_id = "Reset "s + var.m_name + " ?";
+
+		if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByPopup) && ImGui::IsMouseDown(ImGuiMouseButton_Middle))
+		{
+			if (!ImGui::IsPopupOpen(popup_id.c_str())) {
+				ImGui::OpenPopup(popup_id.c_str());
+			}
+		}
+
+		ImGui::SetNextWindowSize(ImVec2(300.0f, 140.0f));
+		if (ImGui::BeginPopupModal(popup_id.c_str(), nullptr, ImGuiWindowFlags_NoSavedSettings))
+		{
+			ImGui::Spacing(0.0f, 0.0f);
+
+			ImGui::Spacing();
+			ImGui::CenterText("This will reset the current variable");
+
+			ImGui::PushFont(shared::common::font::BOLD);
+			ImGui::CenterText("Are you sure?");
+			ImGui::PopFont();
+
+			ImGui::Spacing(0, 8);
+			ImGui::Spacing(0, 0); ImGui::SameLine();
+
+			const auto half_width = ImGui::GetContentRegionMax().x * 0.5f;
+			ImVec2 button_size(half_width - (ImGui::GetStyle().WindowPadding.x * 2.0f) - ImGui::GetStyle().ItemSpacing.x, 0.0f);
+			if (ImGui::Button("Yes", button_size))
+			{
+				var.reset();
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", button_size)) {
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+		}
+	}
+
 	bool compsettings_bool_widget(const char* desc, comp_settings::variable& var)
 	{
 		const auto cs_var_ptr = var.get_as<bool*>();
 		const bool result = ImGui::Checkbox(desc, cs_var_ptr);
 		TT(var.get_tooltip_string().c_str());
+		compsettings_var_reset_logic(var);
 		return result;
 	}
 
@@ -657,6 +707,116 @@ namespace comp
 		const auto cs_var_ptr = var.get_as<float*>();
 		const bool result = ImGui::DragFloat(desc, cs_var_ptr, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None);
 		TT(var.get_tooltip_string().c_str());
+		compsettings_var_reset_logic(var);
+		return result;
+	}
+
+	bool compsettings_vec_widget(const char* desc, comp_settings::variable& var, const int& size, const float& min = 0.0f, const float& max = 0.0f, const float& speed = 0.02f)
+	{
+		const auto cs_var_ptr = var.get_as<float*>();
+		bool result = false;
+		switch (size)
+		{
+		case 2:
+			assert(var.get_type() == comp_settings::var_type_vec2 && "Type mismatch: expected vec2");
+			result = ImGui::DragFloat2(desc, cs_var_ptr, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None);
+			break;
+
+		case 3:
+			assert(var.get_type() == comp_settings::var_type_vec3 && "Type mismatch: expected vec3");
+			result = ImGui::DragFloat3(desc, cs_var_ptr, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None);
+			break;
+
+		default:
+		case 4:
+			assert(var.get_type() == comp_settings::var_type_vec4 && "Type mismatch: expected vec4");
+			result = ImGui::DragFloat4(desc, cs_var_ptr, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None);
+			break;
+		}
+
+		TT(var.get_tooltip_string().c_str());
+		compsettings_var_reset_logic(var);
+		return result;
+	}
+
+	bool compsettings_color_widget(const char* desc, comp_settings::variable& var, const int& size, const ImGuiColorEditFlags_& flags)
+	{
+		const auto cs_var_ptr = var.get_as<float*>();
+		bool result = false;
+
+		switch (size)
+		{
+		case 3:
+			assert(var.get_type() == comp_settings::var_type_vec3 && "Type mismatch: expected vec3");
+			result = ImGui::ColorEdit3(desc, cs_var_ptr, flags);
+			break;
+
+		default:
+		case 4:
+			assert(var.get_type() == comp_settings::var_type_vec4 && "Type mismatch: expected vec4");
+			result = ImGui::ColorEdit4(desc, cs_var_ptr, flags);
+			break;
+		}
+
+		TT(var.get_tooltip_string().c_str());
+		compsettings_var_reset_logic(var);
+		return result;
+	}
+
+	bool compsettings_remix_vec_widget(const char* desc, comp_settings::variable& var, const int& size, const float& min = 0.0f, const float& max = 0.0f, const float& speed = 0.02f, const float next_width = 200.0f)
+	{
+		bool result = false;
+		ImGui::BeginGroup();
+		switch (size)
+		{
+		case 2:
+			assert(var.get_type() == comp_settings::var_type_remix_float2d_array && "Type mismatch: expected remix_float2d");
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::DragFloat2(shared::utils::va("%s #1", desc), &var._remix2d_ptr(0)->x, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None);
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::DragFloat2(shared::utils::va("%s #2", desc), &var._remix2d_ptr(1)->x, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None) ? true : result;
+			break;
+
+		case 3:
+			assert(var.get_type() == comp_settings::var_type_remix_float3d_array && "Type mismatch: expected remix_float3d");
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::DragFloat3(shared::utils::va("%s #1", desc), &var._remix3d_ptr(0)->x, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None);
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::DragFloat3(shared::utils::va("%s #2", desc), &var._remix3d_ptr(1)->x, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None) ? true : result;
+			break;
+
+		default:
+		case 4:
+			assert(var.get_type() == comp_settings::var_type_remix_float4d_array && "Type mismatch: expected remix_float4d");
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::DragFloat4(shared::utils::va("%s #1", desc), &var._remix4d_ptr(0)->x, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None);
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::DragFloat4(shared::utils::va("%s #2", desc), &var._remix4d_ptr(1)->x, speed, min, max, "%.2f", (min != 0.0f || max != 0.0f) ? ImGuiSliderFlags_AlwaysClamp : ImGuiSliderFlags_None) ? true : result;
+			break;
+		}
+		ImGui::EndGroup();
+		TT(var.get_tooltip_string().c_str());
+		compsettings_var_reset_logic(var);
+		return result;
+	}
+
+	bool compsettings_remix_color_widget(const char* desc, comp_settings::variable& var, const int& size, const ImGuiColorEditFlags_& flags, const float next_width = 200.0f)
+	{
+		bool result = false;
+
+		ImGui::BeginGroup();
+		switch (size)
+		{
+		case 3:
+			assert(var.get_type() == comp_settings::var_type_remix_float3d_array && "Type mismatch: expected remix_float3d");
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::ColorEdit3(shared::utils::va("%s #1", desc), &var._remix3d_ptr(0)->x, flags);
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::ColorEdit3(shared::utils::va("%s #2", desc), &var._remix3d_ptr(1)->x, flags) ? true : result;
+			break;
+
+		default:
+		case 4:
+			assert(var.get_type() == comp_settings::var_type_remix_float4d_array && "Type mismatch: expected remix_float4d");
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::ColorEdit4(shared::utils::va("%s #1", desc), &var._remix4d_ptr(0)->x, flags);
+			SET_CHILD_WIDGET_WIDTH_MAN(next_width); result = ImGui::ColorEdit4(shared::utils::va("%s #2", desc), &var._remix4d_ptr(1)->x, flags) ? true : result;
+			break;
+		}
+		ImGui::EndGroup();
+		TT(var.get_tooltip_string().c_str());
+		compsettings_var_reset_logic(var);
 		return result;
 	}
 
@@ -749,6 +909,7 @@ namespace comp
 	{
 		//const auto& cs = comp_settings::get();
 		const auto im = imgui::get();
+		auto cs = comp_settings::get();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 0.0f);
 		const auto spacing = ImGui::GetStyle().ItemSpacing;
@@ -756,7 +917,32 @@ namespace comp
 		SPACEY4;
 		auto& p = rain::get()->m_remix_particle;
 
-		ImGui::Checkbox("Enable Particle System", &p.enabled); TT("If game can trigger particle system");
+		auto save_logo = []() 
+		{
+				ImGui::SameLine(0, 3.0f); ImGui::TextDisabled("  *  ");
+				
+				ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0.124f, 0.124f, 0.124f, 0.776f));
+				if (!ImGui::BeginItemTooltip())
+				{
+					ImGui::PopStyleColor();
+					return;
+				}
+				ImGui::PopStyleColor();
+
+				const auto padding = 4.0f;
+
+				ImGui::Spacing(0, padding);	// top padding
+				ImGui::Spacing(padding, 0); ImGui::SameLine(); // left padding
+
+				ImGui::TextUnformatted("This is a saved Setting.");
+
+				ImGui::SameLine(); ImGui::Spacing(padding, 0); // right padding
+				ImGui::Spacing(0, padding);	// bottom padding
+
+				ImGui::EndTooltip();
+			};
+
+		compsettings_bool_widget("Enable Particle System", cs->rain_enable); save_logo();
 		ImGui::Checkbox("Edit Mode", &p.edit_mode); TT("Always update the particle system variables.");
 		ImGui::Checkbox("Force On", &p.force_enable); TT("Always draw the rain particle system.");
 
@@ -773,13 +959,14 @@ namespace comp
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderInt("BlendType", &p.blendtype, 0, 12);
 
 					SPACEY4;
-					ImGui::Checkbox("Use Emissive Texture", &p.use_emissive_texture);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Emissive Intensity", &p.emissive_intensity, 0.01f, 0.0f, 1.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit3("Emissive Color", &p.emissive_color.x, ImGuiColorEditFlags_Float);
+					compsettings_bool_widget("Use Emissive Texture", cs->rain_use_emissive_texture); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Emissive Intensity", cs->rain_emissive_intensity, 0.0f, 1.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_color_widget("Emissive Color", cs->rain_emissive_color, 3, ImGuiColorEditFlags_Float); save_logo();
 
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Metallic Constant", &p.metallic_constant, 0.01f, 0.0f, 1.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawner Scale", &p.spawner_scale, 0.05f, 0.0f, 100.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Metallic Constant", cs->rain_metallic_constant, 0.0f, 1.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Roughness Constant", cs->rain_roughness_constant, 0.0f, 1.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Spawner Scale", cs->rain_spawner_scale, 0.0f, 100.0f, 0.05f); save_logo();
 
 					SPACEY4;
 					if (ImGui::Button("Recreate System", ImVec2(ImGui::GetContentRegionAvail().x, 0.0f))) {
@@ -872,22 +1059,16 @@ namespace comp
 			ImGui::Widget_CategoryWithVerticalLabel("Position / Angle", [&]()
 				{
 					ImGui::PushID("partposangle");
-
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Position Offset", &p.position_offset.x, 0.05f, -100.0f, 100.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Rotation Offset", &p.rotation_offset.x, 0.05f, -360.0f, 360.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Forward Offset", &p.cam_forward_offset, 0.05f, -1000.0f, 1000.0f);
-					TT("Offset particle spawner in camera direction based on fixed offset.");
-
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Forward Scale", &p.cam_velocity_forward_scale, 0.05f, -1000.0f, 1000.0f);
-					TT("Offset particle spawner in camera direction based on camera velocity. 0.0 = No offset");
+					
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_vec_widget("Position Offset", cs->rain_position_offset, 3, -100.0f, 100.0f, 0.05f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_vec_widget("Rotation Offset", cs->rain_rotation_offset, 3, -360.0f, 360.0f, 0.05f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Cam Forward Offset", cs->rain_cam_forward_offset, -1000.0f, 1000.0f, 0.05f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Cam Vel Forward Scale", cs->rain_cam_velocity_forward_scale, -1000.0f, 1000.0f, 0.05f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Cam Vel Pitch Scale", cs->rain_cam_velocity_spawner_pitch_scale, 0.0f, 500.0f, 0.05f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Cam Vel Pitch Max Deg", cs->rain_cam_velocity_spawner_pitch_max, -90.0f, 90.0f, 0.05f); save_logo();
 
 					ImGui::Checkbox("Rotate Spawner YAW based on Camera", &p.yaw_rotate_spawner_based_on_cam);
-					ImGui::Checkbox("Rotate Spawner PITCH based on Camera", &p.pitch_rotate_spawner_based_on_cam);
-
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Spawner Pitch Scale", &p.cam_velocity_spawner_pitch_scale, 0.05f, 0.0f, 500.0f);
-					TT("Scales pitch amount of particle spawner based on camera speed until pitch max is reached.");
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Cam Velocity Spawner Pitch Max Deg", &p.cam_velocity_spawner_pitch_max, 0.05f, -90.0f, 90.0f);
-					TT("Max Angle (Deg) that particle spawner can pitch towards the cam.");
+					compsettings_bool_widget("Rotate Spawner PITCH based on Camera", cs->rain_pitch_rotate_spawner_based_on_cam); save_logo();
 
 					ImGui::PopID();
 				});
@@ -912,33 +1093,25 @@ namespace comp
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Rate", &p.spawn_rate, 0.25f, 0.0f, 10000.0f);
 					TT("Spawn Rate when rain is forced on.");
 
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Game Spawn Rate Multi", &p.spawn_rate_game_multi, 0.01f, 0.0f, 100.0f);
-					TT("Game Raindrop Count * Multi = Final Spawn Rate. Only used when rain is not forced on.");
-
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Game Spawn Rate Speed Scalar", &p.spawn_rate_game_multi_speed_scalar, 0.01f, 0.0f, 100.0f);
-					TT("Additional scale based on camera velocity.");
-
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Game Spawn Rate Multi Lower Limit", &p.spawn_rate_game_multi_lower_limit, 0.01f, 0.0f, 100.0f);
-					TT("Lower clamp of final multiplier (can not get lower then this 'scalar * game rain count')");
-
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Game Spawn Rate Multi Upper Limit", &p.spawn_rate_game_multi_upper_limit, 0.01f, 0.0f, 100.0f);
-					TT("Upper clamp of final multiplier (can not get larger then this 'scalar * game rain count')");
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Spawn Rate Multi", cs->rain_spawn_rate_game_multi, 0.0f, 100.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Spawn Rate Speed Scalar", cs->rain_spawn_rate_game_multi_speed_scalar, 0.0f, 100.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Spawn Rate Multi LowerLim", cs->rain_spawn_rate_game_multi_lower_limit, 0.0f, 100.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Spawn Rate Multi UpperLim", cs->rain_spawn_rate_game_multi_upper_limit, 0.0f, 100.0f, 0.01f); save_logo();
 
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Spawn Burst Duration", &p.spawn_burst_duration, 0.01f, 0.0f, 1000.0f);
 
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Min Lifetime", &p.min_time, 0.05f, 0.01f, 20.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Max Lifetime", &p.max_time, 0.05f, 0.01f, 20.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Min Lifetime", cs->rain_min_lifetime, 0.01f, 20.0f, 0.001f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Max Lifetime", cs->rain_max_lifetime, 0.01f, 20.0f, 0.001f); save_logo();
 
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Rotation Deg", &p.initial_rot_deg, 0.05f, 0.001f, 360.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Initial Rotation Deg", cs->rain_initial_rotation_degrees, 0.00f, 360.0f, 0.05f); save_logo();
 
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Min Size Start", &p.min_size[0].x, 0.05f, 0.001f, 5.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Min Size End", &p.min_size[1].x, 0.05f, 0.001f, 5.0f);
+					compsettings_remix_vec_widget("Min Size Key", cs->rain_min_size_keyframes, 2, 0.001f, 5.0f, 0.05f); save_logo();
+
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Max Size Start", &p.max_size[0].x, 0.05f, 0.001f, 5.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat2("Max Size End", &p.max_size[1].x, 0.05f, 0.001f, 5.0f);
+					compsettings_remix_vec_widget("Max Size Key", cs->rain_max_size_keyframes, 2, 0.001f, 5.0f, 0.05f); save_logo();
 
 					ImGui::PopID();
 				});
@@ -962,15 +1135,13 @@ namespace comp
 					ImGui::Checkbox("Hide Emitter", &p.hide_emitter);
 
 					SPACEY4;
-					ImGui::Checkbox("Enable Motion Trail", &p.enable_motion_trail);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Motion Trail Multiplier", &p.motion_trail_multi, 0.01f, 0.0f, 100.0f);
+					compsettings_bool_widget("Enable Motion Trail", cs->rain_enable_motion_trail); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Motion Trail Multiplier", cs->rain_motion_trail_multi, 0.0f, 100.0f, 0.01f); save_logo();
 
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Min Particle Color Start", &p.min_color[0].x);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Min Particle Color End", &p.min_color[1].x);
+					compsettings_remix_color_widget("Min Particle Color Key", cs->rain_min_color_keyframes, 4, ImGuiColorEditFlags_Float); save_logo();
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Max Particle Color Start", &p.max_color[0].x);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::ColorEdit4("Max Particle Color End", &p.max_color[1].x);
+					compsettings_remix_color_widget("Max Particle Color Key", cs->rain_max_color_keyframes, 4, ImGuiColorEditFlags_Float); save_logo();
 
 					SPACEY4;
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f);
@@ -1009,10 +1180,12 @@ namespace comp
 				{
 					ImGui::PushID("partvel");
 
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Max Velocity", &p.max_velocity->x, 0.05f, 0.0f, 1000.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Normal", &p.initial_vel_from_normal, 0.05f, -1000.0f, 1000.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel Cone Angle", &p.initial_vel_cone_ang_deg, 0.05f, -1000.0f, 1000.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Initial Vel from Motion", &p.initial_vel_from_motion, 0.01f, -1000.0f, 1000.0f);
+					// Only a single KeyFrame in use
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Max Velocity", &cs->rain_max_velocity._remix3d_ptr(0)->x, 0.05f, 0.0f, 1000.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp); save_logo();
+
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Init Vel from Normal", cs->rain_initial_velocity_from_normal, -1000.0f, 1000.0f, 0.05f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Init Vel Cone Angle", cs->rain_initial_velocity_cone_angle_degrees, -1000.0f, 1000.0f, 0.05f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Init Vel from Motion", cs->rain_initial_velocity_from_motion, -1000.0f, 1000.0f, 0.05f); save_logo();
 
 					SPACEY4;
 					ImGui::Checkbox("Align to Velocity", &p.align_to_velocity);
@@ -1039,12 +1212,12 @@ namespace comp
 					ImGui::PushID("partforce");
 
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat3("Attractor Position", &p.attractor_position.x, 0.05f, -FLT_MAX, FLT_MAX);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Radius", &p.attractor_radius, 0.01f, 0.0f, 100000.0f);
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Attractor Force", &p.attractor_force, 0.01f, 0.0f, 100000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Attractor Radius", cs->rain_attractor_radius, 0.0f, 1000.0f, 0.01f); save_logo();
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Attractor Force", cs->rain_attractor_force, 0.0f, 10000.0f, 0.01f); save_logo();
 					ImGui::Checkbox("Use Camera Pos as Attractor", &p.use_cam_as_attractor);
 
 					SPACEY4;
-					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Gravity Force", &p.gravity_force, 0.05f, -1000.0f, 1000.0f);
+					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Gravity Force", cs->rain_gravity_force, -1000.0f, 1000.0f, 0.01f); save_logo();
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Freq", &p.turbulence_freq, 0.05f, -1000.0f, 1000.0f);
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Turbulence Force", &p.turbulence_force, 0.05f, -1000.0f, 1000.0f);
 					SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::DragFloat("Drag", &p.drag, 0.05f, 0.001f, 100.0f);

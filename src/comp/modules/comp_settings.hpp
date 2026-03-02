@@ -26,7 +26,12 @@ namespace comp
 		{
 			bool boolean;
 			int integer;
-			float value[4] = {};
+			float value[4];
+			remixapi_Float2D remix_float2d[2];
+			remixapi_Float3D remix_float3d[2];
+			remixapi_Float4D remix_float4d[2];
+
+			var_value() : value{} {}
 		};
 	
 		enum var_type : std::uint8_t
@@ -37,6 +42,9 @@ namespace comp
 			var_type_vec2 = 3,
 			var_type_vec3 = 4,
 			var_type_vec4 = 5,
+			var_type_remix_float2d_array = 6,
+			var_type_remix_float3d_array = 7,
+			var_type_remix_float4d_array = 8,
 		};
 	
 		class variable
@@ -89,11 +97,54 @@ namespace comp
 				m_var.value[0] = x; m_var.value[1] = y; m_var.value[2] = z; m_var.value[3] = w;
 				m_var_default.value[0] = x; m_var_default.value[1] = y; m_var_default.value[2] = z; m_var_default.value[3] = w;
 			}
+
+			// remix_float2_array
+			variable(const char* name, const char* desc, const var_type type,
+					 const float x1, const float y1,
+					 const float x2, const float y2) :
+				m_name(name), m_desc(desc), m_type(type)
+			{
+				m_var.remix_float2d[0].x = x1; m_var.remix_float2d[0].y = y1;
+				m_var.remix_float2d[1].x = x2; m_var.remix_float2d[1].y = y2;
+
+				m_var_default.remix_float2d[0].x = x1; m_var_default.remix_float2d[0].y = y1;
+				m_var_default.remix_float2d[1].x = x2; m_var_default.remix_float2d[1].y = y2;
+			}
+
+			// remix_float3_array
+			variable(const char* name, const char* desc, const var_type type,
+					 const float x1, const float y1, const float z1,
+					 const float x2, const float y2, const float z2) :
+				m_name(name), m_desc(desc), m_type(type)
+			{
+				m_var.remix_float3d[0].x = x1; m_var.remix_float3d[0].y = y1; m_var.remix_float3d[0].z = z1;
+				m_var.remix_float3d[1].x = x2; m_var.remix_float3d[1].y = y2; m_var.remix_float3d[1].z = z2;
+
+				m_var_default.remix_float3d[0].x = x1; m_var_default.remix_float3d[0].y = y1; m_var_default.remix_float3d[0].z = z1;
+				m_var_default.remix_float3d[1].x = x2; m_var_default.remix_float3d[1].y = y2; m_var_default.remix_float3d[1].z = z2;
+			}
+
+			// remix_float4_array
+			variable(const char* name, const char* desc, const var_type type,
+					 const float x1, const float y1, const float z1, const float w1,
+					 const float x2, const float y2, const float z2, const float w2) :
+				m_name(name), m_desc(desc), m_type(type)
+			{
+				m_var.remix_float4d[0].x = x1; m_var.remix_float4d[0].y = y1; m_var.remix_float4d[0].z = z1; m_var.remix_float4d[0].w = w1;
+				m_var.remix_float4d[1].x = x2; m_var.remix_float4d[1].y = y2; m_var.remix_float4d[1].z = z2; m_var.remix_float4d[1].w = w2;
+
+				m_var_default.remix_float4d[0].x = x1; m_var_default.remix_float4d[0].y = y1; m_var_default.remix_float4d[0].z = z1; m_var_default.remix_float4d[0].w = w1;
+				m_var_default.remix_float4d[1].x = x2; m_var_default.remix_float4d[1].y = y2; m_var_default.remix_float4d[1].z = z2; m_var_default.remix_float4d[1].w = w2;
+			}
 	
 			const char* get_str_value(bool get_default = false) const
 			{
 				const auto pvec = !get_default ? &m_var.value[0] : &m_var_default.value[0];
-	
+
+				const auto premix2d = !get_default ? &m_var.remix_float2d[0] : &m_var_default.remix_float2d[0];
+				const auto premix3d = !get_default ? &m_var.remix_float3d[0] : &m_var_default.remix_float3d[0];
+				const auto premix4d = !get_default ? &m_var.remix_float4d[0] : &m_var_default.remix_float4d[0];
+
 				switch (m_type)
 				{
 				case var_type_boolean:
@@ -113,6 +164,15 @@ namespace comp
 	
 				case var_type_vec4:
 					return shared::utils::va("[ %.2f, %.2f, %.2f, %.2f ]", pvec[0], pvec[1], pvec[2], pvec[3]);
+
+				case var_type_remix_float2d_array:
+					return shared::utils::va("[ %.2f, %.2f, %.2f, %.2f ]", premix2d[0].x, premix2d[0].y, premix2d[1].x, premix2d[1].y);
+
+				case var_type_remix_float3d_array:
+					return shared::utils::va("[ %.2f, %.2f, %.2f, %.2f, %.2f, %.2f ]", premix3d[0].x, premix3d[0].y, premix3d[0].z, premix3d[1].x, premix3d[1].y, premix3d[1].z);
+				
+				case var_type_remix_float4d_array:
+					return shared::utils::va("[ %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f, %.2f ]", premix4d[0].x, premix4d[0].y, premix4d[0].z, premix4d[0].w, premix4d[1].x, premix4d[1].y, premix4d[1].z, premix4d[1].w);
 				}
 	
 				return nullptr;
@@ -139,8 +199,17 @@ namespace comp
 	
 				case var_type_vec4:
 					return "VEC4";
+
+				case var_type_remix_float2d_array:
+					return "REMIX2D[2]";
+
+				case var_type_remix_float3d_array:
+					return "REMIX3D[2]";
+
+				case var_type_remix_float4d_array:
+					return "REMIX4D[2]";
 				}
-	
+
 				return nullptr;
 			}
 	
@@ -179,6 +248,66 @@ namespace comp
 			{
 				assert(m_type == var_type_value && "Type mismatch: expected float");
 				return !default_value ? m_var.value : m_var_default.value;
+			}
+
+			const float& _vec_x(const bool default_value = false) const
+			{
+				assert(((m_type == var_type_vec2) || (m_type == var_type_vec3) || (m_type == var_type_vec4)) && "Type mismatch: expected vec2, vec3 or vec4");
+				return !default_value ? m_var.value[0] : m_var_default.value[0];
+			}
+
+			const float& _vec_y(const bool default_value = false) const
+			{
+				assert(((m_type == var_type_vec2) || (m_type == var_type_vec3) || (m_type == var_type_vec4)) && "Type mismatch: expected vec2, vec3 or vec4");
+				return !default_value ? m_var.value[1] : m_var_default.value[1];
+			}
+
+			const float& _vec_z(const bool default_value = false) const
+			{
+				assert(((m_type == var_type_vec3) || (m_type == var_type_vec4)) && "Type mismatch: expected vec2, vec3 or vec4");
+				return !default_value ? m_var.value[2] : m_var_default.value[2];
+			}
+
+			const float& _vec_w(const bool default_value = false) const
+			{
+				assert(m_type == var_type_vec4 && "Type mismatch: expected vec2, vec3 or vec4");
+				return !default_value ? m_var.value[3] : m_var_default.value[3];
+			}
+
+			remixapi_Float2D* _remix2d_ptr(const int& index = 0)
+			{
+				assert(m_type == var_type_remix_float2d_array && "Type mismatch: expected remixFloat2d");
+				return &m_var.remix_float2d[index];
+			}
+
+			const remixapi_Float2D* _remix2d_ptr(const int& index = 0) const
+			{
+				assert(m_type == var_type_remix_float2d_array && "Type mismatch: expected remixFloat2d");
+				return &m_var_default.remix_float2d[index];
+			}
+
+			remixapi_Float3D* _remix3d_ptr(const int& index = 0)
+			{
+				assert(m_type == var_type_remix_float3d_array && "Type mismatch: expected remixFloat3d");
+				return &m_var.remix_float3d[index];
+			}
+
+			const remixapi_Float3D* _remix3d_ptr(const int& index = 0) const
+			{
+				assert(m_type == var_type_remix_float3d_array && "Type mismatch: expected remixFloat3d");
+				return &m_var_default.remix_float3d[index];
+			}
+
+			remixapi_Float4D* _remix4d_ptr(const int& index = 0)
+			{
+				assert(m_type == var_type_remix_float4d_array && "Type mismatch: expected remixFloat4d");
+				return &m_var.remix_float4d[index];
+			}
+
+			const remixapi_Float4D* _remix4d_ptr(const int& index = 0) const
+			{
+				assert(m_type == var_type_remix_float4d_array && "Type mismatch: expected remixFloat4d");
+				return &m_var_default.remix_float4d[index];
 			}
 	
 			template <typename T>
@@ -320,6 +449,40 @@ namespace comp
 				}
 			}
 
+			// sets var and writes toml (remix vec)
+			void set_remix_vec(const float* v, bool no_toml_update = false)
+			{
+				uint8_t ct = 0u;
+				switch (m_type)
+				{
+				default:
+					break;
+
+				case var_type_remix_float2d_array:
+					m_var.remix_float2d[0].x = v[ct++]; m_var.remix_float2d[0].y = v[ct++];
+					m_var.remix_float2d[1].x = v[ct++]; m_var.remix_float2d[1].y = v[ct];
+					break;
+
+				case var_type_remix_float3d_array:
+					m_var.remix_float3d[0].x = v[ct++]; m_var.remix_float3d[0].y = v[ct++]; m_var.remix_float3d[0].z = v[ct++];
+					m_var.remix_float3d[1].x = v[ct++]; m_var.remix_float3d[1].y = v[ct++]; m_var.remix_float3d[1].z = v[ct];
+					break;
+
+				case var_type_remix_float4d_array:
+					m_var.remix_float4d[0].x = v[ct++]; m_var.remix_float4d[0].y = v[ct++]; m_var.remix_float4d[0].z = v[ct++]; m_var.remix_float4d[0].w = v[ct++];
+					m_var.remix_float4d[1].x = v[ct++]; m_var.remix_float4d[1].y = v[ct++]; m_var.remix_float4d[1].z = v[ct++]; m_var.remix_float4d[1].w = v[ct];
+					break;
+				}
+
+				if (!no_toml_update) {
+					write_toml();
+				}
+			}
+
+			void reset() {
+				m_var = m_var_default;
+			}
+
 			const char* m_name;
 			const char* m_desc;
 	
@@ -348,8 +511,7 @@ namespace comp
 			// ----------------------------------
 			// culling related settings
 
-			variable nocull_distance =
-			{
+			variable nocull_distance = {
 				"nocull_distance",
 				("Distance (radius around player) where culling of objects is disabled"),
 				150.0f
@@ -359,22 +521,19 @@ namespace comp
 			// ----------------------------------
 			// rendering related settings
 
-			variable vertex_colors_global =
-			{
+			variable vertex_colors_global = {
 				"vertex_colors_global",
 				("Enabled vertex colors (baked lighting) globally"),
 				false
 			};
 
-			variable vertex_colors_particles =
-			{
+			variable vertex_colors_particles = {
 				"vertex_colors_particles",
 				("Enabled vertex colors (baked lighting) on particles"),
 				true
 			};
 
-			variable vertex_colors_world =
-			{
+			variable vertex_colors_world = {
 				"vertex_colors_world",
 				("Enabled vertex colors (baked lighting) on world objects"),
 				false
@@ -382,15 +541,13 @@ namespace comp
 
 			// ---
 
-			variable flare_enabled = 
-			{
+			variable flare_enabled =  {
 				"flare_enabled", 
 				("Render flares"), 
 				true
 			};
 
-			variable flare_alpha_multiplier =
-			{
+			variable flare_alpha_multiplier = {
 				"flare_alpha_multiplier",
 				("Alpha multiplier for flares"),
 				0.3f
@@ -398,44 +555,38 @@ namespace comp
 
 			// ---
 
-			variable wetness_world =
-			{
+			variable wetness_world = {
 				"wetness_world",
 				("Enable World Wetness"),
 				true
 			};
 
-			variable wetness_world_variation =
-			{
+			variable wetness_world_variation = {
 				"wetness_world_variation",
 				("Enable World Wetness Variation"),
 				true
 			};
 
-			variable wetness_world_puddles =
-			{
+			variable wetness_world_puddles = {
 				"wetness_world_puddles",
 				("Enable World Wetness Puddles"),
 				true
 			};
 
-			variable wetness_world_occlusion_check =
-			{
+			variable wetness_world_occlusion_check = {
 				"wetness_world_occlusion_check",
 				("Enable World Wetness Occlusion Checks (dry ground under cover)"),
 				true
 			};
 
-			variable wetness_world_occlusion_smoothing =
-			{
+			variable wetness_world_occlusion_smoothing = {
 				"wetness_world_occlusion_smoothing",
 				 ("Enable World Wetness Occlusion Smoothing (smooth wet <-> dry transition)\n"
 				  "Does NOT look good without DLSS!"),
 				true
 			};
 
-			variable wetness_world_raindrops =
-			{
+			variable wetness_world_raindrops = {
 				"wetness_world_raindrops",
 				("Enable World Wetness Raindrops"),
 				false
@@ -448,18 +599,205 @@ namespace comp
 
 			// ---
 
-			variable wetness_car_raindrops =
-			{
+			variable wetness_car_raindrops = {
 				"wetness_car_raindrops",
 				("Enable Raindrops on Cars"),
 				true
 			};
 
-			variable enable_camera_raindrops =
-			{
+			variable enable_camera_raindrops = {
 				"enable_camera_raindrops",
 				("Enable Raindrops on the Camera Lense. Does not look good until we have cutout translucents."),
 				false
+			};
+
+
+			// ----------------------------------
+			// rain related settings
+
+			variable rain_enable = {
+				"rain_enable", ("If game can trigger Remix Rain Particle Effect"),
+				true
+			};
+
+			variable rain_spawner_scale = {
+				"rain_spawner_scale", ("Size of rain particle spawner. Particle System needs to be Reset for this to apply."),
+				35.0f
+			};
+
+			variable rain_metallic_constant = {
+				"rain_metallic_constant", ("Can be used to darken the rain. Particle System needs to be Reset for this to apply."),
+				0.4f
+			};
+
+			variable rain_roughness_constant = {
+				"rain_roughness_constant", ("Might be useful. Particle System needs to be Reset for this to apply."),
+				1.0f
+			};
+
+			variable rain_emissive_intensity = {
+				"rain_emissive_intensity", ("Emissive intensity of rain. Particle System needs to be Reset for this to apply."),
+				0.01f
+			};
+
+			variable rain_emissive_color = {
+				"rain_emissive_color", ("Emissive color of rain. Particle System needs to be Reset for this to apply."),
+				0.768f, 0.768f, 0.768f
+			};
+
+			variable rain_use_emissive_texture = {
+				"rain_use_emissive_texture", ("Use 'raindrop_emissive.e.rtex.dds' from rtx_comp/textures as emissive map. Particle System needs to be Reset for this to apply."),
+				false
+			};
+
+			variable rain_enable_motion_trail = {
+				"rain_enable_motion_trail", ("Enable motion trail on rain particles"),
+				true
+			};
+
+			variable rain_motion_trail_multi = {
+				"rain_motion_trail_multi", ("Motion trail multiplier"),
+				1.1f
+			};
+
+
+			variable rain_min_color_keyframes = {
+				"rain_min_color_keyframes",
+				("Min Particle color on spawn (air: keyframe 1) to on death (ground: keyframe 2). Random value between 'rain_min_color_keyframes' and 'rain_max_color_keyframes')"), 
+				var_type_remix_float4d_array,
+				0.96f, 0.96f, 1.00f, 0.00f, 
+				0.96f, 0.96f, 1.00f, 0.40f
+			};
+
+			variable rain_max_color_keyframes = {
+				"rain_max_color_keyframes",
+				("Max Particle color on spawn (air: keyframe 1) to on death (ground: keyframe 2). Random value between 'rain_min_color_keyframes' and 'rain_max_color_keyframes')"),
+				var_type_remix_float4d_array,
+				0.36f, 0.36f, 0.36f, 0.27f,
+				0.61f, 0.61f, 0.61f, 0.43f
+			};
+
+			variable rain_min_size_keyframes = {
+				"rain_min_size_keyframes",
+				("Min Particle size on spawn (air: keyframe 1) to on death (ground: keyframe 2). Random value between 'rain_min_size_keyframes' and 'rain_max_size_keyframes')"),
+				var_type_remix_float2d_array,
+				0.10f, 0.25f,
+				0.10f, 0.25f
+			};
+
+			variable rain_max_size_keyframes = {
+				"rain_max_size_keyframes",
+				("Max Particle size on spawn (air: keyframe 1) to on death (ground: keyframe 2). Random value between 'rain_min_size_keyframes' and 'rain_max_size_keyframes')"),
+				var_type_remix_float2d_array,
+				0.20f, 0.35f,
+				0.20f, 0.35f
+			};
+
+			variable rain_max_velocity = {
+				"rain_max_velocity", ("Max Particle velocity over the lifetime of the particle. Only 1 keyframe."),
+				var_type_remix_float3d_array,
+				120.0f, 120.0f, 80.0f,
+				0.0f,   0.0f,   0.0f
+			};
+
+			variable rain_min_lifetime = {
+				"rain_min_lifetime", ("Minimum particle lifetime"),
+				0.3f
+			};
+
+			variable rain_max_lifetime = {
+				"rain_max_lifetime", ("Maximum particle lifetime"),
+				0.8f
+			};
+
+			variable rain_initial_velocity_from_normal = {
+				"rain_initial_velocity_from_normal", ("Spawn particle along the spawner normal with this velocity"),
+				-90.0f
+			};
+
+			variable rain_initial_velocity_cone_angle_degrees = {
+				"rain_initial_velocity_cone_angle_degrees", ("Size of cone angle applied at spawn"),
+				2.0f
+			};
+
+			variable rain_initial_rotation_degrees = {
+				"rain_initial_rotation_degrees", ("Size of random angle applied at spawn"),
+				5.0f
+			};
+
+			variable rain_gravity_force = {
+				"rain_gravity_force", ("Gravity amount applied to particles"),
+				-40.0f
+			};
+
+			variable rain_spawn_rate_game_multi = {
+				"rain_spawn_rate_game_multi", ("Game Raindrop Count * Multi = Final Spawn Rate. Only used when rain is not forced on"),
+				16.0f
+			};
+
+			variable rain_spawn_rate_game_multi_speed_scalar = {
+				"rain_spawn_rate_game_multi_speed_scalar", ("Multi * CameraVelocity * This. Additional scale based on camera velocity"),
+				20.0f
+			};
+
+			variable rain_spawn_rate_game_multi_lower_limit = {
+				"rain_spawn_rate_game_multi_lower_limit", ("Lower Clamp of final rain multiplier"),
+				16.0f
+			};
+
+			variable rain_spawn_rate_game_multi_upper_limit = {
+				"rain_spawn_rate_game_multi_upper_limit", ("Upper Clamp of final rain multiplier"),
+				33.0f
+			};
+
+			variable rain_initial_velocity_from_motion = {
+				"rain_initial_velocity_from_motion", ("Velocity applied on spawn based on current camera motion"),
+				-0.1f
+			};
+
+			variable rain_attractor_radius = {
+				"rain_attractor_radius", ("Rain is attracted towards the player camera. This sets the radius of the attractor"),
+				25.0f
+			};
+
+			variable rain_attractor_force = {
+				"rain_attractor_force", ("Rain is attracted towards the player camera. This sets the force of the attractor"),
+				200.0f
+			};
+
+			variable rain_position_offset = {
+				"rain_position_offset", ("Offset position of the particle spawner"),
+				0.0f, 0.0f, 8.0f
+			};
+
+			variable rain_rotation_offset = {
+				"rain_rotation_offset", ("Offset rotation of the particle spawner. Pitch (Z) and Yaw (Y) are constantly modified based on camera speed and direction."),
+				-90.0f, 0.0f, 4.0f
+			};
+
+			variable rain_cam_forward_offset = {
+				"rain_cam_forward_offset", ("Static position offset of particle spawner along camera direction"),
+				20.0f
+			};
+
+			variable rain_cam_velocity_forward_scale = {
+				"rain_cam_velocity_forward_scale", ("Dynamic position offset of particle spawner along camera direction. Based on camera velocity"),
+				120.0f
+			};
+
+			variable rain_cam_velocity_spawner_pitch_scale = {
+				"rain_cam_velocity_spawner_pitch_scale", ("Dynamic pitch of particle spawner so that the lower end of rain particles starts facing the camera on higher speeds. Based on camera velocity"),
+				200.0f
+			};
+
+			variable rain_cam_velocity_spawner_pitch_max = {
+				"rain_cam_velocity_spawner_pitch_max", ("Upper Clamp / Maximum pitch angle the spawner can reach due to camera velocity"),
+				60.0f
+			};
+
+			variable rain_pitch_rotate_spawner_based_on_cam = {
+				"rain_pitch_rotate_spawner_based_on_cam", ("This enables dynamic pitch changes of the particle spawner based on camera velocity"),
+				true
 			};
 
 			// ----------------------------------

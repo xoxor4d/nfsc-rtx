@@ -77,7 +77,7 @@ namespace comp
 				}
 
 				// #
-				auto to_vec = [](const toml::value& entry, const var_type type, float* default_vec = nullptr)
+				auto to_vec = [](const toml::value& entry, const var_type type, float* default_vec = nullptr) -> std::vector<float>
 					{
 						std::vector<float> result;
 
@@ -128,23 +128,84 @@ namespace comp
 						return result;
 					};
 
+				// #
+				auto to_remix_vec = [](const toml::value& entry, const var_type type, variable* v = nullptr) -> std::vector<float>
+					{
+						std::vector<float> result;
+
+						const size_t size_for_vec =
+							type == var_type_remix_float2d_array ? 4u :
+							type == var_type_remix_float3d_array ? 6u :
+							type == var_type_remix_float4d_array ? 8u : 0u;
+
+						if (entry.is_array())
+						{
+							if (entry.as_array().size() == size_for_vec)
+							{
+								for (const auto& val : entry.as_array())
+								{
+									if (val.is_floating())
+									{
+										result.push_back((float)val.as_floating());
+										continue;
+									}
+
+									TOML_ERROR("[CompSettings] #to_remix_vec", val, "expected float but got value_t of => %d ", val.type());
+								}
+
+								return result;
+							}
+
+							TOML_ERROR("[CompSettings] #to_remix_vec", entry, "unexpected array size of => %d ", entry.as_array().size());
+						}
+
+						TOML_ERROR("[CompSettings] #to_remix_vec", entry, "expected a vector but got value_t => %d ", entry.type());
+
+						switch (type)
+						{
+						default:
+							result = { 0, 0, 0, 0, 0, 0, 0, 0 };
+							break;
+						case var_type_remix_float2d_array:
+							result = {	v->_remix2d_ptr(0)->x, v->_remix2d_ptr(0)->y,
+										v->_remix2d_ptr(1)->x, v->_remix2d_ptr(1)->y };
+							break;
+						case var_type_remix_float3d_array:
+							result = {	v->_remix3d_ptr(0)->x, v->_remix3d_ptr(0)->y, v->_remix3d_ptr(0)->z,
+										v->_remix3d_ptr(1)->x, v->_remix3d_ptr(1)->y, v->_remix3d_ptr(1)->z, };
+							break;
+						case var_type_remix_float4d_array:
+							result = {	v->_remix4d_ptr(0)->x, v->_remix4d_ptr(0)->y, v->_remix4d_ptr(0)->z, v->_remix4d_ptr(0)->w,
+										v->_remix4d_ptr(1)->x, v->_remix4d_ptr(1)->y, v->_remix4d_ptr(1)->z, v->_remix4d_ptr(1)->w, };
+							break;
+						}
+
+						return result;
+					};
+
 				// ---------------------------------------
 
-			#define ASSIGN(name)																								\
-				if (config.contains((#name))) {																					\
-					switch (vars.##name.get_type()) {																			\
-						case (var_type_boolean):																				\
-							vars.##name.set_var(shared::common::toml_ext::to_bool(config.at(#name), vars.##name.get_as<bool>()), true); break;			\
-						case (var_type_integer):																				\
-							vars.##name.set_var(shared::common::toml_ext::to_int(config.at(#name), vars.##name.get_as<int>()), true); break;				\
-						case (var_type_value):																					\
-							vars.##name.set_var(shared::common::toml_ext::to_float(config.at(#name), vars.##name.get_as<float>()), true); break;			\
-						case (var_type_vec2):																					\
-						case (var_type_vec3):																					\
-						case (var_type_vec4):																					\
-							const auto vec = to_vec(config.at(#name), vars.##name.get_type(), vars.##name.get_as<float*>());	\
-							vars.##name.set_vec(vec.data(), true); break;														\
-					}																											\
+			#define ASSIGN(name)																													\
+				if (config.contains((#name))) {																										\
+					std::vector<float> vec;																											\
+					switch (vars.##name.get_type()) {																								\
+						case (var_type_boolean):																									\
+							vars.##name.set_var(shared::common::toml_ext::to_bool(config.at(#name), vars.##name.get_as<bool>()), true); break;		\
+						case (var_type_integer):																									\
+							vars.##name.set_var(shared::common::toml_ext::to_int(config.at(#name), vars.##name.get_as<int>()), true); break;		\
+						case (var_type_value):																										\
+							vars.##name.set_var(shared::common::toml_ext::to_float(config.at(#name), vars.##name.get_as<float>()), true); break;	\
+						case (var_type_vec2):																										\
+						case (var_type_vec3):																										\
+						case (var_type_vec4):																										\
+							vec = to_vec(config.at(#name), vars.##name.get_type(), vars.##name.get_as<float*>());									\
+							vars.##name.set_vec(vec.data(), true); break;																			\
+						case (var_type_remix_float2d_array):																						\
+						case (var_type_remix_float3d_array):																						\
+						case (var_type_remix_float4d_array):																						\
+							vec = to_remix_vec(config.at(#name), vars.##name.get_type(), &vars.##name);												\
+							vars.##name.set_remix_vec(vec.data(), true); break;																		\
+					}																																\
 				}
 
 				// remix related settings
@@ -170,8 +231,43 @@ namespace comp
 				ASSIGN(wetness_world_raindrop_scale);
 
 				ASSIGN(wetness_car_raindrops);
-
 				ASSIGN(enable_camera_raindrops);
+
+				// rain related settings
+
+				ASSIGN(rain_enable);
+				ASSIGN(rain_spawner_scale);
+				ASSIGN(rain_metallic_constant);
+				ASSIGN(rain_roughness_constant);
+				ASSIGN(rain_emissive_intensity);
+				ASSIGN(rain_emissive_color);
+				ASSIGN(rain_use_emissive_texture);
+				ASSIGN(rain_enable_motion_trail);
+				ASSIGN(rain_motion_trail_multi);
+				ASSIGN(rain_min_color_keyframes);
+				ASSIGN(rain_min_size_keyframes);
+				ASSIGN(rain_max_size_keyframes);
+				ASSIGN(rain_max_velocity);
+				ASSIGN(rain_min_lifetime);
+				ASSIGN(rain_max_lifetime);
+				ASSIGN(rain_initial_velocity_from_normal);
+				ASSIGN(rain_initial_velocity_cone_angle_degrees);
+				ASSIGN(rain_initial_rotation_degrees);
+				ASSIGN(rain_gravity_force);
+				ASSIGN(rain_spawn_rate_game_multi);
+				ASSIGN(rain_spawn_rate_game_multi_speed_scalar);
+				ASSIGN(rain_spawn_rate_game_multi_lower_limit);
+				ASSIGN(rain_spawn_rate_game_multi_upper_limit);
+				ASSIGN(rain_initial_velocity_from_motion);
+				ASSIGN(rain_attractor_radius);
+				ASSIGN(rain_attractor_force);
+				ASSIGN(rain_position_offset);
+				ASSIGN(rain_rotation_offset);
+				ASSIGN(rain_cam_forward_offset);
+				ASSIGN(rain_cam_velocity_forward_scale);
+				ASSIGN(rain_cam_velocity_spawner_pitch_scale);
+				ASSIGN(rain_cam_velocity_spawner_pitch_max);
+				ASSIGN(rain_pitch_rotate_spawner_based_on_cam);
 
 				// material related settings
 				
