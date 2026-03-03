@@ -6,6 +6,8 @@ namespace comp::game
 	// --------------
 	// game variables
 
+	char** shader_fx_path_array = nullptr;
+
 	int* game_input_allowed = nullptr;
 
 	float* drawscenery_cell_dist_check_01 = nullptr; // used for compare of out dist of vis func
@@ -29,6 +31,9 @@ namespace comp::game
 
 	// --------------
 	// game asm offsets
+
+	uint32_t retn_addr__load_effect_from_input = 0u;
+	uint32_t call_addr__d3dx_create_effect_from_resource = 0u;
 
 	uint32_t nop_addr__set_transforms_01 = 0u;
 	uint32_t nop_addr__set_transforms_02 = 0u;
@@ -106,6 +111,13 @@ namespace comp::game
 		// Or via macro
 			//PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(d3d_dev_sample_addr, DWORD*, "? ? ? ? ?", 1, 0xDEADBEEF);
 
+		// shader loader
+
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(shader_fx_path_array, char**,
+			"8B 88 ? ? ? ? 81 EC", 2, 0x7139A9);
+
+		// ---
+
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(game_input_allowed, int*,
 				"39 1D ? ? ? ? 74 ? 6A ? 8D 4C 24", 2, 0x711E90);
 
@@ -168,7 +180,15 @@ namespace comp::game
 			//	nop_addr__func2 = offset; found_pattern_count++;
 			//} total_pattern_count++;
 
-		// renderer
+		// shader loader
+
+		PATTERN_OFFSET_SIMPLE(retn_addr__load_effect_from_input,
+			"8B 82 ? ? ? ? 50 6A", 0, 0x72B6CA);
+
+		PATTERN_OFFSET_SIMPLE(call_addr__d3dx_create_effect_from_resource,
+			"E8 ? ? ? ? 8B CE E8 ? ? ? ? 8B CE E8 ? ? ? ? 5F 5E 59", 0, 0x72B6D4);
+
+		// ---
 
 		PATTERN_OFFSET_SIMPLE(nop_addr__set_transforms_01, 
 			"75 ? 8B 54 24 ? A1 ? ? ? ? ? ? 52 6A ? 50 FF 91 ? ? ? ? A1 ? ? ? ? ? ? 57 6A ? 50 FF 91 ? ? ? ? 8B 86", 0, 0x71E736);

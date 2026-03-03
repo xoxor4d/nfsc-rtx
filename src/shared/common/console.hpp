@@ -177,7 +177,7 @@ namespace shared::common
 		std::cout << " ]  ";
 
 		colorize(type, highlight);
-		std::cout << msg << '\n';
+		std::cout << msg << std::endl; //'\n';
 		set_console_color_default();
 
 		init_log_file();

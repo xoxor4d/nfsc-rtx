@@ -380,7 +380,8 @@ namespace comp
 		const HRESULT hr = D3DXCreateEffectFromResourceA_original(pDevice, hSrcModule, pSrcResource, pDefines, pInclude, Flags, pPool, ppEffect, ppCompilationErrors);
 		if (SUCCEEDED(hr) && ppEffect && *ppEffect) 
 		{
-			shared::common::log("d3dxeffects", std::format("D3DXCreateEffectFromResourceA: Wrapping effect '{}'", pSrcResource ? pSrcResource : "unknown"), shared::common::LOG_TYPE::LOG_TYPE_STATUS, false);
+			std::cout << std::endl;
+			shared::common::log("d3dxeffects", std::format("D3DXCreateEffectFromResourceA: Wrapping effect '{}'", pSrcResource ? pSrcResource : "unknown"), shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
 			*ppEffect = CreateWrappedEffect(*ppEffect);
 		}
 
@@ -392,7 +393,8 @@ namespace comp
 		const HRESULT hr = D3DXCreateEffectFromFile_original(pDevice, pSrcFile, pDefines, pInclude, Flags, pPool, ppEffect, ppCompilationErrors);
 		if (SUCCEEDED(hr) && ppEffect && *ppEffect) 
 		{
-			shared::common::log("d3dxeffects", std::format("D3DXCreateEffectFromFile: Wrapping effect '{}'", pSrcFile ? pSrcFile : "unknown"), shared::common::LOG_TYPE::LOG_TYPE_STATUS, false);
+			std::cout << std::endl;
+			shared::common::log("d3dxeffects", std::format("D3DXCreateEffectFromFile: Wrapping effect '{}'", pSrcFile ? pSrcFile : "unknown"), shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
 			*ppEffect = CreateWrappedEffect(*ppEffect);
 		}
 
@@ -404,7 +406,8 @@ namespace comp
 		const HRESULT hr = D3DXCreateEffect_original(pDevice, pSrcData, SrcDataLen, pDefines, pInclude, Flags, pPool, ppEffect, ppCompilationErrors);
 		if (SUCCEEDED(hr) && ppEffect && *ppEffect) 
 		{
-			shared::common::log("d3dxeffects", "D3DXCreateEffect: Wrapping effect from memory", shared::common::LOG_TYPE::LOG_TYPE_STATUS, false);
+			std::cout << std::endl;
+			shared::common::log("d3dxeffects", "D3DXCreateEffect: Wrapping effect from memory", shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
 			*ppEffect = CreateWrappedEffect(*ppEffect);
 		}
 
@@ -416,7 +419,8 @@ namespace comp
 		const HRESULT hr = D3DXCreateEffectFromFileEx_original(pDevice, pSrcFile, pDefines, pInclude, pSkipConstants, Flags, pPool, ppEffect, ppCompilationErrors);
 		if (SUCCEEDED(hr) && ppEffect && *ppEffect) 
 		{
-			shared::common::log("d3dxeffects", std::format("D3DXCreateEffectFromFileEx: Wrapping effect '{}'", pSrcFile ? pSrcFile : "unknown"), shared::common::LOG_TYPE::LOG_TYPE_STATUS, false);
+			std::cout << std::endl;
+			shared::common::log("d3dxeffects", std::format("D3DXCreateEffectFromFileEx: Wrapping effect '{}'", pSrcFile ? pSrcFile : "unknown"), shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
 			*ppEffect = CreateWrappedEffect(*ppEffect);
 		}
 
@@ -428,7 +432,7 @@ namespace comp
 		const HRESULT hr = D3DXCreateEffectEx_original(pDevice, pSrcData, SrcDataLen, pDefines, pInclude, pSkipConstants, Flags, pPool, ppEffect, ppCompilationErrors);
 		if (SUCCEEDED(hr) && ppEffect && *ppEffect) 
 		{
-			shared::common::log("d3dxeffects", "D3DXCreateEffectEx: Wrapping effect from memory", shared::common::LOG_TYPE::LOG_TYPE_STATUS, false);
+			shared::common::log("d3dxeffects", "D3DXCreateEffectEx: Wrapping effect from memory", shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
 			*ppEffect = CreateWrappedEffect(*ppEffect);
 		}
 

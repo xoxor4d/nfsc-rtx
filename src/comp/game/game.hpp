@@ -6,6 +6,8 @@ namespace comp::game
 	// --------------
 	// game variables
 
+	extern char** shader_fx_path_array;
+
 	extern int* game_input_allowed;
 
 	extern float* drawscenery_cell_dist_check_01;
@@ -33,6 +35,9 @@ namespace comp::game
 
 	// --------------
 	// game asm offsets
+
+	extern uint32_t retn_addr__load_effect_from_input;
+	extern uint32_t call_addr__d3dx_create_effect_from_resource;
 
 	extern uint32_t nop_addr__set_transforms_01;
 	extern uint32_t nop_addr__set_transforms_02;

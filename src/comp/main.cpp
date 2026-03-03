@@ -6,6 +6,7 @@
 #include "shared/common/flags.hpp"
 #include "modules/d3d9ex.hpp"
 #include "modules/d3dxeffects.hpp"
+#include "modules/shader_loader.hpp"
 
 namespace comp
 {
@@ -100,6 +101,9 @@ BOOL APIENTRY DllMain(HMODULE hmodule, const DWORD ul_reason_for_call, LPVOID)
 
 		// Register d3d9 module to create a d3d9 proxy interface
 		shared::common::loader::module_loader::register_module(std::make_unique<comp::d3d9ex>());
+
+		// Integrated shader loader using patterns instead of hardcoded offsets
+		shared::common::loader::module_loader::register_module(std::make_unique<comp::shader_loader>());
 
 		// Register d3dxeffects module to hook D3DX effect functions
 		shared::common::loader::module_loader::register_module(std::make_unique<comp::d3dxeffects>());

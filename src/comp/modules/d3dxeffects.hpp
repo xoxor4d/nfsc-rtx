@@ -120,7 +120,7 @@ namespace comp
 							if (is_new)
 							{
 								effects::g_discovered_techniques.push_back(name);
-								shared::common::log("d3dxeffects", std::format("[tech] '{}'", name), shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
+								shared::common::log("d3dxeffects", std::format("Tech >> '{}'", name), shared::common::LOG_TYPE::LOG_TYPE_DEFAULT, false);
 							}
 						}
 					}
