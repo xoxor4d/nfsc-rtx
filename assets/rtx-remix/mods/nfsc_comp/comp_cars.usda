@@ -722,6 +722,33 @@ over "RootNode"
                 custom bool inputs:thin_walled = 1
             }
         }
+
+        over "mat_425173F723C94913" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.5
+                custom float inputs:thin_wall_thickness = 1.5
+                custom bool inputs:thin_walled = 1
+            }
+        }
+
+        over "mat_C84D55C7C3898BC2" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom float inputs:ior_constant = 1.3
+                custom float inputs:thin_wall_thickness = 1.3
+                custom bool inputs:thin_walled = 1
+                custom float inputs:transmittance_measurement_distance = 1
+                custom asset inputs:transmittance_texture = @./assets/vehicle/windshield/C84D55C7C3898BC2_trans.a.rtex.dds@
+                custom bool inputs:use_diffuse_layer = 0
+            }
+        }
     }
 
     over "meshes"
