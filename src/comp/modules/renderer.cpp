@@ -725,6 +725,40 @@ namespace comp
 				render_with_ff = true;
 			}
 
+			// Fix T-Pose on skinned meshes by rendering them via shaders
+			if (g_rendering_mdl && g_rendering_mdl->blending_matrices && g_rendering_mdl->mesh.entry
+				&& (g_rendering_mdl->mesh.entry->type == game::WorldBoneShader || g_rendering_mdl->mesh.entry->type == game::UCAP))
+			{
+				// render skinned stuff via shader
+				render_with_ff = false;
+
+				//shared::utils::lookat_vertex_decl(dev);
+
+				// in correct position but no face anims
+				/*if (im->m_dbg_debug_bool04)
+				{
+					ctx.save_rs(dev, D3DRS_VERTEXBLEND);
+					ctx.save_rs(dev, D3DRS_INDEXEDVERTEXBLENDENABLE);
+
+					dev->SetRenderState(D3DRS_VERTEXBLEND, D3DVBF_1WEIGHTS);
+					dev->SetRenderState(D3DRS_INDEXEDVERTEXBLENDENABLE, TRUE);
+
+					D3DXMATRIX world;
+					dev->GetTransform(D3DTS_WORLD, &world);
+
+					D3DXMATRIX bone;
+					for (auto i = 0; i < 15; i++)
+					{
+						bone = g_rendering_mdl->blending_matrices[i] * world;
+
+						if (&g_rendering_mdl->blending_matrices[i]) {
+							dev->SetTransform(D3DTS_WORLDMATRIX(i), &bone);
+						}
+					}
+				}*/
+			}
+
+
 			// Globally enable vertex colors
 			if (cs->vertex_colors_global._bool()) {
 				set_remix_texture_categories(dev, InstanceCategories::Beam);
