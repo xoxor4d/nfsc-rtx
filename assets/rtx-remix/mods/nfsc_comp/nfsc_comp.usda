@@ -7,8 +7,8 @@
                 double radius = 500
             }
             dictionary Perspective = {
-                double3 position = (4561.414775164221, 1250.4003127008707, 61.891189737656674)
-                double3 target = (4563.788409316699, 1259.2494704619712, 63.37196507976606)
+                double3 position = (3932.4848940175048, 3562.1350862070035, 225.90753498007726)
+                double3 target = (9240.120495292564, 3491.546912068242, -599.2609303045938)
             }
             dictionary Right = {
                 double3 position = (0, -500, 0)
@@ -22,9 +22,9 @@
         }
         string lightspeed_layer_type = "workfile"
         dictionary omni_layer = {
-            string authoring_layer = "./comp_world.usda"
+            string authoring_layer = "./comp_water.usda"
             dictionary locked = {
-                bool "./deps/captures/4_lights_n1___1.usd" = 1
+                bool "./deps/captures/8_water_x_.usd" = 1
                 bool "./deps/captures/aaaaaaa2026-02-26_19-36-27.usd" = 1
             }
         }
@@ -36,7 +36,7 @@
     startTimeCode = 0
     subLayers = [
         @./mod.usda@,
-        @./deps/captures/4_lights_n1___1.usd@
+        @./deps/captures/8_water_x_.usd@
     ]
     timeCodesPerSecond = 24
     upAxis = "Z"

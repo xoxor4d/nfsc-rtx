@@ -671,6 +671,128 @@ over "RootNode"
                 custom bool inputs:enable_emission = 1
             }
         }
+
+        over "mat_67E3F824DEA41D25"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 3
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/67E3F824DEA41D25_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_05C0CE75F6990A5F"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.8
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/cowboy_anim/05C0CE75F6990A5F_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_DE97BF04643EA92B"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.8
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/cowboy_anim/DE97BF04643EA92B_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_FD67CA3DDDFEBCFB"
+        {
+            over "Shader"
+            {
+                custom int inputs:alpha_test_type = 4
+                custom bool inputs:blend_enabled = 0
+                custom int inputs:blend_type = 1
+                custom bool inputs:use_legacy_alpha_state = 1
+            }
+        }
+
+        over "mat_442BF38B9B043704"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.8
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/442BF38B9B043704_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_BACEC168A9B0D3EC"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 1
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/BACEC168A9B0D3EC_emissives.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_62652F407CB4F05D"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.5
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/62652F407CB4F05D_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_186ABDED9056E42C"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.5
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/186ABDED9056E42C_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_196D700B5D20D53E"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 1
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/196D700B5D20D53E_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_D2ACECE9FDF50152"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 0.5
+                custom asset inputs:emissive_mask_texture = @./assets/world/buildings/emissives/vista/D2ACECE9FDF50152_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
+
+        over "mat_443140DA83408EE6"
+        {
+            over "Shader"
+            {
+                custom float inputs:subsurface_measurement_distance = 6
+                custom color3f inputs:subsurface_single_scattering_albedo = (0.9150579, 0.9150487, 0.9150487)
+                custom color3f inputs:subsurface_transmittance_color = (0.6819937, 0.87258685, 0.27963206)
+                custom float inputs:subsurface_volumetric_anisotropy = 0.6831
+            }
+        }
+
+        over "mat_D89FBA287EC124E1"
+        {
+            over "Shader"
+            {
+                custom float inputs:emissive_intensity = 2
+                custom asset inputs:emissive_mask_texture = @./assets/world/logos/D89FBA287EC124E1_emissive.e.rtex.dds@
+                custom bool inputs:enable_emission = 1
+            }
+        }
     }
 
     over "meshes"
@@ -767,6 +889,14 @@ over "RootNode"
                 double3 xformOp:scale = (1, 1, 1)
                 double3 xformOp:translate = (-5.734627044223998, 8.503860573637894, 3.9247828500763404)
                 uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+            }
+        }
+
+        over "mesh_1260CE63E76804C3"
+        {
+            over "RectLight"
+            {
+                float inputs:width = 15
             }
         }
     }

@@ -49,6 +49,19 @@ over "RootNode"
                 custom bool inputs:use_diffuse_layer = 0
             }
         }
+
+        over "mat_E93BA0084E8F97FA" (
+            references = @./materials/AperturePBR_Translucent.usda@</Looks/mat_AperturePBR_Translucent>
+        )
+        {
+            over "Shader"
+            {
+                custom asset inputs:normalmap_texture = @./assets/world/water/water_slow_shallow_16x4_OTH_Normal.n.rtex.dds@
+                custom int inputs:sprite_sheet_cols = 16
+                custom int inputs:sprite_sheet_fps = 24
+                custom int inputs:sprite_sheet_rows = 4
+            }
+        }
     }
 
     over "meshes"
@@ -149,6 +162,63 @@ over "RootNode"
                             {
                                 over "Shader"
                                 {
+                                    custom float inputs:reflection_roughness_constant = 1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        over "mesh_77B29DD919BC9470"
+        {
+            def Xform "ref_e1e74181ff794facad8be5fe9602838e" (
+                prepend references = @./assets/helper/square_plane.usda@
+            )
+            {
+                custom bool IsRemixRef = 1
+                double3 xformOp:rotateXYZ = (0, 0, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                over "XForms"
+                {
+                    float3 xformOp:rotateXYZ = (0, 0, 48.433)
+                    float3 xformOp:scale = (1, 0.6, 1)
+                    double3 xformOp:translate = (4163.263715363369, 3930.93742568222, 16.98904468792981)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                    over "World"
+                    {
+                        over "Plane"
+                        {
+                            float3 xformOp:rotateXYZ = (0, -0, 0)
+                            float3 xformOp:scale = (50, 50, 100)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+
+                            over "Plane"
+                            {
+                                uniform bool doubleSided = 1
+                                float3 xformOp:rotateXYZ = (0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
+                            }
+                        }
+                    }
+
+                    over "AssetImporter"
+                    {
+                        over "Looks"
+                        {
+                            over "Plane__"
+                            {
+                                over "Shader"
+                                {
+                                    custom color3f inputs:diffuse_color_constant = (0.000001, 9.9999e-7, 9.9999e-7)
                                     custom float inputs:reflection_roughness_constant = 1
                                 }
                             }
