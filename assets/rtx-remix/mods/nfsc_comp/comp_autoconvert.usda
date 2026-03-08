@@ -7,11 +7,68 @@ over "RootNode"
 {
     over "Looks"
     {
+        over "mat_273F47C087F59074"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/273F47C087F59074_chA_rough.dds@
+            }
+        }
+
+        over "mat_2E7D97F938E4E606"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2E7D97F938E4E606_chA_rough.dds@
+            }
+        }
+
+        over "mat_E1BB36CFEB9FCA65"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E1BB36CFEB9FCA65_chA_rough.dds@
+            }
+        }
+
+        over "mat_A1CF0F083F1F6168"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A1CF0F083F1F6168_chA_rough.dds@
+            }
+        }
+
         over "mat_72CEA8452AA1B5EB"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/72CEA8452AA1B5EB_chA_rough.dds@
+            }
+        }
+
+        over "mat_11DED3E503B3B895"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/5BCCAAD81BBD9D26_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/11DED3E503B3B895_chA_rough.dds@
+            }
+        }
+
+        over "mat_F742481CC9F5DB1A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F742481CC9F5DB1A_chA_rough.dds@
+            }
+        }
+
+        over "mat_8D52159D9B4AEFE2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8D52159D9B4AEFE2_chA_rough.dds@
             }
         }
 
@@ -23,11 +80,59 @@ over "RootNode"
             }
         }
 
-        over "mat_429F412C76625DBD"
+        over "mat_9CD5743BD30E5684"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/429F412C76625DBD_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9CD5743BD30E5684_chA_rough.dds@
+            }
+        }
+
+        over "mat_5496EBDD7BF53FDC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5496EBDD7BF53FDC_chA_rough.dds@
+            }
+        }
+
+        over "mat_457686D81B2BB882"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/457686D81B2BB882_chA_rough.dds@
+            }
+        }
+
+        over "mat_5D21EABCF70C422F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5D21EABCF70C422F_chA_rough.dds@
+            }
+        }
+
+        over "mat_70C395F3EDB9984D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/70C395F3EDB9984D_chA_rough.dds@
+            }
+        }
+
+        over "mat_A8998DC8682C6046"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A8998DC8682C6046_chA_rough.dds@
+            }
+        }
+
+        over "mat_A131AE1BB886247D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A131AE1BB886247D_chA_rough.dds@
             }
         }
 
@@ -40,6 +145,14 @@ over "RootNode"
             }
         }
 
+        over "mat_5ECF25271E8C3CAF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5ECF25271E8C3CAF_chA_rough.dds@
+            }
+        }
+
         over "mat_B7D333EDFB291D11"
         {
             over "Shader"
@@ -48,27 +161,51 @@ over "RootNode"
             }
         }
 
-        over "mat_70C395F3EDB9984D"
+        over "mat_14905A3BE1374C11"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/70C395F3EDB9984D_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/14905A3BE1374C11_chA_rough.dds@
             }
         }
 
-        over "mat_DE65E9CF2CBE7E02"
+        over "mat_429F412C76625DBD"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/DE65E9CF2CBE7E02_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/429F412C76625DBD_chA_rough.dds@
             }
         }
 
-        over "mat_AF6798AA4235C955"
+        over "mat_10FBA47BCA71E924"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/AF6798AA4235C955_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/10FBA47BCA71E924_chA_rough.dds@
+            }
+        }
+
+        over "mat_784623FA4C002FEA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/784623FA4C002FEA_chA_rough.dds@
+            }
+        }
+
+        over "mat_D0A6A3064969D1CE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D0A6A3064969D1CE_chA_rough.dds@
+            }
+        }
+
+        over "mat_EE93A05685EE472D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EE93A05685EE472D_chA_rough.dds@
             }
         }
 
@@ -80,6 +217,30 @@ over "RootNode"
             }
         }
 
+        over "mat_AF6798AA4235C955"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AF6798AA4235C955_chA_rough.dds@
+            }
+        }
+
+        over "mat_851680CBF5F3F39A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/851680CBF5F3F39A_chA_rough.dds@
+            }
+        }
+
+        over "mat_DE65E9CF2CBE7E02"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DE65E9CF2CBE7E02_chA_rough.dds@
+            }
+        }
+
         over "mat_67D4745C64F06481"
         {
             over "Shader"
@@ -88,19 +249,19 @@ over "RootNode"
             }
         }
 
-        over "mat_257ACAAA10DC5E33"
-        {
-            over "Shader"
-            {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/257ACAAA10DC5E33_chA_rough.dds@
-            }
-        }
-
         over "mat_DB8D008C51A0A605"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/DB8D008C51A0A605_chA_rough.dds@
+            }
+        }
+
+        over "mat_257ACAAA10DC5E33"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/257ACAAA10DC5E33_chA_rough.dds@
             }
         }
 
@@ -136,6 +297,22 @@ over "RootNode"
             }
         }
 
+        over "mat_9776356D22859C25"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9776356D22859C25_chA_rough.dds@
+            }
+        }
+
+        over "mat_7DB632C0D5D83184"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7DB632C0D5D83184_chA_rough.dds@
+            }
+        }
+
         over "mat_3D42AAAC94E46621"
         {
             over "Shader"
@@ -152,6 +329,14 @@ over "RootNode"
             }
         }
 
+        over "mat_8FCF44AC4BC14F8A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8FCF44AC4BC14F8A_chA_rough.dds@
+            }
+        }
+
         over "mat_112065ECDA526D86"
         {
             over "Shader"
@@ -160,11 +345,19 @@ over "RootNode"
             }
         }
 
-        over "mat_0BB2F19E24EAD02D"
+        over "mat_5099B3124BD6D4D0"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/0BB2F19E24EAD02D_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5099B3124BD6D4D0_chA_rough.dds@
+            }
+        }
+
+        over "mat_3E7D9391C4609F73"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3E7D9391C4609F73_chA_rough.dds@
             }
         }
 
@@ -173,6 +366,22 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/DD37FD7913AA9BFD_chA_rough.dds@
+            }
+        }
+
+        over "mat_133D2107863A1F48"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/133D2107863A1F48_chA_rough.dds@
+            }
+        }
+
+        over "mat_0BB2F19E24EAD02D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0BB2F19E24EAD02D_chA_rough.dds@
             }
         }
 
@@ -189,6 +398,14 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/80F143900E956B93_chA_rough.dds@
+            }
+        }
+
+        over "mat_CAC12C0B1F2049F1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CAC12C0B1F2049F1_chA_rough.dds@
             }
         }
 
@@ -217,11 +434,51 @@ over "RootNode"
             }
         }
 
+        over "mat_C1F9EEC2797BEF27"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C1F9EEC2797BEF27_chA_rough.dds@
+            }
+        }
+
         over "mat_D16EC63BCCF709D7"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/D16EC63BCCF709D7_chA_rough.dds@
+            }
+        }
+
+        over "mat_E32403A79FB4B390"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E32403A79FB4B390_chA_rough.dds@
+            }
+        }
+
+        over "mat_102C1B387A970B58"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/102C1B387A970B58_chA_rough.dds@
+            }
+        }
+
+        over "mat_07DA4D71FC715BA1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/07DA4D71FC715BA1_chA_rough.dds@
+            }
+        }
+
+        over "mat_0B19BE7CCDB4D962"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0B19BE7CCDB4D962_chA_rough.dds@
             }
         }
 
@@ -243,19 +500,19 @@ over "RootNode"
             }
         }
 
-        over "mat_205821A8045833CF"
-        {
-            over "Shader"
-            {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/205821A8045833CF_chA_rough.dds@
-            }
-        }
-
         over "mat_42F8BAFE675228E8"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/42F8BAFE675228E8_chA_rough.dds@
+            }
+        }
+
+        over "mat_205821A8045833CF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/205821A8045833CF_chA_rough.dds@
             }
         }
 
@@ -275,11 +532,83 @@ over "RootNode"
             }
         }
 
+        over "mat_2A2B260FA695DB4E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2A2B260FA695DB4E_chA_rough.dds@
+            }
+        }
+
         over "mat_4594A7854F7A6256"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/4594A7854F7A6256_chA_rough.dds@
+            }
+        }
+
+        over "mat_A46526B42F5678BC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A46526B42F5678BC_chA_rough.dds@
+            }
+        }
+
+        over "mat_7A44F3DEE0C29D98"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7A44F3DEE0C29D98_chA_rough.dds@
+            }
+        }
+
+        over "mat_D9CE083AFD6E2149"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D9CE083AFD6E2149_chA_rough.dds@
+            }
+        }
+
+        over "mat_0388FFA2A861AEEC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0388FFA2A861AEEC_chA_rough.dds@
+            }
+        }
+
+        over "mat_314E1C3AD8BB5BD4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/314E1C3AD8BB5BD4_chA_rough.dds@
+            }
+        }
+
+        over "mat_E6280F0E602EFF93"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E6280F0E602EFF93_chA_rough.dds@
+            }
+        }
+
+        over "mat_A03162CC0B72713A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A03162CC0B72713A_chA_rough.dds@
+            }
+        }
+
+        over "mat_ABEE960F3094E71A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ABEE960F3094E71A_chA_rough.dds@
             }
         }
 
@@ -292,11 +621,43 @@ over "RootNode"
             }
         }
 
+        over "mat_4DE2814CB046E3C0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4DE2814CB046E3C0_chA_rough.dds@
+            }
+        }
+
+        over "mat_A2B929A2D1239863"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A2B929A2D1239863_chA_rough.dds@
+            }
+        }
+
         over "mat_87D7882477F485ED"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/87D7882477F485ED_chA_rough.dds@
+            }
+        }
+
+        over "mat_760E133EC5E09451"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/760E133EC5E09451_chA_rough.dds@
+            }
+        }
+
+        over "mat_096636F68420568C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/096636F68420568C_chA_rough.dds@
             }
         }
 
@@ -324,11 +685,20 @@ over "RootNode"
             }
         }
 
-        over "mat_AD77E04CA92202A5"
+        over "mat_551B01273C60940E"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/AD77E04CA92202A5_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/551B01273C60940E_chA_rough.dds@
+            }
+        }
+
+        over "mat_A5C83FB6009B5318"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/2D7F6A156663A066_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A5C83FB6009B5318_chA_rough.dds@
             }
         }
 
@@ -337,6 +707,30 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/D680F9333FC516BA_chA_rough.dds@
+            }
+        }
+
+        over "mat_AD77E04CA92202A5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AD77E04CA92202A5_chA_rough.dds@
+            }
+        }
+
+        over "mat_06F5FD6A2F197C7B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/06F5FD6A2F197C7B_chA_rough.dds@
+            }
+        }
+
+        over "mat_FC1873012F8F5568"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FC1873012F8F5568_chA_rough.dds@
             }
         }
 
@@ -349,11 +743,11 @@ over "RootNode"
             }
         }
 
-        over "mat_06F5FD6A2F197C7B"
+        over "mat_5862544DB3542276"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/06F5FD6A2F197C7B_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5862544DB3542276_chA_rough.dds@
             }
         }
 
@@ -362,6 +756,30 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/B3ACE8EBB83DA250_chA_rough.dds@
+            }
+        }
+
+        over "mat_E1BB6AA7A75B8D99"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E1BB6AA7A75B8D99_chA_rough.dds@
+            }
+        }
+
+        over "mat_445ED222698C6EDA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/445ED222698C6EDA_chA_rough.dds@
+            }
+        }
+
+        over "mat_3BC448FA20D0AABE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3BC448FA20D0AABE_chA_rough.dds@
             }
         }
 
@@ -389,11 +807,69 @@ over "RootNode"
             }
         }
 
+        over "mat_5770A1DD5B70ACD6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5770A1DD5B70ACD6_chA_rough.dds@
+            }
+        }
+
+        over "mat_B645FE6C7DC4C826"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B645FE6C7DC4C826_chA_rough.dds@
+            }
+        }
+
+        over "mat_24BCF5F7D0A47FD0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/24BCF5F7D0A47FD0_chA_rough.dds@
+            }
+        }
+
         over "mat_65DDAAAF86988729"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/65DDAAAF86988729_chA_rough.dds@
+            }
+        }
+
+        over "mat_7F8BB113F1BC7B42"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7F8BB113F1BC7B42_chA_rough.dds@
+            }
+        }
+
+        over "mat_A553CA187D3DCDA5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A553CA187D3DCDA5_chA_rough.dds@
+            }
+        }
+
+        over "mat_05643D8C791413F6"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/6B200986EDC86923_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/05643D8C791413F6_chA_rough.dds@
+            }
+        }
+
+        over "mat_399DC6229D532E7C"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/0FB1D76E45245A0D_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/399DC6229D532E7C_chA_rough.dds@
             }
         }
 
@@ -413,6 +889,22 @@ over "RootNode"
             }
         }
 
+        over "mat_ECB8A7F58C9DC0C7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ECB8A7F58C9DC0C7_chA_rough.dds@
+            }
+        }
+
+        over "mat_1AC01D4AC19C8A50"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1AC01D4AC19C8A50_chA_rough.dds@
+            }
+        }
+
         over "mat_ED61F9AFCBC52F4F"
         {
             over "Shader"
@@ -421,11 +913,44 @@ over "RootNode"
             }
         }
 
+        over "mat_F4E7FD9F64D9D919"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/8295AE258BAED7FC_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F4E7FD9F64D9D919_chA_rough.dds@
+            }
+        }
+
+        over "mat_EE4FD01D5D0293C4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EE4FD01D5D0293C4_chA_rough.dds@
+            }
+        }
+
         over "mat_A32F7BA7D7957624"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/A32F7BA7D7957624_chA_rough.dds@
+            }
+        }
+
+        over "mat_BDE2446E55F06E95"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BDE2446E55F06E95_chA_rough.dds@
+            }
+        }
+
+        over "mat_0F52B270B7EF2981"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0F52B270B7EF2981_chA_rough.dds@
             }
         }
 
@@ -442,6 +967,22 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/3CF09D0FD3B1E8FC_chA_rough.dds@
+            }
+        }
+
+        over "mat_FA4964110AC0B3CF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FA4964110AC0B3CF_chA_rough.dds@
+            }
+        }
+
+        over "mat_36CB15ED7640186F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/36CB15ED7640186F_chA_rough.dds@
             }
         }
 
@@ -469,19 +1010,19 @@ over "RootNode"
             }
         }
 
-        over "mat_0545B24638CF3505"
-        {
-            over "Shader"
-            {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/0545B24638CF3505_chA_rough.dds@
-            }
-        }
-
         over "mat_F27F18E4E0D40DB5"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/F27F18E4E0D40DB5_chA_rough.dds@
+            }
+        }
+
+        over "mat_0545B24638CF3505"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0545B24638CF3505_chA_rough.dds@
             }
         }
 
@@ -501,6 +1042,39 @@ over "RootNode"
             }
         }
 
+        over "mat_51DE375DDDC75C7F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/51DE375DDDC75C7F_chA_rough.dds@
+            }
+        }
+
+        over "mat_CB661D4C3B50AED2"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/C4B10262343C3551_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CB661D4C3B50AED2_chA_rough.dds@
+            }
+        }
+
+        over "mat_F0A4A09291E72DBA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F0A4A09291E72DBA_chA_rough.dds@
+            }
+        }
+
+        over "mat_7F7144C76CD5CF2F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7F7144C76CD5CF2F_chA_rough.dds@
+            }
+        }
+
         over "mat_EF10DD251CFEBD4A"
         {
             over "Shader"
@@ -514,6 +1088,38 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/9322A50DB0FADF39_chA_rough.dds@
+            }
+        }
+
+        over "mat_298CB6EFEA6C9ACB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/298CB6EFEA6C9ACB_chA_rough.dds@
+            }
+        }
+
+        over "mat_4C703F7B196857C9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4C703F7B196857C9_chA_rough.dds@
+            }
+        }
+
+        over "mat_7903702E29F6E006"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7903702E29F6E006_chA_rough.dds@
+            }
+        }
+
+        over "mat_909E5B0A7951F2A4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/909E5B0A7951F2A4_chA_rough.dds@
             }
         }
 
@@ -533,11 +1139,27 @@ over "RootNode"
             }
         }
 
+        over "mat_34738230B666ED7F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/34738230B666ED7F_chA_rough.dds@
+            }
+        }
+
         over "mat_4129D9ECB53A5D5E"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/4129D9ECB53A5D5E_chA_rough.dds@
+            }
+        }
+
+        over "mat_793536FB1F02BD4E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/793536FB1F02BD4E_chA_rough.dds@
             }
         }
 
@@ -557,11 +1179,27 @@ over "RootNode"
             }
         }
 
+        over "mat_584B1E0263FE87AA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/584B1E0263FE87AA_chA_rough.dds@
+            }
+        }
+
         over "mat_1F8D3AE29F8613BF"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/1F8D3AE29F8613BF_chA_rough.dds@
+            }
+        }
+
+        over "mat_AD6E878053D5ED9A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AD6E878053D5ED9A_chA_rough.dds@
             }
         }
 
@@ -590,12 +1228,28 @@ over "RootNode"
             }
         }
 
+        over "mat_470E57638C1818A2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/470E57638C1818A2_chA_rough.dds@
+            }
+        }
+
         over "mat_3513AF7AF8B8E4A0"
         {
             over "Shader"
             {
                 asset inputs:normalmap_texture = @./assets/autoconv/65CCE04AE4CAFB86_normal_oth.dds@
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/3513AF7AF8B8E4A0_chA_rough.dds@
+            }
+        }
+
+        over "mat_5EC820180E2C6C81"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5EC820180E2C6C81_chA_rough.dds@
             }
         }
 
@@ -608,14 +1262,6 @@ over "RootNode"
             }
         }
 
-        over "mat_E3413517C3C88E45"
-        {
-            over "Shader"
-            {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/E3413517C3C88E45_chA_rough.dds@
-            }
-        }
-
         over "mat_3AAE992F672D90A2"
         {
             over "Shader"
@@ -625,12 +1271,36 @@ over "RootNode"
             }
         }
 
+        over "mat_E3413517C3C88E45"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E3413517C3C88E45_chA_rough.dds@
+            }
+        }
+
+        over "mat_BF54FDA0DA4CB0F4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BF54FDA0DA4CB0F4_chA_rough.dds@
+            }
+        }
+
         over "mat_1A316A4C86A88594"
         {
             over "Shader"
             {
                 asset inputs:normalmap_texture = @./assets/autoconv/C9B6CB61F7B1EBDE_normal_oth.dds@
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/1A316A4C86A88594_chA_rough.dds@
+            }
+        }
+
+        over "mat_10374927738FCF8A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/10374927738FCF8A_chA_rough.dds@
             }
         }
 
@@ -651,11 +1321,43 @@ over "RootNode"
             }
         }
 
+        over "mat_CFAFBE9B6C8BF498"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CFAFBE9B6C8BF498_chA_rough.dds@
+            }
+        }
+
+        over "mat_9118DC5A5185D1B5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9118DC5A5185D1B5_chA_rough.dds@
+            }
+        }
+
         over "mat_A556E30B5F25103E"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/A556E30B5F25103E_chA_rough.dds@
+            }
+        }
+
+        over "mat_F41B4002B14FBDD5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F41B4002B14FBDD5_chA_rough.dds@
+            }
+        }
+
+        over "mat_237BE9F6DBB0FB4B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/237BE9F6DBB0FB4B_chA_rough.dds@
             }
         }
 
@@ -667,11 +1369,51 @@ over "RootNode"
             }
         }
 
+        over "mat_963C91C85E3498BF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/963C91C85E3498BF_chA_rough.dds@
+            }
+        }
+
+        over "mat_4CB203B6D0053F05"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4CB203B6D0053F05_chA_rough.dds@
+            }
+        }
+
+        over "mat_F2718536ED221A95"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F2718536ED221A95_chA_rough.dds@
+            }
+        }
+
         over "mat_FCA47422A8330C6B"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/FCA47422A8330C6B_chA_rough.dds@
+            }
+        }
+
+        over "mat_31FF04BF9E755CE3"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/31FF04BF9E755CE3_chA_rough.dds@
+            }
+        }
+
+        over "mat_9F3F4222D2DAFB2E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9F3F4222D2DAFB2E_chA_rough.dds@
             }
         }
 
@@ -683,11 +1425,11 @@ over "RootNode"
             }
         }
 
-        over "mat_9F3F4222D2DAFB2E"
+        over "mat_F079624E706A1388"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/9F3F4222D2DAFB2E_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F079624E706A1388_chA_rough.dds@
             }
         }
 
@@ -707,6 +1449,14 @@ over "RootNode"
             }
         }
 
+        over "mat_4C5D8321E68669AE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4C5D8321E68669AE_chA_rough.dds@
+            }
+        }
+
         over "mat_A5B6FA7AAFE78C8F"
         {
             over "Shader"
@@ -720,6 +1470,23 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/26EB118ECD5CCA26_chA_rough.dds@
+            }
+        }
+
+        over "mat_56378724F7CCA126"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/1FBF8FE2861154EC_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/56378724F7CCA126_chA_rough.dds@
+            }
+        }
+
+        over "mat_5651977D87D0526C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5651977D87D0526C_chA_rough.dds@
             }
         }
 
@@ -739,6 +1506,71 @@ over "RootNode"
             }
         }
 
+        over "mat_FC3806C6D08D739E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FC3806C6D08D739E_chA_rough.dds@
+            }
+        }
+
+        over "mat_A2D2469C8E61BAA9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A2D2469C8E61BAA9_chA_rough.dds@
+            }
+        }
+
+        over "mat_0AC04788A739C90A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0AC04788A739C90A_chA_rough.dds@
+            }
+        }
+
+        over "mat_4F142EDCB7895A23"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4F142EDCB7895A23_chA_rough.dds@
+            }
+        }
+
+        over "mat_247ED4C95D9FA5FF"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/3BAD64ACE2B947C6_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/247ED4C95D9FA5FF_chA_rough.dds@
+            }
+        }
+
+        over "mat_DB8F694BE7F3B95A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DB8F694BE7F3B95A_chA_rough.dds@
+            }
+        }
+
+        over "mat_5BAD20BBC6F79504"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5BAD20BBC6F79504_chA_rough.dds@
+            }
+        }
+
+        over "mat_4D99A004E8D23FFC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4D99A004E8D23FFC_chA_rough.dds@
+            }
+        }
+
         over "mat_524251B17311CD29"
         {
             over "Shader"
@@ -755,6 +1587,14 @@ over "RootNode"
             }
         }
 
+        over "mat_B0857DBD1E38A20D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B0857DBD1E38A20D_chA_rough.dds@
+            }
+        }
+
         over "mat_5FF10324F5E631ED"
         {
             over "Shader"
@@ -768,6 +1608,23 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/A2C7FE7CBB281863_chA_rough.dds@
+            }
+        }
+
+        over "mat_9D75ACF4ECCC5484"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9D75ACF4ECCC5484_chA_rough.dds@
+            }
+        }
+
+        over "mat_3EF51CACC1DBE62B"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/2AB434579E547121_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3EF51CACC1DBE62B_chA_rough.dds@
             }
         }
 
@@ -788,11 +1645,43 @@ over "RootNode"
             }
         }
 
+        over "mat_309AB3F702B6336C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/309AB3F702B6336C_chA_rough.dds@
+            }
+        }
+
+        over "mat_DAAC743C6ECAD5BE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DAAC743C6ECAD5BE_chA_rough.dds@
+            }
+        }
+
         over "mat_3B25325D1974383B"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/3B25325D1974383B_chA_rough.dds@
+            }
+        }
+
+        over "mat_E3562EE44F619855"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E3562EE44F619855_chA_rough.dds@
+            }
+        }
+
+        over "mat_EDB562A794C93E6F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EDB562A794C93E6F_chA_rough.dds@
             }
         }
 
@@ -812,6 +1701,14 @@ over "RootNode"
             }
         }
 
+        over "mat_8C2C571770451B70"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8C2C571770451B70_chA_rough.dds@
+            }
+        }
+
         over "mat_2E223105BD569672"
         {
             over "Shader"
@@ -828,11 +1725,19 @@ over "RootNode"
             }
         }
 
-        over "mat_086FA2B93907FC39"
+        over "mat_7C53E7D00292DA10"
         {
             over "Shader"
             {
-                asset inputs:reflectionroughness_texture = @./assets/autoconv/086FA2B93907FC39_chA_rough.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7C53E7D00292DA10_chA_rough.dds@
+            }
+        }
+
+        over "mat_B9A4BDB5D2303E14"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B9A4BDB5D2303E14_chA_rough.dds@
             }
         }
 
@@ -841,6 +1746,14 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/BACEC168A9B0D3EC_chA_rough.dds@
+            }
+        }
+
+        over "mat_086FA2B93907FC39"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/086FA2B93907FC39_chA_rough.dds@
             }
         }
 
@@ -868,11 +1781,35 @@ over "RootNode"
             }
         }
 
+        over "mat_D65B0E180C842B45"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D65B0E180C842B45_chA_rough.dds@
+            }
+        }
+
+        over "mat_D567A153AF94DD1D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D567A153AF94DD1D_chA_rough.dds@
+            }
+        }
+
         over "mat_66A327C85B4BDD87"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/66A327C85B4BDD87_chA_rough.dds@
+            }
+        }
+
+        over "mat_1AE2F388ABB4CD68"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1AE2F388ABB4CD68_chA_rough.dds@
             }
         }
 
@@ -900,6 +1837,62 @@ over "RootNode"
             }
         }
 
+        over "mat_E21837BD3A935FCB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E21837BD3A935FCB_chA_rough.dds@
+            }
+        }
+
+        over "mat_BC8318022545E8BE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BC8318022545E8BE_chA_rough.dds@
+            }
+        }
+
+        over "mat_F5C564C383537812"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F5C564C383537812_chA_rough.dds@
+            }
+        }
+
+        over "mat_8957C705FA748CFF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8957C705FA748CFF_chA_rough.dds@
+            }
+        }
+
+        over "mat_EA974BF5A15BBD4E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EA974BF5A15BBD4E_chA_rough.dds@
+            }
+        }
+
+        over "mat_C5C30B065DD512E7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C5C30B065DD512E7_chA_rough.dds@
+            }
+        }
+
+        over "mat_AA32A55908D0A57D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AA32A55908D0A57D_chA_rough.dds@
+            }
+        }
+
         over "mat_8065FA6FBB5894E0"
         {
             over "Shader"
@@ -908,11 +1901,44 @@ over "RootNode"
             }
         }
 
+        over "mat_62BA4D66CEE8EE0B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/62BA4D66CEE8EE0B_chA_rough.dds@
+            }
+        }
+
         over "mat_81D1DA21E218EEA7"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/81D1DA21E218EEA7_chA_rough.dds@
+            }
+        }
+
+        over "mat_D788EF060FD98A79"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D788EF060FD98A79_chA_rough.dds@
+            }
+        }
+
+        over "mat_AF35DD7213892333"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/8EA027970C151376_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AF35DD7213892333_chA_rough.dds@
+            }
+        }
+
+        over "mat_E2191C92025CFD99"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E2191C92025CFD99_chA_rough.dds@
             }
         }
 
@@ -929,6 +1955,22 @@ over "RootNode"
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/335647911E86DB61_chA_rough.dds@
+            }
+        }
+
+        over "mat_F58E5400231B6C7C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F58E5400231B6C7C_chA_rough.dds@
+            }
+        }
+
+        over "mat_E70BD8AC9BC2C951"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E70BD8AC9BC2C951_chA_rough.dds@
             }
         }
 
@@ -965,11 +2007,27 @@ over "RootNode"
             }
         }
 
+        over "mat_2AA29850809EDC72"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2AA29850809EDC72_chA_rough.dds@
+            }
+        }
+
         over "mat_3B076B9AB94814AA"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/3B076B9AB94814AA_chA_rough.dds@
+            }
+        }
+
+        over "mat_2046DA7919E930BB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2046DA7919E930BB_chA_rough.dds@
             }
         }
 
@@ -981,11 +2039,51 @@ over "RootNode"
             }
         }
 
+        over "mat_340134F4D3D37F22"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/340134F4D3D37F22_chA_rough.dds@
+            }
+        }
+
         over "mat_782A6BDE6D3D8B66"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/782A6BDE6D3D8B66_chA_rough.dds@
+            }
+        }
+
+        over "mat_462816E4ED5ED550"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/462816E4ED5ED550_chA_rough.dds@
+            }
+        }
+
+        over "mat_9F58101630C79A7D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9F58101630C79A7D_chA_rough.dds@
+            }
+        }
+
+        over "mat_92B6EE5799CB07A7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/92B6EE5799CB07A7_chA_rough.dds@
+            }
+        }
+
+        over "mat_54DFC02AA6177488"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/54DFC02AA6177488_chA_rough.dds@
             }
         }
 
@@ -997,12 +2095,60 @@ over "RootNode"
             }
         }
 
+        over "mat_F6CBEFC2658A4265"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F6CBEFC2658A4265_chA_rough.dds@
+            }
+        }
+
+        over "mat_FEAF040ECEFCFA0E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FEAF040ECEFCFA0E_chA_rough.dds@
+            }
+        }
+
+        over "mat_87EA4D8DBE54DA79"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/87EA4D8DBE54DA79_chA_rough.dds@
+            }
+        }
+
         over "mat_706B882D342ADE89"
         {
             over "Shader"
             {
                 asset inputs:normalmap_texture = @./assets/autoconv/CB8C7907D0CFF379_normal_oth.dds@
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/706B882D342ADE89_chA_rough.dds@
+            }
+        }
+
+        over "mat_8AC8B1DC38AAFEAC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8AC8B1DC38AAFEAC_chA_rough.dds@
+            }
+        }
+
+        over "mat_71F3B3A7021B4D9F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/71F3B3A7021B4D9F_chA_rough.dds@
+            }
+        }
+
+        over "mat_7F809BD51BB0F33C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7F809BD51BB0F33C_chA_rough.dds@
             }
         }
 
@@ -1024,6 +2170,30 @@ over "RootNode"
             }
         }
 
+        over "mat_EB3210EDD6D6E6E1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EB3210EDD6D6E6E1_chA_rough.dds@
+            }
+        }
+
+        over "mat_5BEB5FBF5D7FEA8C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5BEB5FBF5D7FEA8C_chA_rough.dds@
+            }
+        }
+
+        over "mat_FABE3B5C5AB2AF9A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FABE3B5C5AB2AF9A_chA_rough.dds@
+            }
+        }
+
         over "mat_D883C5545ACCECD8"
         {
             over "Shader"
@@ -1033,11 +2203,91 @@ over "RootNode"
             }
         }
 
+        over "mat_0D8175A1D8E6FDAF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0D8175A1D8E6FDAF_chA_rough.dds@
+            }
+        }
+
+        over "mat_4D9C1F70E0637C54"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4D9C1F70E0637C54_chA_rough.dds@
+            }
+        }
+
+        over "mat_2F9E8869F45F3820"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2F9E8869F45F3820_chA_rough.dds@
+            }
+        }
+
+        over "mat_BB93C418CECB0ECB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BB93C418CECB0ECB_chA_rough.dds@
+            }
+        }
+
+        over "mat_AED4879534398573"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AED4879534398573_chA_rough.dds@
+            }
+        }
+
+        over "mat_901A2559C389B892"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/901A2559C389B892_chA_rough.dds@
+            }
+        }
+
+        over "mat_9417C4C049A956CE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9417C4C049A956CE_chA_rough.dds@
+            }
+        }
+
         over "mat_F4E510D0B15CE54C"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/F4E510D0B15CE54C_chA_rough.dds@
+            }
+        }
+
+        over "mat_DE54A8DD00AC7B0C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DE54A8DD00AC7B0C_chA_rough.dds@
+            }
+        }
+
+        over "mat_5E06E592B6065BEA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5E06E592B6065BEA_chA_rough.dds@
+            }
+        }
+
+        over "mat_0869722D2D2ADA4B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0869722D2D2ADA4B_chA_rough.dds@
             }
         }
 
@@ -1057,11 +2307,27 @@ over "RootNode"
             }
         }
 
+        over "mat_0C57688AE25BF7EF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0C57688AE25BF7EF_chA_rough.dds@
+            }
+        }
+
         over "mat_B34F3C2DEC13884E"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/B34F3C2DEC13884E_chA_rough.dds@
+            }
+        }
+
+        over "mat_EAF41CDB7C83C6A0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EAF41CDB7C83C6A0_chA_rough.dds@
             }
         }
 
@@ -1082,11 +2348,68 @@ over "RootNode"
             }
         }
 
+        over "mat_F9989CE8447F6E41"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F9989CE8447F6E41_chA_rough.dds@
+            }
+        }
+
+        over "mat_734304869A5214BF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/734304869A5214BF_chA_rough.dds@
+            }
+        }
+
+        over "mat_F05CF33EDD47E1BB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F05CF33EDD47E1BB_chA_rough.dds@
+            }
+        }
+
+        over "mat_5C84DF7EF6660C80"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5C84DF7EF6660C80_chA_rough.dds@
+            }
+        }
+
+        over "mat_ECA3740F19293213"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ECA3740F19293213_chA_rough.dds@
+            }
+        }
+
         over "mat_3D8C30F333990EC2"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/3D8C30F333990EC2_chA_rough.dds@
+            }
+        }
+
+        over "mat_ADE909FFE0688643"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ADE909FFE0688643_chA_rough.dds@
+            }
+        }
+
+        over "mat_1732F97DF2D51643"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/1AB9E0063F883AF9_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1732F97DF2D51643_chA_rough.dds@
             }
         }
 
@@ -1098,11 +2421,43 @@ over "RootNode"
             }
         }
 
+        over "mat_BFE0B78E713D403C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BFE0B78E713D403C_chA_rough.dds@
+            }
+        }
+
         over "mat_A27B5BF36DE69485"
         {
             over "Shader"
             {
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/A27B5BF36DE69485_chA_rough.dds@
+            }
+        }
+
+        over "mat_8AA1F1302D1E4317"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8AA1F1302D1E4317_chA_rough.dds@
+            }
+        }
+
+        over "mat_8332B1506C88D2BE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8332B1506C88D2BE_chA_rough.dds@
+            }
+        }
+
+        over "mat_2EEBBFE0914EA07A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2EEBBFE0914EA07A_chA_rough.dds@
             }
         }
 
@@ -1113,6 +2468,3209 @@ over "RootNode"
                 asset inputs:reflectionroughness_texture = @./assets/autoconv/A7098A2E2C991A84_chA_rough.dds@
             }
         }
+
+        over "mat_5FD5EFABB01BF02E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5FD5EFABB01BF02E_chA_rough.dds@
+            }
+        }
+
+        over "mat_6BC370D87F40168E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6BC370D87F40168E_chA_rough.dds@
+            }
+        }
+
+        over "mat_5167C16D3E0613B7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5167C16D3E0613B7_chA_rough.dds@
+            }
+        }
+
+        over "mat_8611B02193755ADC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8611B02193755ADC_chA_rough.dds@
+            }
+        }
+
+        over "mat_CCC9D578B4CA76A9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CCC9D578B4CA76A9_chA_rough.dds@
+            }
+        }
+
+        over "mat_E6FD40A2171B1861"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/0E7D776FF60F90D4_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E6FD40A2171B1861_chA_rough.dds@
+            }
+        }
+
+        over "mat_6ED4680D96D7F9DD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6ED4680D96D7F9DD_chA_rough.dds@
+            }
+        }
+
+        over "mat_14E67F3790669D31"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/14E67F3790669D31_chA_rough.dds@
+            }
+        }
+
+        over "mat_9B6B7274DD6A1CAE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9B6B7274DD6A1CAE_chA_rough.dds@
+            }
+        }
+
+        over "mat_A8658E546F02D846"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/3C6F1FF4344DEB92_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A8658E546F02D846_chA_rough.dds@
+            }
+        }
+
+        over "mat_64BD2DD00081EFB5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/64BD2DD00081EFB5_chA_rough.dds@
+            }
+        }
+
+        over "mat_AD47B723AB6CBF67"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AD47B723AB6CBF67_chA_rough.dds@
+            }
+        }
+
+        over "mat_6118A4F5060B1238"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6118A4F5060B1238_chA_rough.dds@
+            }
+        }
+
+        over "mat_162C547EA539F5D0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/162C547EA539F5D0_chA_rough.dds@
+            }
+        }
+
+        over "mat_70CC6E23E7920C26"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/70CC6E23E7920C26_chA_rough.dds@
+            }
+        }
+
+        over "mat_D3DD31B99DD713EB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D3DD31B99DD713EB_chA_rough.dds@
+            }
+        }
+
+        over "mat_8F4A93B1ED286D05"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8F4A93B1ED286D05_chA_rough.dds@
+            }
+        }
+
+        over "mat_C75DEE96ED9DD5E3"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C75DEE96ED9DD5E3_chA_rough.dds@
+            }
+        }
+
+        over "mat_40C72325615D0923"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/40C72325615D0923_chA_rough.dds@
+            }
+        }
+
+        over "mat_30716BD37C2B4B31"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/30716BD37C2B4B31_chA_rough.dds@
+            }
+        }
+
+        over "mat_99E9162E9C6AD498"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/99E9162E9C6AD498_chA_rough.dds@
+            }
+        }
+
+        over "mat_4BAFA21C134F953D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4BAFA21C134F953D_chA_rough.dds@
+            }
+        }
+
+        over "mat_E3092C03B57C26CA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E3092C03B57C26CA_chA_rough.dds@
+            }
+        }
+
+        over "mat_2A4A9DD3E0C1D4EE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2A4A9DD3E0C1D4EE_chA_rough.dds@
+            }
+        }
+
+        over "mat_0117F323C1293661"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0117F323C1293661_chA_rough.dds@
+            }
+        }
+
+        over "mat_20ABD4DE00763EFF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/20ABD4DE00763EFF_chA_rough.dds@
+            }
+        }
+
+        over "mat_18370A31BFF6CE41"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/18370A31BFF6CE41_chA_rough.dds@
+            }
+        }
+
+        over "mat_8D32D7C5D6EB9304"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8D32D7C5D6EB9304_chA_rough.dds@
+            }
+        }
+
+        over "mat_6CC53E22A80190B6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6CC53E22A80190B6_chA_rough.dds@
+            }
+        }
+
+        over "mat_169BF56B3A1F251D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/169BF56B3A1F251D_chA_rough.dds@
+            }
+        }
+
+        over "mat_7030060D6753CBC8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7030060D6753CBC8_chA_rough.dds@
+            }
+        }
+
+        over "mat_AE49A57B1775BB8D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AE49A57B1775BB8D_chA_rough.dds@
+            }
+        }
+
+        over "mat_9841CA8DD0BDF140"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9841CA8DD0BDF140_chA_rough.dds@
+            }
+        }
+
+        over "mat_DA6EFC3F22E964AF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DA6EFC3F22E964AF_chA_rough.dds@
+            }
+        }
+
+        over "mat_A6BA01EFB0AD95A1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A6BA01EFB0AD95A1_chA_rough.dds@
+            }
+        }
+
+        over "mat_DBD8448796A9D006"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DBD8448796A9D006_chA_rough.dds@
+            }
+        }
+
+        over "mat_2E6C99714A21E795"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2E6C99714A21E795_chA_rough.dds@
+            }
+        }
+
+        over "mat_BE5378518FDBF53E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BE5378518FDBF53E_chA_rough.dds@
+            }
+        }
+
+        over "mat_33B59302674C5318"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/33B59302674C5318_chA_rough.dds@
+            }
+        }
+
+        over "mat_42A161BC268DF396"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/42A161BC268DF396_chA_rough.dds@
+            }
+        }
+
+        over "mat_CF66339B823F24F0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CF66339B823F24F0_chA_rough.dds@
+            }
+        }
+
+        over "mat_8A56406EDE517ADB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8A56406EDE517ADB_chA_rough.dds@
+            }
+        }
+
+        over "mat_D151BB72981880FD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D151BB72981880FD_chA_rough.dds@
+            }
+        }
+
+        over "mat_A8EEB181553F123E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A8EEB181553F123E_chA_rough.dds@
+            }
+        }
+
+        over "mat_8734EA4FA44D4D9A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8734EA4FA44D4D9A_chA_rough.dds@
+            }
+        }
+
+        over "mat_73330C8305998269"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/73330C8305998269_chA_rough.dds@
+            }
+        }
+
+        over "mat_7580BDF53F5B7819"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7580BDF53F5B7819_chA_rough.dds@
+            }
+        }
+
+        over "mat_FB0F2DD7E72C2E86"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FB0F2DD7E72C2E86_chA_rough.dds@
+            }
+        }
+
+        over "mat_54F4577DC6EA8F86"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/54F4577DC6EA8F86_chA_rough.dds@
+            }
+        }
+
+        over "mat_473833CAED59291B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/473833CAED59291B_chA_rough.dds@
+            }
+        }
+
+        over "mat_D6F12005F8D0489E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D6F12005F8D0489E_chA_rough.dds@
+            }
+        }
+
+        over "mat_D10748EDA5C64676"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D10748EDA5C64676_chA_rough.dds@
+            }
+        }
+
+        over "mat_603B8231629B95CE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/603B8231629B95CE_chA_rough.dds@
+            }
+        }
+
+        over "mat_23723D0622A84B71"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/23723D0622A84B71_chA_rough.dds@
+            }
+        }
+
+        over "mat_0E5C5026301731B8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0E5C5026301731B8_chA_rough.dds@
+            }
+        }
+
+        over "mat_876027E51FB44944"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/876027E51FB44944_chA_rough.dds@
+            }
+        }
+
+        over "mat_368BB4BB260E13DD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/368BB4BB260E13DD_chA_rough.dds@
+            }
+        }
+
+        over "mat_9F56C1595AAC12C6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9F56C1595AAC12C6_chA_rough.dds@
+            }
+        }
+
+        over "mat_4D9ED420D32FF566"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4D9ED420D32FF566_chA_rough.dds@
+            }
+        }
+
+        over "mat_F9459775DB749697"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F9459775DB749697_chA_rough.dds@
+            }
+        }
+
+        over "mat_D73FEA7CD3B30992"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D73FEA7CD3B30992_chA_rough.dds@
+            }
+        }
+
+        over "mat_56513BAA04E0DC78"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/56513BAA04E0DC78_chA_rough.dds@
+            }
+        }
+
+        over "mat_73B7A8A892868F7B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/73B7A8A892868F7B_chA_rough.dds@
+            }
+        }
+
+        over "mat_4F9A300D610D79B9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4F9A300D610D79B9_chA_rough.dds@
+            }
+        }
+
+        over "mat_3BCA87D97039378E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3BCA87D97039378E_chA_rough.dds@
+            }
+        }
+
+        over "mat_7FB5F442C92257C8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7FB5F442C92257C8_chA_rough.dds@
+            }
+        }
+
+        over "mat_2611674557740B65"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2611674557740B65_chA_rough.dds@
+            }
+        }
+
+        over "mat_E67DED908526ED1F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E67DED908526ED1F_chA_rough.dds@
+            }
+        }
+
+        over "mat_B7A481A8ACF85226"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B7A481A8ACF85226_chA_rough.dds@
+            }
+        }
+
+        over "mat_C35A6E0FA2B46874"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C35A6E0FA2B46874_chA_rough.dds@
+            }
+        }
+
+        over "mat_CFF901A8FEA2FEB5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CFF901A8FEA2FEB5_chA_rough.dds@
+            }
+        }
+
+        over "mat_08BDB52A4723385A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/08BDB52A4723385A_chA_rough.dds@
+            }
+        }
+
+        over "mat_975106D53A2755EF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/975106D53A2755EF_chA_rough.dds@
+            }
+        }
+
+        over "mat_E93C13F1DD1AAD7E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E93C13F1DD1AAD7E_chA_rough.dds@
+            }
+        }
+
+        over "mat_C89EDA8C23D426D0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C89EDA8C23D426D0_chA_rough.dds@
+            }
+        }
+
+        over "mat_95B0BB3DDD1C2CFF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/95B0BB3DDD1C2CFF_chA_rough.dds@
+            }
+        }
+
+        over "mat_40925518228EBE78"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/40925518228EBE78_chA_rough.dds@
+            }
+        }
+
+        over "mat_7E41C4499389D928"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7E41C4499389D928_chA_rough.dds@
+            }
+        }
+
+        over "mat_619E771368D6DA45"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/619E771368D6DA45_chA_rough.dds@
+            }
+        }
+
+        over "mat_8E5E7F1F71831848"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8E5E7F1F71831848_chA_rough.dds@
+            }
+        }
+
+        over "mat_BE96367A92006D62"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BE96367A92006D62_chA_rough.dds@
+            }
+        }
+
+        over "mat_8BFF5BA45DDB49E7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8BFF5BA45DDB49E7_chA_rough.dds@
+            }
+        }
+
+        over "mat_FB3CF789541CC990"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FB3CF789541CC990_chA_rough.dds@
+            }
+        }
+
+        over "mat_ACF9721B5886D4E0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ACF9721B5886D4E0_chA_rough.dds@
+            }
+        }
+
+        over "mat_713BC14D8F87295B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/713BC14D8F87295B_chA_rough.dds@
+            }
+        }
+
+        over "mat_D4073EC7C7CD46B0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D4073EC7C7CD46B0_chA_rough.dds@
+            }
+        }
+
+        over "mat_F07E44A153417B56"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F07E44A153417B56_chA_rough.dds@
+            }
+        }
+
+        over "mat_12C93EB41E556527"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/12C93EB41E556527_chA_rough.dds@
+            }
+        }
+
+        over "mat_F3AEADBAB4BC8040"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F3AEADBAB4BC8040_chA_rough.dds@
+            }
+        }
+
+        over "mat_A69790D0B97F9326"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A69790D0B97F9326_chA_rough.dds@
+            }
+        }
+
+        over "mat_9BCBCF1AFD50CB19"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9BCBCF1AFD50CB19_chA_rough.dds@
+            }
+        }
+
+        over "mat_684E451F9AF443A3"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/684E451F9AF443A3_chA_rough.dds@
+            }
+        }
+
+        over "mat_03DB43063B4874CE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/03DB43063B4874CE_chA_rough.dds@
+            }
+        }
+
+        over "mat_9B806969452CD3C8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9B806969452CD3C8_chA_rough.dds@
+            }
+        }
+
+        over "mat_3735450369522A7D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3735450369522A7D_chA_rough.dds@
+            }
+        }
+
+        over "mat_E4BCFB97B8B98B46"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E4BCFB97B8B98B46_chA_rough.dds@
+            }
+        }
+
+        over "mat_BECA0D84E478A794"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BECA0D84E478A794_chA_rough.dds@
+            }
+        }
+
+        over "mat_DA97C52FCB264FBD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DA97C52FCB264FBD_chA_rough.dds@
+            }
+        }
+
+        over "mat_1C1E02911849DC4E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1C1E02911849DC4E_chA_rough.dds@
+            }
+        }
+
+        over "mat_AA748ADFE9F957A2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AA748ADFE9F957A2_chA_rough.dds@
+            }
+        }
+
+        over "mat_8BCB2F5960311ECB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8BCB2F5960311ECB_chA_rough.dds@
+            }
+        }
+
+        over "mat_F45DAD46BC882E23"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F45DAD46BC882E23_chA_rough.dds@
+            }
+        }
+
+        over "mat_D7149122502C44A7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D7149122502C44A7_chA_rough.dds@
+            }
+        }
+
+        over "mat_11A970665D53F3E6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/11A970665D53F3E6_chA_rough.dds@
+            }
+        }
+
+        over "mat_908D9A96799E20E7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/908D9A96799E20E7_chA_rough.dds@
+            }
+        }
+
+        over "mat_396DD7209916669E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/396DD7209916669E_chA_rough.dds@
+            }
+        }
+
+        over "mat_3296FE6AFEEB9A6D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3296FE6AFEEB9A6D_chA_rough.dds@
+            }
+        }
+
+        over "mat_AC8ECA3A99E26CF5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AC8ECA3A99E26CF5_chA_rough.dds@
+            }
+        }
+
+        over "mat_7EB83C8DAABD6B80"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7EB83C8DAABD6B80_chA_rough.dds@
+            }
+        }
+
+        over "mat_D275590709A3D2A8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D275590709A3D2A8_chA_rough.dds@
+            }
+        }
+
+        over "mat_0D3DBA5FA47F92CB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0D3DBA5FA47F92CB_chA_rough.dds@
+            }
+        }
+
+        over "mat_3AAA73A8712B40E5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3AAA73A8712B40E5_chA_rough.dds@
+            }
+        }
+
+        over "mat_D1F7105B04E65363"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D1F7105B04E65363_chA_rough.dds@
+            }
+        }
+
+        over "mat_39AAD53707DD3861"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/39AAD53707DD3861_chA_rough.dds@
+            }
+        }
+
+        over "mat_B2182F363A347AAE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B2182F363A347AAE_chA_rough.dds@
+            }
+        }
+
+        over "mat_E41EC3BCED6C707D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E41EC3BCED6C707D_chA_rough.dds@
+            }
+        }
+
+        over "mat_05C39869B68C09A2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/05C39869B68C09A2_chA_rough.dds@
+            }
+        }
+
+        over "mat_32FD0E221D94824F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/32FD0E221D94824F_chA_rough.dds@
+            }
+        }
+
+        over "mat_83CD019F3FA17020"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/83CD019F3FA17020_chA_rough.dds@
+            }
+        }
+
+        over "mat_88A2A08D2FCE3620"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/88A2A08D2FCE3620_chA_rough.dds@
+            }
+        }
+
+        over "mat_9D5FF9C47981CC2D"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/C5E120C1F7A92F90_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9D5FF9C47981CC2D_chA_rough.dds@
+            }
+        }
+
+        over "mat_3034F9A7E5D3C65D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3034F9A7E5D3C65D_chA_rough.dds@
+            }
+        }
+
+        over "mat_EB40232458C998DE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EB40232458C998DE_chA_rough.dds@
+            }
+        }
+
+        over "mat_0344C325DFF2F137"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0344C325DFF2F137_chA_rough.dds@
+            }
+        }
+
+        over "mat_559F977C85964F6E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/559F977C85964F6E_chA_rough.dds@
+            }
+        }
+
+        over "mat_F08A7F7FB16C43B8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F08A7F7FB16C43B8_chA_rough.dds@
+            }
+        }
+
+        over "mat_A2E2037A53D868DE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A2E2037A53D868DE_chA_rough.dds@
+            }
+        }
+
+        over "mat_CD6EC0246A695E9A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CD6EC0246A695E9A_chA_rough.dds@
+            }
+        }
+
+        over "mat_90897474F6824564"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/90897474F6824564_chA_rough.dds@
+            }
+        }
+
+        over "mat_1434F43D7A4A1ED1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1434F43D7A4A1ED1_chA_rough.dds@
+            }
+        }
+
+        over "mat_8A4C9FA455537B0F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8A4C9FA455537B0F_chA_rough.dds@
+            }
+        }
+
+        over "mat_810E4DF78170BF90"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/810E4DF78170BF90_chA_rough.dds@
+            }
+        }
+
+        over "mat_AF432D5CFFA4D425"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AF432D5CFFA4D425_chA_rough.dds@
+            }
+        }
+
+        over "mat_0ED13FBF364221A7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0ED13FBF364221A7_chA_rough.dds@
+            }
+        }
+
+        over "mat_F0149AF60FBCBA4C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F0149AF60FBCBA4C_chA_rough.dds@
+            }
+        }
+
+        over "mat_E2755076445225A7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E2755076445225A7_chA_rough.dds@
+            }
+        }
+
+        over "mat_4EDDA6C7964E5CA7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4EDDA6C7964E5CA7_chA_rough.dds@
+            }
+        }
+
+        over "mat_A1ACB0B93E764444"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A1ACB0B93E764444_chA_rough.dds@
+            }
+        }
+
+        over "mat_F75D24B2DDD4908B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F75D24B2DDD4908B_chA_rough.dds@
+            }
+        }
+
+        over "mat_123CC0289411E4F2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/123CC0289411E4F2_chA_rough.dds@
+            }
+        }
+
+        over "mat_FC1E8AD2C76C4336"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FC1E8AD2C76C4336_chA_rough.dds@
+            }
+        }
+
+        over "mat_35AC04BFF51CC8DA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/35AC04BFF51CC8DA_chA_rough.dds@
+            }
+        }
+
+        over "mat_C71F9158DCB9E5EE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C71F9158DCB9E5EE_chA_rough.dds@
+            }
+        }
+
+        over "mat_6DCA8E24598ADE0F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6DCA8E24598ADE0F_chA_rough.dds@
+            }
+        }
+
+        over "mat_6E78EB093E8BB20C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6E78EB093E8BB20C_chA_rough.dds@
+            }
+        }
+
+        over "mat_1A3655ABD67DA23E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1A3655ABD67DA23E_chA_rough.dds@
+            }
+        }
+
+        over "mat_35DC4A1122C3EAC8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/35DC4A1122C3EAC8_chA_rough.dds@
+            }
+        }
+
+        over "mat_FEF14576934592E7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FEF14576934592E7_chA_rough.dds@
+            }
+        }
+
+        over "mat_186ABDED9056E42C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/186ABDED9056E42C_chA_rough.dds@
+            }
+        }
+
+        over "mat_A13E9A377913813D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A13E9A377913813D_chA_rough.dds@
+            }
+        }
+
+        over "mat_B431573F1FBCD1A2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B431573F1FBCD1A2_chA_rough.dds@
+            }
+        }
+
+        over "mat_38BA163A90060E5A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/38BA163A90060E5A_chA_rough.dds@
+            }
+        }
+
+        over "mat_CC3D583FBF65541D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CC3D583FBF65541D_chA_rough.dds@
+            }
+        }
+
+        over "mat_074D59FD310069D9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/074D59FD310069D9_chA_rough.dds@
+            }
+        }
+
+        over "mat_1D68A9624F32AEC0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1D68A9624F32AEC0_chA_rough.dds@
+            }
+        }
+
+        over "mat_DBE0814DBD819882"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DBE0814DBD819882_chA_rough.dds@
+            }
+        }
+
+        over "mat_65833BE23C61115C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/65833BE23C61115C_chA_rough.dds@
+            }
+        }
+
+        over "mat_DBDBCBCF5DF66042"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DBDBCBCF5DF66042_chA_rough.dds@
+            }
+        }
+
+        over "mat_339018503130AA86"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/339018503130AA86_chA_rough.dds@
+            }
+        }
+
+        over "mat_89FACB7240A82CA7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/89FACB7240A82CA7_chA_rough.dds@
+            }
+        }
+
+        over "mat_A8568B7B5E7BF7C3"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A8568B7B5E7BF7C3_chA_rough.dds@
+            }
+        }
+
+        over "mat_FE7130239F5A5711"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FE7130239F5A5711_chA_rough.dds@
+            }
+        }
+
+        over "mat_0685FA3DB48D96A5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0685FA3DB48D96A5_chA_rough.dds@
+            }
+        }
+
+        over "mat_78BA7A458236480E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/78BA7A458236480E_chA_rough.dds@
+            }
+        }
+
+        over "mat_0A3E4057234CE8BA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0A3E4057234CE8BA_chA_rough.dds@
+            }
+        }
+
+        over "mat_D39FC657E26DF0B4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D39FC657E26DF0B4_chA_rough.dds@
+            }
+        }
+
+        over "mat_9E277324ACFE907C"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/A384726AB2F9A373_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9E277324ACFE907C_chA_rough.dds@
+            }
+        }
+
+        over "mat_6AEF8486764D009E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6AEF8486764D009E_chA_rough.dds@
+            }
+        }
+
+        over "mat_8472AD44CF11890E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8472AD44CF11890E_chA_rough.dds@
+            }
+        }
+
+        over "mat_C5A057ECCED77F3A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C5A057ECCED77F3A_chA_rough.dds@
+            }
+        }
+
+        over "mat_80018AB399549312"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/80018AB399549312_chA_rough.dds@
+            }
+        }
+
+        over "mat_5FBF8CB02C2B87A2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5FBF8CB02C2B87A2_chA_rough.dds@
+            }
+        }
+
+        over "mat_70F4883C4CD1A558"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/70F4883C4CD1A558_chA_rough.dds@
+            }
+        }
+
+        over "mat_82998310DB887D92"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/82998310DB887D92_chA_rough.dds@
+            }
+        }
+
+        over "mat_4AF6E2BECDB877F2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4AF6E2BECDB877F2_chA_rough.dds@
+            }
+        }
+
+        over "mat_6E845181A24FE2BB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6E845181A24FE2BB_chA_rough.dds@
+            }
+        }
+
+        over "mat_B85181F93491505E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B85181F93491505E_chA_rough.dds@
+            }
+        }
+
+        over "mat_617C2F856EE6FA4A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/617C2F856EE6FA4A_chA_rough.dds@
+            }
+        }
+
+        over "mat_F14371F1CF8253FE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F14371F1CF8253FE_chA_rough.dds@
+            }
+        }
+
+        over "mat_F6DBAF62969D41E8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F6DBAF62969D41E8_chA_rough.dds@
+            }
+        }
+
+        over "mat_FD9B7F834109E75B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FD9B7F834109E75B_chA_rough.dds@
+            }
+        }
+
+        over "mat_6A39337779013D95"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6A39337779013D95_chA_rough.dds@
+            }
+        }
+
+        over "mat_B0B35C9307A1F423"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B0B35C9307A1F423_chA_rough.dds@
+            }
+        }
+
+        over "mat_95CEB84C6BE918E3"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/95CEB84C6BE918E3_chA_rough.dds@
+            }
+        }
+
+        over "mat_34D044B0EFF0D091"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/34D044B0EFF0D091_chA_rough.dds@
+            }
+        }
+
+        over "mat_1E1963D3CBCFECE2"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/C797B6FF33C9FDBE_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1E1963D3CBCFECE2_chA_rough.dds@
+            }
+        }
+
+        over "mat_39D46ED635528C46"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/39D46ED635528C46_chA_rough.dds@
+            }
+        }
+
+        over "mat_0FF6BA15D5A43CDB"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/9A23BF1F45C0BCF0_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0FF6BA15D5A43CDB_chA_rough.dds@
+            }
+        }
+
+        over "mat_449EFFB3972D2870"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/449EFFB3972D2870_chA_rough.dds@
+            }
+        }
+
+        over "mat_D42F6555BDF77AE5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D42F6555BDF77AE5_chA_rough.dds@
+            }
+        }
+
+        over "mat_287CE33F8B3190E6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/287CE33F8B3190E6_chA_rough.dds@
+            }
+        }
+
+        over "mat_DBD421B419CFC689"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DBD421B419CFC689_chA_rough.dds@
+            }
+        }
+
+        over "mat_4832C606D1363BC5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4832C606D1363BC5_chA_rough.dds@
+            }
+        }
+
+        over "mat_334385F81DBB1ED5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/334385F81DBB1ED5_chA_rough.dds@
+            }
+        }
+
+        over "mat_F740D62769828679"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F740D62769828679_chA_rough.dds@
+            }
+        }
+
+        over "mat_9E9405C714179057"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9E9405C714179057_chA_rough.dds@
+            }
+        }
+
+        over "mat_C7252DEEA8282178"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C7252DEEA8282178_chA_rough.dds@
+            }
+        }
+
+        over "mat_9859B997FB60E8DA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9859B997FB60E8DA_chA_rough.dds@
+            }
+        }
+
+        over "mat_36462C2B5E9767A4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/36462C2B5E9767A4_chA_rough.dds@
+            }
+        }
+
+        over "mat_8BEF737D5A347C8B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8BEF737D5A347C8B_chA_rough.dds@
+            }
+        }
+
+        over "mat_5040D391F728DADE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5040D391F728DADE_chA_rough.dds@
+            }
+        }
+
+        over "mat_C05292AAAA042D02"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C05292AAAA042D02_chA_rough.dds@
+            }
+        }
+
+        over "mat_15E8C82F53300E3B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/15E8C82F53300E3B_chA_rough.dds@
+            }
+        }
+
+        over "mat_3AF9E5ADC3F3481F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3AF9E5ADC3F3481F_chA_rough.dds@
+            }
+        }
+
+        over "mat_ADD613E34FB0B471"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ADD613E34FB0B471_chA_rough.dds@
+            }
+        }
+
+        over "mat_4F1F0DAEF3D9037D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4F1F0DAEF3D9037D_chA_rough.dds@
+            }
+        }
+
+        over "mat_F8060254542E083D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F8060254542E083D_chA_rough.dds@
+            }
+        }
+
+        over "mat_62652F407CB4F05D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/62652F407CB4F05D_chA_rough.dds@
+            }
+        }
+
+        over "mat_F57F6EB609A371B3"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/FDE0F22DE9B00BDD_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F57F6EB609A371B3_chA_rough.dds@
+            }
+        }
+
+        over "mat_DAACF41ACAF9E65D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DAACF41ACAF9E65D_chA_rough.dds@
+            }
+        }
+
+        over "mat_A941F09E0DABD8B8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A941F09E0DABD8B8_chA_rough.dds@
+            }
+        }
+
+        over "mat_194EB7021EC43448"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/194EB7021EC43448_chA_rough.dds@
+            }
+        }
+
+        over "mat_C5A2F696DCF2F1A6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C5A2F696DCF2F1A6_chA_rough.dds@
+            }
+        }
+
+        over "mat_B96F1E47217C4801"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B96F1E47217C4801_chA_rough.dds@
+            }
+        }
+
+        over "mat_5FF01AE555E2A63A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5FF01AE555E2A63A_chA_rough.dds@
+            }
+        }
+
+        over "mat_302E895544A51207"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/302E895544A51207_chA_rough.dds@
+            }
+        }
+
+        over "mat_F5327F73A212BD90"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F5327F73A212BD90_chA_rough.dds@
+            }
+        }
+
+        over "mat_D6B30EB35AC34673"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D6B30EB35AC34673_chA_rough.dds@
+            }
+        }
+
+        over "mat_ED55E0908BE81358"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ED55E0908BE81358_chA_rough.dds@
+            }
+        }
+
+        over "mat_D0EC975A1A1F4186"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D0EC975A1A1F4186_chA_rough.dds@
+            }
+        }
+
+        over "mat_292EFF0BD3EBFAAA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/292EFF0BD3EBFAAA_chA_rough.dds@
+            }
+        }
+
+        over "mat_E1791372DC445CC5"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/234185350D892360_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E1791372DC445CC5_chA_rough.dds@
+            }
+        }
+
+        over "mat_A652865629A720D9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A652865629A720D9_chA_rough.dds@
+            }
+        }
+
+        over "mat_ABB427B3277CC60A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ABB427B3277CC60A_chA_rough.dds@
+            }
+        }
+
+        over "mat_DD6C470380AB6D62"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DD6C470380AB6D62_chA_rough.dds@
+            }
+        }
+
+        over "mat_96F7BD36D171ADFE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/96F7BD36D171ADFE_chA_rough.dds@
+            }
+        }
+
+        over "mat_E49279F263F1CBED"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E49279F263F1CBED_chA_rough.dds@
+            }
+        }
+
+        over "mat_AA3A1B80FDFF94CF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AA3A1B80FDFF94CF_chA_rough.dds@
+            }
+        }
+
+        over "mat_14B3E833AC4A48ED"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/14B3E833AC4A48ED_chA_rough.dds@
+            }
+        }
+
+        over "mat_EC3CD41436D508E0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EC3CD41436D508E0_chA_rough.dds@
+            }
+        }
+
+        over "mat_6905721D39CEC030"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6905721D39CEC030_chA_rough.dds@
+            }
+        }
+
+        over "mat_6C60FB469211D203"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6C60FB469211D203_chA_rough.dds@
+            }
+        }
+
+        over "mat_A8600A026891A7FE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A8600A026891A7FE_chA_rough.dds@
+            }
+        }
+
+        over "mat_23EE239477F98F4F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/23EE239477F98F4F_chA_rough.dds@
+            }
+        }
+
+        over "mat_267925EBE49C113A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/267925EBE49C113A_chA_rough.dds@
+            }
+        }
+
+        over "mat_7D049BA80AE21404"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7D049BA80AE21404_chA_rough.dds@
+            }
+        }
+
+        over "mat_534A9354C8054363"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/72DEDDBFB88F9E92_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/534A9354C8054363_chA_rough.dds@
+            }
+        }
+
+        over "mat_CFA2EC032C7619CC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CFA2EC032C7619CC_chA_rough.dds@
+            }
+        }
+
+        over "mat_3DFD091CD20BA6B4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3DFD091CD20BA6B4_chA_rough.dds@
+            }
+        }
+
+        over "mat_AB3DD7FBB2BFEAD8"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AB3DD7FBB2BFEAD8_chA_rough.dds@
+            }
+        }
+
+        over "mat_79BBDA7B76C804FD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/79BBDA7B76C804FD_chA_rough.dds@
+            }
+        }
+
+        over "mat_F3166B789A99822E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F3166B789A99822E_chA_rough.dds@
+            }
+        }
+
+        over "mat_7AAAB97C4AF5B617"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7AAAB97C4AF5B617_chA_rough.dds@
+            }
+        }
+
+        over "mat_58CE8E8CB7242E6C"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/15B0B1C80EB7C12E_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/58CE8E8CB7242E6C_chA_rough.dds@
+            }
+        }
+
+        over "mat_91D1FFBCDFD52107"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/91D1FFBCDFD52107_chA_rough.dds@
+            }
+        }
+
+        over "mat_6A9AA45262F703A6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6A9AA45262F703A6_chA_rough.dds@
+            }
+        }
+
+        over "mat_4BBD16644140AA3F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4BBD16644140AA3F_chA_rough.dds@
+            }
+        }
+
+        over "mat_B79CAA07436F7B61"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B79CAA07436F7B61_chA_rough.dds@
+            }
+        }
+
+        over "mat_BF02FAFCA9C00EFA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BF02FAFCA9C00EFA_chA_rough.dds@
+            }
+        }
+
+        over "mat_2360834F129B3D59"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2360834F129B3D59_chA_rough.dds@
+            }
+        }
+
+        over "mat_8783C634D74DAACA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8783C634D74DAACA_chA_rough.dds@
+            }
+        }
+
+        over "mat_368C4F8DAF249A5C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/368C4F8DAF249A5C_chA_rough.dds@
+            }
+        }
+
+        over "mat_C80913FF7E39FF6C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C80913FF7E39FF6C_chA_rough.dds@
+            }
+        }
+
+        over "mat_EB366B6E3A851CEB"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/FDE0F22DE9B00BDD_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EB366B6E3A851CEB_chA_rough.dds@
+            }
+        }
+
+        over "mat_4FA5FF3EEC34669F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4FA5FF3EEC34669F_chA_rough.dds@
+            }
+        }
+
+        over "mat_C27EF9335BA36953"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C27EF9335BA36953_chA_rough.dds@
+            }
+        }
+
+        over "mat_686520640247DE73"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/686520640247DE73_chA_rough.dds@
+            }
+        }
+
+        over "mat_F268869F7F792DC9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F268869F7F792DC9_chA_rough.dds@
+            }
+        }
+
+        over "mat_744E37D2B0DB76A6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/744E37D2B0DB76A6_chA_rough.dds@
+            }
+        }
+
+        over "mat_ADC6B087F68B9AA6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ADC6B087F68B9AA6_chA_rough.dds@
+            }
+        }
+
+        over "mat_0D0E9EA76E9067D5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0D0E9EA76E9067D5_chA_rough.dds@
+            }
+        }
+
+        over "mat_847814CB88B547D9"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/922913BF05F0ACFB_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/847814CB88B547D9_chA_rough.dds@
+            }
+        }
+
+        over "mat_F3240A80D57A5B36"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/F21944E788750CBF_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F3240A80D57A5B36_chA_rough.dds@
+            }
+        }
+
+        over "mat_E4AAF808C712BC28"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E4AAF808C712BC28_chA_rough.dds@
+            }
+        }
+
+        over "mat_8DADA7659CC1A57F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8DADA7659CC1A57F_chA_rough.dds@
+            }
+        }
+
+        over "mat_8689DB4A733A57B0"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/92DD549C7BA1BF38_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8689DB4A733A57B0_chA_rough.dds@
+            }
+        }
+
+        over "mat_EBDA36DFFE82E827"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EBDA36DFFE82E827_chA_rough.dds@
+            }
+        }
+
+        over "mat_A081CA9EB6D9DA01"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/DADE67F78C7DA387_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A081CA9EB6D9DA01_chA_rough.dds@
+            }
+        }
+
+        over "mat_B1375825599E1C46"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B1375825599E1C46_chA_rough.dds@
+            }
+        }
+
+        over "mat_09DFC46F74E03C51"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/09DFC46F74E03C51_chA_rough.dds@
+            }
+        }
+
+        over "mat_C63B39336232A522"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C63B39336232A522_chA_rough.dds@
+            }
+        }
+
+        over "mat_6B837DCFD43B670A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6B837DCFD43B670A_chA_rough.dds@
+            }
+        }
+
+        over "mat_0DF73AE7F1E73C81"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0DF73AE7F1E73C81_chA_rough.dds@
+            }
+        }
+
+        over "mat_BF0FDFD6E2C3FF64"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BF0FDFD6E2C3FF64_chA_rough.dds@
+            }
+        }
+
+        over "mat_16D1665E268EC2C9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/16D1665E268EC2C9_chA_rough.dds@
+            }
+        }
+
+        over "mat_4BD1EC4188A9EEA0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4BD1EC4188A9EEA0_chA_rough.dds@
+            }
+        }
+
+        over "mat_A2F5FF8D6876CAFE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A2F5FF8D6876CAFE_chA_rough.dds@
+            }
+        }
+
+        over "mat_E0A24DF8AE229D92"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E0A24DF8AE229D92_chA_rough.dds@
+            }
+        }
+
+        over "mat_D03056E0F39B75AC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/D03056E0F39B75AC_chA_rough.dds@
+            }
+        }
+
+        over "mat_035FF986C4612960"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/035FF986C4612960_chA_rough.dds@
+            }
+        }
+
+        over "mat_7352D374BEBC56A5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7352D374BEBC56A5_chA_rough.dds@
+            }
+        }
+
+        over "mat_1A02F03FCA53056C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1A02F03FCA53056C_chA_rough.dds@
+            }
+        }
+
+        over "mat_42770A45AAC46265"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/42770A45AAC46265_chA_rough.dds@
+            }
+        }
+
+        over "mat_38D32EEBB83ED37A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/38D32EEBB83ED37A_chA_rough.dds@
+            }
+        }
+
+        over "mat_570C7635179DD5E6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/570C7635179DD5E6_chA_rough.dds@
+            }
+        }
+
+        over "mat_AC34EB4AB1861CD4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/AC34EB4AB1861CD4_chA_rough.dds@
+            }
+        }
+
+        over "mat_F4C9455BAC8B0B57"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F4C9455BAC8B0B57_chA_rough.dds@
+            }
+        }
+
+        over "mat_34BCB0B90C0D4096"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/34BCB0B90C0D4096_chA_rough.dds@
+            }
+        }
+
+        over "mat_4F00BC79F4235DF2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4F00BC79F4235DF2_chA_rough.dds@
+            }
+        }
+
+        over "mat_93F32C8B01B499AB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/93F32C8B01B499AB_chA_rough.dds@
+            }
+        }
+
+        over "mat_C58474AB01C9BDB2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C58474AB01C9BDB2_chA_rough.dds@
+            }
+        }
+
+        over "mat_5AFD94E4AFCC12D6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5AFD94E4AFCC12D6_chA_rough.dds@
+            }
+        }
+
+        over "mat_6BBADBE7D9EC98CE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6BBADBE7D9EC98CE_chA_rough.dds@
+            }
+        }
+
+        over "mat_6BD5324EE58B07BC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6BD5324EE58B07BC_chA_rough.dds@
+            }
+        }
+
+        over "mat_0432BC23282CC5F0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0432BC23282CC5F0_chA_rough.dds@
+            }
+        }
+
+        over "mat_CF96BA018F4F0927"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CF96BA018F4F0927_chA_rough.dds@
+            }
+        }
+
+        over "mat_ADA166BEA4FA5DC4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ADA166BEA4FA5DC4_chA_rough.dds@
+            }
+        }
+
+        over "mat_F8DB8BBC38ECFFD0"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F8DB8BBC38ECFFD0_chA_rough.dds@
+            }
+        }
+
+        over "mat_DA47DB00F2BFB5CD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DA47DB00F2BFB5CD_chA_rough.dds@
+            }
+        }
+
+        over "mat_DE45CE2A6DFC050B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DE45CE2A6DFC050B_chA_rough.dds@
+            }
+        }
+
+        over "mat_27A7D2857BDDCFEC"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/CA8A678B1261E986_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/27A7D2857BDDCFEC_chA_rough.dds@
+            }
+        }
+
+        over "mat_89F7062D491C38A7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/89F7062D491C38A7_chA_rough.dds@
+            }
+        }
+
+        over "mat_42D15154833256F6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/42D15154833256F6_chA_rough.dds@
+            }
+        }
+
+        over "mat_FF9BA4D39059834B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FF9BA4D39059834B_chA_rough.dds@
+            }
+        }
+
+        over "mat_ED86ED8BC7B31CF1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/ED86ED8BC7B31CF1_chA_rough.dds@
+            }
+        }
+
+        over "mat_52D8F8784405A7CE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/52D8F8784405A7CE_chA_rough.dds@
+            }
+        }
+
+        over "mat_E45902F1CEB3B7C1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E45902F1CEB3B7C1_chA_rough.dds@
+            }
+        }
+
+        over "mat_51B947E0A7B4B98B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/51B947E0A7B4B98B_chA_rough.dds@
+            }
+        }
+
+        over "mat_50327F5DCFE6ADAD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/50327F5DCFE6ADAD_chA_rough.dds@
+            }
+        }
+
+        over "mat_7FCC5C4986375ED5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7FCC5C4986375ED5_chA_rough.dds@
+            }
+        }
+
+        over "mat_18FAD99290B4BE06"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/18FAD99290B4BE06_chA_rough.dds@
+            }
+        }
+
+        over "mat_FD033A00EB9EB645"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FD033A00EB9EB645_chA_rough.dds@
+            }
+        }
+
+        over "mat_BDEF230A79269909"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BDEF230A79269909_chA_rough.dds@
+            }
+        }
+
+        over "mat_2741E6A2FCCA66D6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/2741E6A2FCCA66D6_chA_rough.dds@
+            }
+        }
+
+        over "mat_FBB2D431E20FC836"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FBB2D431E20FC836_chA_rough.dds@
+            }
+        }
+
+        over "mat_FA7984DBD526DB98"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/FA7984DBD526DB98_chA_rough.dds@
+            }
+        }
+
+        over "mat_0DA9F14CFC1AD2D4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0DA9F14CFC1AD2D4_chA_rough.dds@
+            }
+        }
+
+        over "mat_831A25CF268C2EBC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/831A25CF268C2EBC_chA_rough.dds@
+            }
+        }
+
+        over "mat_5B644BABCAC37ADE"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/9581924BBBE0E8FE_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5B644BABCAC37ADE_chA_rough.dds@
+            }
+        }
+
+        over "mat_EF4C0787BAE04556"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EF4C0787BAE04556_chA_rough.dds@
+            }
+        }
+
+        over "mat_7D6A5B2D697969DD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7D6A5B2D697969DD_chA_rough.dds@
+            }
+        }
+
+        over "mat_E37E6FCEAA4DDDA5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E37E6FCEAA4DDDA5_chA_rough.dds@
+            }
+        }
+
+        over "mat_7C57D8639CC72EC1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7C57D8639CC72EC1_chA_rough.dds@
+            }
+        }
+
+        over "mat_9A941E32D0F3F5B7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9A941E32D0F3F5B7_chA_rough.dds@
+            }
+        }
+
+        over "mat_0506FCF5C71C2DAC"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/0506FCF5C71C2DAC_chA_rough.dds@
+            }
+        }
+
+        over "mat_A38703AA27213CF5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A38703AA27213CF5_chA_rough.dds@
+            }
+        }
+
+        over "mat_3259AB92368702FE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3259AB92368702FE_chA_rough.dds@
+            }
+        }
+
+        over "mat_EF7E9FAF88D38223"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EF7E9FAF88D38223_chA_rough.dds@
+            }
+        }
+
+        over "mat_3D267EF13DE0D76F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3D267EF13DE0D76F_chA_rough.dds@
+            }
+        }
+
+        over "mat_F49D7C1E75380D91"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F49D7C1E75380D91_chA_rough.dds@
+            }
+        }
+
+        over "mat_5CF51465D8A6CA63"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/5CF51465D8A6CA63_chA_rough.dds@
+            }
+        }
+
+        over "mat_6C9B7E2551B95D88"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6C9B7E2551B95D88_chA_rough.dds@
+            }
+        }
+
+        over "mat_490C944BB3CE38EE"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/490C944BB3CE38EE_chA_rough.dds@
+            }
+        }
+
+        over "mat_56A10694CB93A141"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/56A10694CB93A141_chA_rough.dds@
+            }
+        }
+
+        over "mat_F14083D072727E93"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F14083D072727E93_chA_rough.dds@
+            }
+        }
+
+        over "mat_1C1A6E5ED6BBB595"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1C1A6E5ED6BBB595_chA_rough.dds@
+            }
+        }
+
+        over "mat_07B0297097DEA515"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/07B0297097DEA515_chA_rough.dds@
+            }
+        }
+
+        over "mat_044C519295CCF7C6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/044C519295CCF7C6_chA_rough.dds@
+            }
+        }
+
+        over "mat_A1DAB4E51A91DF2B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A1DAB4E51A91DF2B_chA_rough.dds@
+            }
+        }
+
+        over "mat_B6B88E729DD7BF63"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B6B88E729DD7BF63_chA_rough.dds@
+            }
+        }
+
+        over "mat_9127AEB74F2CDCB3"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/9127AEB74F2CDCB3_chA_rough.dds@
+            }
+        }
+
+        over "mat_EF24FAE2933B3CB7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EF24FAE2933B3CB7_chA_rough.dds@
+            }
+        }
+
+        over "mat_55AFFCC4BB0143E4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/55AFFCC4BB0143E4_chA_rough.dds@
+            }
+        }
+
+        over "mat_4ADA7241A0E15C29"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/4ADA7241A0E15C29_chA_rough.dds@
+            }
+        }
+
+        over "mat_DCE3E7E15326BE5C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DCE3E7E15326BE5C_chA_rough.dds@
+            }
+        }
+
+        over "mat_836CE5F0593EAE09"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/836CE5F0593EAE09_chA_rough.dds@
+            }
+        }
+
+        over "mat_E9D9420F0F5A7BC5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E9D9420F0F5A7BC5_chA_rough.dds@
+            }
+        }
+
+        over "mat_DFC04899FCF599E9"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/3D8753940E95AA2A_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/DFC04899FCF599E9_chA_rough.dds@
+            }
+        }
+
+        over "mat_E3E84802D26B4218"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E3E84802D26B4218_chA_rough.dds@
+            }
+        }
+
+        over "mat_C1DF7D5573CD18FF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/C1DF7D5573CD18FF_chA_rough.dds@
+            }
+        }
+
+        over "mat_E8892B613F44F953"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E8892B613F44F953_chA_rough.dds@
+            }
+        }
+
+        over "mat_6BBF526E05DF9E92"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6BBF526E05DF9E92_chA_rough.dds@
+            }
+        }
+
+        over "mat_27952511BF590F5E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/27952511BF590F5E_chA_rough.dds@
+            }
+        }
+
+        over "mat_8D12DA95AB9134A9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8D12DA95AB9134A9_chA_rough.dds@
+            }
+        }
+
+        over "mat_27CB286468F0C35A"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/27CB286468F0C35A_chA_rough.dds@
+            }
+        }
+
+        over "mat_1CAF74409D0846D6"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1CAF74409D0846D6_chA_rough.dds@
+            }
+        }
+
+        over "mat_1C211619CA576D30"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1C211619CA576D30_chA_rough.dds@
+            }
+        }
+
+        over "mat_6B1B9A32F631C8B7"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6B1B9A32F631C8B7_chA_rough.dds@
+            }
+        }
+
+        over "mat_B8C04CDDB06AA065"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B8C04CDDB06AA065_chA_rough.dds@
+            }
+        }
+
+        over "mat_8E4769B1BE23E039"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8E4769B1BE23E039_chA_rough.dds@
+            }
+        }
+
+        over "mat_423C2BA6932DA396"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/423C2BA6932DA396_chA_rough.dds@
+            }
+        }
+
+        over "mat_92AD68FD5FDB110E"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/92AD68FD5FDB110E_chA_rough.dds@
+            }
+        }
+
+        over "mat_E30FE4F24B9D3DC2"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/3A9112582ED31F64_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E30FE4F24B9D3DC2_chA_rough.dds@
+            }
+        }
+
+        over "mat_3E3F95773188367D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3E3F95773188367D_chA_rough.dds@
+            }
+        }
+
+        over "mat_1EB294FDD6F4250F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1EB294FDD6F4250F_chA_rough.dds@
+            }
+        }
+
+        over "mat_79B93AEF93C694D2"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/79B93AEF93C694D2_chA_rough.dds@
+            }
+        }
+
+        over "mat_EBD7EC2913893E24"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EBD7EC2913893E24_chA_rough.dds@
+            }
+        }
+
+        over "mat_F6B05B9DCC18A606"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F6B05B9DCC18A606_chA_rough.dds@
+            }
+        }
+
+        over "mat_F71E6C4262F6DC5A"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/6005CF1771A6DB8E_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F71E6C4262F6DC5A_chA_rough.dds@
+            }
+        }
+
+        over "mat_E4215677914A4E28"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E4215677914A4E28_chA_rough.dds@
+            }
+        }
+
+        over "mat_A3272A8A26F9BB6F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/A3272A8A26F9BB6F_chA_rough.dds@
+            }
+        }
+
+        over "mat_70B3B76EE4568D44"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/70B3B76EE4568D44_chA_rough.dds@
+            }
+        }
+
+        over "mat_7AE6E767545979EA"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/7AE6E767545979EA_chA_rough.dds@
+            }
+        }
+
+        over "mat_8E7EA96220D88C17"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/8E7EA96220D88C17_chA_rough.dds@
+            }
+        }
+
+        over "mat_BF6F544B7737C921"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BF6F544B7737C921_chA_rough.dds@
+            }
+        }
+
+        over "mat_65ADD92ECEE4356F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/65ADD92ECEE4356F_chA_rough.dds@
+            }
+        }
+
+        over "mat_F7811B2C043D2FE4"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F7811B2C043D2FE4_chA_rough.dds@
+            }
+        }
+
+        over "mat_86D11216373CF26F"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/86D11216373CF26F_chA_rough.dds@
+            }
+        }
+
+        over "mat_F27EA6399DB406B5"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/F27EA6399DB406B5_chA_rough.dds@
+            }
+        }
+
+        over "mat_3B9E091FA48873DF"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/3B9E091FA48873DF_chA_rough.dds@
+            }
+        }
+
+        over "mat_1234CE5CD18D2E99"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1234CE5CD18D2E99_chA_rough.dds@
+            }
+        }
+
+        over "mat_016FEB5D842238DB"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/016FEB5D842238DB_chA_rough.dds@
+            }
+        }
+
+        over "mat_EEDFC86B14DD129D"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/EEDFC86B14DD129D_chA_rough.dds@
+            }
+        }
+
+        over "mat_E715787595F2B7E1"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E715787595F2B7E1_chA_rough.dds@
+            }
+        }
+
+        over "mat_E66DD8A38DD7B281"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/E66DD8A38DD7B281_chA_rough.dds@
+            }
+        }
+
+        over "mat_91B62BE347F5C746"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/91B62BE347F5C746_chA_rough.dds@
+            }
+        }
+
+        over "mat_B3EEE0A68A540385"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/30E8A3798A642FA7_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B3EEE0A68A540385_chA_rough.dds@
+            }
+        }
+
+        over "mat_B017FDE1997B985A"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/E4D187F7725B1ABA_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/B017FDE1997B985A_chA_rough.dds@
+            }
+        }
+
+        over "mat_CFFABFD1B181EEB3"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/2AD175AFC2F735BD_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/CFFABFD1B181EEB3_chA_rough.dds@
+            }
+        }
+
+        over "mat_BE279FBCCBB7890B"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BE279FBCCBB7890B_chA_rough.dds@
+            }
+        }
+
+        over "mat_081274130412367D"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/C797B6FF33C9FDBE_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/081274130412367D_chA_rough.dds@
+            }
+        }
+
+        over "mat_1B7D554D6C5B0E5C"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1B7D554D6C5B0E5C_chA_rough.dds@
+            }
+        }
+
+        over "mat_BB6CB3A51E274AFD"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/BB6CB3A51E274AFD_chA_rough.dds@
+            }
+        }
+
+        over "mat_72DFF25CAD4D59A2"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/751223EC59D06CA2_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/72DFF25CAD4D59A2_chA_rough.dds@
+            }
+        }
+
+        over "mat_74B8D114E0C5BC01"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/D87348126B5944CA_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/74B8D114E0C5BC01_chA_rough.dds@
+            }
+        }
+
+        over "mat_6743E713524A38E9"
+        {
+            over "Shader"
+            {
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/6743E713524A38E9_chA_rough.dds@
+            }
+        }
+
+        over "mat_1CBB7AC2AF82F6CB"
+        {
+            over "Shader"
+            {
+                asset inputs:normalmap_texture = @./assets/autoconv/F21944E788750CBF_normal_oth.dds@
+                asset inputs:reflectionroughness_texture = @./assets/autoconv/1CBB7AC2AF82F6CB_chA_rough.dds@
+            }
+        }
+
     }
 }
-
