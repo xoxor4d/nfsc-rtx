@@ -10,28 +10,138 @@
 
 namespace comp
 {
+	freecam_t g_freecam = {};
+
+	// ----
+
 	void on_begin_scene_cb()
 	{
 		if (!tex_addons::initialized) {
 			tex_addons::init_texture_addons();
 		}
 
-		// Actual camera setup here if matrices are available
-		// No longer needed
-		/*{
-			shared::globals::d3d_device->SetTransform(D3DTS_WORLD, &shared::globals::IDENTITY); // does not hurt
+		const auto im = imgui::get();
 
-			auto sview = reinterpret_cast<game::eViewPlatInterface*>(0xB4AF90);
-			if (sview && sview->m_pTransform)
+		if (im->m_freecam_mode)
+		{
+			*game::game_input_allowed = false;
+			*game::cam_stop_updates = true;
+
+			const bool pressed_w = ImGui::IsKeyDown(ImGuiKey_W);
+			const bool pressed_a = ImGui::IsKeyDown(ImGuiKey_A);
+			const bool pressed_s = ImGui::IsKeyDown(ImGuiKey_S);
+			const bool pressed_d = ImGui::IsKeyDown(ImGuiKey_D);
+			const bool pressed_r = ImGui::IsKeyDown(ImGuiKey_R);
+			const bool pressed_f = ImGui::IsKeyDown(ImGuiKey_F);
+			const bool pressed_c = ImGui::IsKeyDown(ImGuiKey_C);
+			const bool pressed_shift = ImGui::IsKeyDown(ImGuiKey_LeftShift);
+			const bool pressed_space = ImGui::IsKeyDown(ImGuiKey_Space);
+
+			const float forward_speed = im->m_freecam_fwd_speed * (pressed_shift ? 2.0f : 1.0f);
+			const float strafe_speed = im->m_freecam_rt_speed * (pressed_shift ? 2.0f : 1.0f);
+			const float upward_speed = im->m_freecam_up_speed * (pressed_shift ? 2.0f : 1.0f);
+			const float roll_speed = im->m_freecam_roll_speed * (pressed_shift ? 2.0f : 1.0f);
+
+			float dt = ImGui::GetIO().DeltaTime * 10.0f; // frame rate independent 
+
+			// start free cam at current pos
+			if (!g_freecam.active)
 			{
-				const auto& im = imgui::get();
-				if (im->m_dbg_use_game_matrices)
-				{
-					shared::globals::d3d_device->SetTransform(D3DTS_VIEW, &sview->m_pTransform->ViewMatrix);
-					shared::globals::d3d_device->SetTransform(D3DTS_PROJECTION, &sview->m_pTransform->ProjectionMatrix);
-				}
+				g_freecam.near_clip = game::the_camera->near_clip;
+				g_freecam.far_clip = game::the_camera->far_clip;
+				g_freecam.horizontal_fov = game::the_camera->horizontal_fov;
+
+				g_freecam.position.x = game::the_camera->position.x;
+				g_freecam.position.y = game::the_camera->position.y;
+				g_freecam.position.z = game::the_camera->position.z;
+
+				const D3DXMATRIX& vm = game::the_camera->view_matrix;
+				g_freecam.right = { vm._11, vm._21, vm._31 };
+				g_freecam.up = { vm._12, vm._22, vm._32 };
+				g_freecam.forward = { vm._13, vm._23, vm._33 };
+
+				g_freecam.active = true;
 			}
-		}*/
+
+			ImGuiIO& io = ImGui::GetIO();
+			if (ImGui::IsMouseDown(ImGuiMouseButton_Right))
+			{
+				float yaw = io.MouseDelta.x * im->m_freecam_mouse_sensitivity;
+				float pitch = -io.MouseDelta.y * im->m_freecam_mouse_sensitivity;
+
+				D3DXMatrixRotationAxis(&g_freecam.yaw_mat, &g_freecam.up, yaw);
+
+				D3DXVec3TransformNormal(&g_freecam.forward, &g_freecam.forward, &g_freecam.yaw_mat);
+				D3DXVec3TransformNormal(&g_freecam.right, &g_freecam.right, &g_freecam.yaw_mat);
+
+				D3DXMatrixRotationAxis(&g_freecam.pitch_mat, &g_freecam.right, pitch);
+
+				D3DXVec3TransformNormal(&g_freecam.forward, &g_freecam.forward, &g_freecam.pitch_mat);
+				D3DXVec3TransformNormal(&g_freecam.up, &g_freecam.up, &g_freecam.pitch_mat);
+			}
+
+			// roll
+			if (pressed_r || pressed_f)
+			{
+				const float roll = (pressed_r ? -1.0f : 1.0f) * roll_speed * dt;
+				D3DXMatrixRotationAxis(&g_freecam.roll_mat, &g_freecam.forward, roll);
+
+				D3DXVec3TransformNormal(&g_freecam.right, &g_freecam.right, &g_freecam.roll_mat);
+				D3DXVec3TransformNormal(&g_freecam.up, &g_freecam.up, &g_freecam.roll_mat);
+			}
+
+			// normalize to prevent drift
+			D3DXVec3Normalize(&g_freecam.forward, &g_freecam.forward);
+			D3DXVec3Cross(&g_freecam.right, &g_freecam.up, &g_freecam.forward);
+			D3DXVec3Normalize(&g_freecam.right, &g_freecam.right);
+			D3DXVec3Cross(&g_freecam.up, &g_freecam.forward, &g_freecam.right);
+
+			// movement
+			if (pressed_w) { g_freecam.position += g_freecam.forward * forward_speed * dt; }
+			if (pressed_s) { g_freecam.position -= g_freecam.forward * forward_speed * dt; }
+
+			if (pressed_d) { g_freecam.position += g_freecam.right * strafe_speed * dt; }
+			if (pressed_a) { g_freecam.position -= g_freecam.right * strafe_speed * dt; }
+
+			if (pressed_c) { g_freecam.position += g_freecam.up * upward_speed * dt; }
+			if (pressed_space) { g_freecam.position -= g_freecam.up * upward_speed * dt; }
+
+			// build view matrix
+			D3DXVECTOR3 target = g_freecam.position + g_freecam.forward;
+
+			//D3DXMATRIX view;
+			D3DXMatrixLookAtLH(&g_freecam.view, &g_freecam.position, &target, &g_freecam.up);
+
+			game::the_camera->view_matrix = g_freecam.view;
+			game::the_camera->position.x = g_freecam.position.x;
+			game::the_camera->position.y = g_freecam.position.y;
+			game::the_camera->position.z = g_freecam.position.z;
+
+			D3DXVECTOR3 f = g_freecam.forward;
+			D3DXVec3Normalize(&f, &f);
+			game::the_camera->direction.x = f.x;
+			game::the_camera->direction.y = f.y;
+			game::the_camera->direction.z = f.z;
+
+			game::the_camera->target.x = g_freecam.position.x + game::the_camera->direction.x;
+			game::the_camera->target.y = g_freecam.position.y + game::the_camera->direction.y;
+			game::the_camera->target.z = g_freecam.position.z + game::the_camera->direction.z;
+
+			// ---
+			game::the_camera->near_clip = g_freecam.near_clip;
+			game::the_camera->far_clip = g_freecam.far_clip;
+			game::the_camera->horizontal_fov = g_freecam.horizontal_fov;
+		}
+
+		// on reset
+		else if (g_freecam.active)
+		{
+			*game::game_input_allowed = shared::globals::imgui_allow_input_bypass;
+			*game::cam_stop_updates = false;
+
+			g_freecam = {};
+			g_freecam.active = false;
+		}
 
 		// for hyperlinked fork tests: (treecull function in hyperlinked is much slower than og)
 		//*game::drawscenery_cell_dist_check_01 = cs->nocull_distance_scenery._float();
@@ -67,7 +177,7 @@ namespace comp
 
 	// keep game running when imgui open, can pause if imgui not open and wnd unfocused
 	int game_focused_hk() {
-		return shared::globals::imgui_menu_open || *game::game_input_allowed;
+		return shared::globals::imgui_menu_open || *game::game_input_allowed || imgui::get()->m_freecam_mode;
 	}
 
 	int game_focused_helper = 0;

@@ -23,11 +23,14 @@ namespace comp::game
 	options* game_options = nullptr;
 	int* g_shaderDetailLevel = nullptr;
 
+	bool* cam_stop_updates = nullptr;
+	camera_s* the_camera = nullptr;
+
 	// --------------
 	// game functions
 
-	// SampleTemplate_t SampleTemplate = nullptr;
 	IsPaused_t IsPaused = nullptr;
+	SetCameraMatrix_t SetCameraMatrix = nullptr;
 
 	// --------------
 	// game asm offsets
@@ -72,6 +75,11 @@ namespace comp::game
 #define PATTERN_OFFSET_SIMPLE(var, pattern, byte_offset, static_addr) \
 		if (const auto offset = shared::utils::mem::find_pattern(##pattern, byte_offset, #var, use_pattern, static_addr); offset) { \
 			(var) = offset; found_pattern_count++; \
+		} total_pattern_count++;
+
+#define PATTERN_OFFSET_CAST_TYPE(var, type, pattern, byte_offset, static_addr) \
+		if (const auto offset = shared::utils::mem::find_pattern(##pattern, byte_offset, #var, use_pattern, static_addr); offset) { \
+			(var) = (type)offset; found_pattern_count++; \
 		} total_pattern_count++;
 
 #define PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(var, type, pattern, byte_offset, static_addr) \
@@ -148,6 +156,13 @@ namespace comp::game
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(g_shaderDetailLevel, int*,
 			"89 35 ? ? ? ? E8 ? ? ? ? A1 ? ? ? ? 83 C4", 2, 0x711652);
 
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(cam_stop_updates, bool*,
+			"A0 ? ? ? ? 84 C0 75 ? 8B 46 ? 8B 4E", 1, 0x47AC61);
+
+		if (const auto offset = shared::utils::mem::find_pattern("C7 05 ? ? ? ? ? ? ? ? 88 1D ? ? ? ? 89 15", 6, "the_camera", use_pattern, 0x710A72); offset) {
+			the_camera = (camera_s*) *(DWORD*)offset; found_pattern_count++;
+		} total_pattern_count++;
+
 		// end GAME_VARIABLES
 #pragma endregion
 
@@ -164,6 +179,10 @@ namespace comp::game
 		{
 			IsPaused = (IsPaused_t)shared::utils::mem::resolve_relative_call_address(offset); found_pattern_count++;
 		} total_pattern_count++;
+
+		PATTERN_OFFSET_CAST_TYPE(SetCameraMatrix, SetCameraMatrix_t,
+			"55 8B EC 83 E4 ? 81 EC ? ? ? ? A0 ? ? ? ? 84 C0 53 56 57 8B D9", 0, 0x4822F0);
+		
 
 		// end GAME_FUNCTIONS
 #pragma endregion

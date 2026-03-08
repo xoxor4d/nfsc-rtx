@@ -69,12 +69,12 @@ namespace comp
 			}
 		}
 
-		if (shared::globals::imgui_menu_open)
+		if (shared::globals::imgui_menu_open || get()->m_freecam_mode)
 		{
 			//auto& io = ImGui::GetIO();
 			ImGui_ImplWin32_WndProcHandler(shared::globals::main_window, message_type, wparam, lparam);
 		} else {
-			shared::globals::imgui_allow_input_bypass =false; // always reset if there is no imgui window open
+			shared::globals::imgui_allow_input_bypass = false; // always reset if there is no imgui window open
 		}
 
 		return shared::globals::imgui_menu_open;
@@ -579,6 +579,102 @@ namespace comp
 			}
 
 			SPACEY4;
+		}
+	}
+
+	void quicksettings_util_container()
+	{
+		const auto& im = imgui::get();
+
+		SPACEY4;
+		ImGui::SeparatorText("    Screenshot Mode     ");
+		SPACEY4;
+
+		
+		{
+			ImGui::Style_ColorButtonPush(im->m_screenshot_mode ? ImVec4(0.22f, 0.5f, 0.26f, 1.0f) : ImGui::GetStyleColorVec4(ImGuiCol_Button), true);
+			if (ImGui::Button("Toggle Screenshot Mode", ImVec2(ImGui::GetContentRegionAvail().x, 48))) {
+				im->m_screenshot_mode = !im->m_screenshot_mode;
+			}
+			ImGui::Style_ColorButtonPop();
+
+			// ---
+
+			SPACEY8;
+			ImGui::SeparatorText("    FreeCam     ");
+			SPACEY4;
+
+			ImGui::Style_ColorButtonPush(im->m_freecam_mode ? ImVec4(0.22f, 0.5f, 0.26f, 1.0f) : ImGui::GetStyleColorVec4(ImGuiCol_Button), true);
+			if (ImGui::Button("FreeCam Mode", ImVec2(ImGui::GetContentRegionAvail().x, 48))) {
+				im->m_freecam_mode = !im->m_freecam_mode;
+			} TT("Enable FreeCam Mode");
+			ImGui::Style_ColorButtonPop();
+
+			SPACEY4;
+
+			if (ImGui::TreeNode("Controls"))
+			{
+				if (ImGui::BeginTable("##controls", 2, ImGuiTableFlags_Borders, ImVec2(ImGui::GetContentRegionAvail().x, 0.0f)))
+				{
+					ImGui::TableNextRow();
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("WASD");
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Forward & Strafing");
+
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Space/C");
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Up & Down");
+
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("R/F");
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Roll");
+
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Shift");
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Speedup");
+
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Holding Right Mouse    ");
+					ImGui::TableNextColumn(); ImGui::TextUnformatted("Rotate");
+
+					ImGui::EndTable();
+				}
+
+				ImGui::Checkbox("Show Control Hint", &im->m_freecam_mode_hint);
+
+				ImGui::TreePop();
+			}
+
+			SPACEY4;
+
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderFloat("FreeCam Forward Speed", &im->m_freecam_fwd_speed, 0.01f, 10.0f, "%.2f");
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderFloat("FreeCam Strafe Speed", &im->m_freecam_rt_speed, 0.01f, 10.0f, "%.2f");
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderFloat("FreeCam Upward Speed", &im->m_freecam_up_speed, 0.01f, 10.0f, "%.2f");
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderFloat("FreeCam Roll Speed", &im->m_freecam_roll_speed, 0.001f, 1.0f, "%.3f");
+			SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderFloat("FreeCam Mouse Sensitivity", &im->m_freecam_mouse_sensitivity, 0.0001f, 1.0f, "%.4f");
+
+			SPACEY4;
+			ImGui::Separator();
+			SPACEY4;
+
+			ImGui::BeginDisabled(!im->m_freecam_mode);
+			{
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderFloat("FreeCam NearClip", &g_freecam.near_clip, 0.001f, 1000.0f, "%.4f");
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); ImGui::SliderFloat("FreeCam FarClip", &g_freecam.far_clip, 0.001f, 100000.0f, "%.4f");
+
+				int temp_fov = g_freecam.horizontal_fov;
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); if (ImGui::SliderInt("FreeCam HorzFov", &temp_fov, 0, 65535)) {
+					g_freecam.horizontal_fov = static_cast<std::uint16_t>(temp_fov);
+				}
+				ImGui::EndDisabled();
+			}
+			
+			SPACEY4;
+		}
+	}
+
+	void imgui::tab_utils()
+	{
+		// utilities
+		{
+			static float cont_quick_utilities_height = 0.0f;
+			cont_quick_utilities_height = ImGui::Widget_ContainerWithCollapsingTitle("Utilities", cont_quick_utilities_height, quicksettings_util_container,
+				true, ICON_FA_TERMINAL, &ImGuiCol_ContainerBackground, &ImGuiCol_ContainerBorder);
 		}
 	}
 
@@ -1942,6 +2038,20 @@ namespace comp
 	void imgui::draw_debug()
 	{
 		const auto im = imgui::get();
+
+		if (m_freecam_mode && im->m_freecam_mode_hint && !m_screenshot_mode)
+		{
+			const float line_height = 20.0f;
+			const float line_start_y = 20.0f;
+			uint32_t curr_line = 0u;
+
+			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "FreeCam Controls:");
+			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "WASD:\t\t    Forward & Strafing");
+			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "Space/C:\t     Up & Down");
+			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "R/F:\t\t\t      Roll");
+			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "Shift:\t\t\t    Speedup");
+			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "Right Mouse:  Rotate");
+		}
 		
 		if (m_dbg_visualize_model_info)
 		{
@@ -2037,6 +2147,7 @@ namespace comp
 			ADD_TAB("Comp Settings", tab_compsettings);
 			ADD_TAB("Map Settings", tab_map_settings);
 			ADD_TAB("Dev", tab_dev);
+			ADD_TAB("Utils", tab_utils);
 			ADD_TAB("About", tab_about);
 			ImGui::EndTabBar();
 		}
@@ -2108,8 +2219,6 @@ namespace comp
 
 					if (shared::globals::imgui_menu_open) 
 					{
-						//*game::game_input_allowed = shared::globals::imgui_allow_input_bypass;
-
 						io.MouseDrawCursor = true;
 						im->devgui();
 
@@ -2126,7 +2235,8 @@ namespace comp
 							}
 
 							// enable game input if no imgui window is hovered and right mouse is held
-							else
+							// and freecam not enabled
+							else if (!get()->m_freecam_mode)
 							{
 								ImGui::SetWindowFocus(); // unfocus input text
 								shared::globals::imgui_allow_input_bypass = true;

@@ -627,9 +627,15 @@ namespace comp
 		dev->GetTransform(D3DTS_PROJECTION, &proj);
 
 
-		const bool is_2d = m_triggered_remix_injection; // everything after hud injection is 2d
-		if (!is_2d && shared::utils::float_equal(proj.m[3][3], 1.0f)) {
+		bool is_2d = m_triggered_remix_injection; // everything after hud injection is 2d
+		if (!is_2d && shared::utils::float_equal(proj.m[3][3], 1.0f)) 
+		{
+			is_2d = true; // also "capture" the very first hud elem
 			manually_trigger_remix_injection(dev);
+		}
+
+		if (is_2d && im->m_screenshot_mode) {
+			ctx.modifiers.do_not_render = true;
 		}
 
 		if (g_is_rendering_rain) 

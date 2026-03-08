@@ -56,6 +56,16 @@ namespace comp
 		bool m_dbg_force_ff_indexed_prim_up = false;
 		bool m_dbg_use_game_matrices = false;
 
+		bool m_screenshot_mode = false;
+		bool m_freecam_mode = false;
+		bool m_freecam_mode_hint = true;
+
+		float m_freecam_fwd_speed = 0.5f;
+		float m_freecam_rt_speed = 0.5f;
+		float m_freecam_up_speed = 0.5f; 
+		float m_freecam_roll_speed = 0.05f;
+		float m_freecam_mouse_sensitivity = 0.0025f;
+
 		bool m_dbg_disable_prim_draw = false;
 		bool m_dbg_disable_prim_up_draw = false;
 		bool m_dbg_disable_indexed_prim_draw = false;
@@ -316,6 +326,7 @@ namespace comp
 
 	private:
 		void tab_about();
+		void tab_utils();
 		void tab_dev();
 		void tab_compsettings();
 		void tab_map_settings();

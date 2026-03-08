@@ -514,7 +514,7 @@ namespace comp
 			variable nocull_distance = {
 				"nocull_distance",
 				("Distance (radius around player) where culling of objects is disabled"),
-				150.0f
+				75.0f
 			};
 
 

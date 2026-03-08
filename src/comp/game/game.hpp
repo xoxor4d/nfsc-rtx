@@ -3,6 +3,8 @@
 
 namespace comp::game
 {
+	class camera_s;
+
 	// --------------
 	// game variables
 
@@ -23,15 +25,51 @@ namespace comp::game
 	extern options* game_options;
 	extern int* g_shaderDetailLevel;
 
+	extern bool* cam_stop_updates;
+	extern camera_s* the_camera;
+
 	// --------------
 	// game functions
-
-	//typedef	void (__cdecl* SampleTemplate_t)(uint32_t arg1, uint32_t arg2);
-	//	extern SampleTemplate_t SampleTemplate;
 
 	typedef	bool(__cdecl* IsPaused_t)();
 		extern IsPaused_t IsPaused;
 
+
+	typedef	void(__stdcall* SetCameraMatrix_t)(D3DXMATRIX* mtx, float time);
+		extern SetCameraMatrix_t SetCameraMatrix;
+
+	class camera_s
+	{
+	public:
+		D3DXMATRIX view_matrix;
+		Vector position;
+		int pad_pos;
+		Vector direction;
+		int pad_dir;
+		Vector target;
+		int pad_target;
+		Vector4D noise_frequency_1;
+		Vector4D noise_amplitude_1;
+		Vector4D noise_frequency_2;
+		Vector4D noise_amplitude_2;
+		Vector4D fade_color;
+		float target_distance;
+		float focal_distance;
+		float depth_of_field;
+		float dof_falloff;
+		float dof_max_intensity;
+		float near_clip;
+		float far_clip;
+		float lb_height;
+		float sim_time_multiplier;
+		std::uint16_t horizontal_fov;
+
+		void set_camera_matrix(D3DXMATRIX* m, float fTime)
+		{
+			((void(__thiscall*)(camera_s*, D3DXMATRIX*, float))0x4822F0)(this, m, fTime);
+			//game::SetCameraMatrix(m, fTime);
+		}
+	};
 
 	// --------------
 	// game asm offsets
