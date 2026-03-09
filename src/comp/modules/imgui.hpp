@@ -59,6 +59,7 @@ namespace comp
 		bool m_screenshot_mode = false;
 		bool m_freecam_mode = false;
 		bool m_freecam_mode_hint = true;
+		bool m_freecam_freeze_allow_controls = false;
 
 		bool m_dbg_show_camera_info = false;
 

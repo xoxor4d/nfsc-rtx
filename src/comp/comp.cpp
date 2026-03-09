@@ -26,7 +26,12 @@ namespace comp
 
 		if (im->m_freecam_mode)
 		{
-			*game::game_input_allowed = false;
+			if (!im->m_freecam_freeze_allow_controls) {
+				*game::game_input_allowed = false;
+			} else {
+				*game::game_input_allowed = true;
+			}
+			
 			*game::cam_stop_updates = true;
 
 			const bool pressed_w = ImGui::IsKeyDown(ImGuiKey_W);

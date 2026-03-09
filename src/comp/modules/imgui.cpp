@@ -685,6 +685,9 @@ namespace comp
 
 			if (ImGui::TreeNode("Controls"))
 			{
+				ImGui::Checkbox("Allow Controls", &im->m_freecam_freeze_allow_controls);
+				SPACEY4;
+
 				if (ImGui::BeginTable("##controls", 2, ImGuiTableFlags_Borders, ImVec2(ImGui::GetContentRegionAvail().x, 0.0f)))
 				{
 					ImGui::TableNextRow();
@@ -2363,7 +2366,7 @@ namespace comp
 
 							// enable game input if no imgui window is hovered and right mouse is held
 							// and freecam not enabled
-							else if (!get()->m_freecam_mode)
+							else if (!get()->m_freecam_mode || im->m_freecam_freeze_allow_controls)
 							{
 								ImGui::SetWindowFocus(); // unfocus input text
 								shared::globals::imgui_allow_input_bypass = true;
