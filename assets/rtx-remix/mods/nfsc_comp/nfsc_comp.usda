@@ -7,8 +7,8 @@
                 double radius = 500
             }
             dictionary Perspective = {
-                double3 position = (3932.4848940175048, 3562.1350862070035, 225.90753498007726)
-                double3 target = (9240.120495292564, 3491.546912068242, -599.2609303045938)
+                double3 position = (107.36928558349608, 3.6388564109802317, 1.8524745702743495)
+                double3 target = (30.39812026312017, -64.4252135380956, -29.572969196111274)
             }
             dictionary Right = {
                 double3 position = (0, -500, 0)
@@ -22,10 +22,11 @@
         }
         string lightspeed_layer_type = "workfile"
         dictionary omni_layer = {
-            string authoring_layer = "./comp_water.usda"
+            string authoring_layer = "./comp_cars.usda"
             dictionary locked = {
-                bool "./deps/captures/8_water_x_.usd" = 1
+                bool "./deps/captures/1_car_caymans.usd" = 1
                 bool "./deps/captures/aaaaaaa2026-02-26_19-36-27.usd" = 1
+                bool "./deps/captures/rain_2.usd" = 1
             }
         }
         dictionary renderSettings = {
@@ -36,9 +37,17 @@
     startTimeCode = 0
     subLayers = [
         @./mod.usda@,
-        @./deps/captures/8_water_x_.usd@
+        @./deps/captures/1_car_caymans.usd@
     ]
     timeCodesPerSecond = 24
     upAxis = "Z"
 )
+
+def Scope "CustomTags" (
+    prepend apiSchemas = ["CollectionAPI:headlight"]
+)
+{
+    uniform token collection:headlight:expansionRule = "explicitOnly"
+    prepend rel collection:headlight:includes = </RootNode/instances/inst_B69DE87F511A6C07_0/SphereLight>
+}
 

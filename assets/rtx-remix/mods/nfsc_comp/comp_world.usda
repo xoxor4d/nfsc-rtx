@@ -126,6 +126,7 @@ over "RootNode"
             over "Shader"
             {
                 custom float inputs:reflection_roughness_constant = 0.081
+                custom bool inputs:use_legacy_alpha_state = 0
             }
         }
 
