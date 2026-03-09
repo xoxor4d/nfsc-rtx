@@ -1061,4 +1061,56 @@ namespace comp::game
 		void* blend_data; // pca::blend_data
 		bool use_low_lod;
 	};
+
+
+	struct time_of_day_params_s
+	{
+		Vector4D diffuse_color;
+		Vector4D ambient_color;
+		Vector4D specular_color;
+		Vector4D car_shadow_color;
+		float car_spec_scale;
+		float env_sky_brightness;
+		std::int32_t pad[2];
+		Vector4D fog_sky_color;
+		Vector4D fog_haze_color;
+		float fog_sky_color_scale;
+		float fog_haze_color_scale;
+		float fog_in_light_scatter;
+		float fog_sun_falloff;
+		float fog_distance_scale;
+		float align_pad[6];
+	};
+
+	struct time_of_day_s
+	{
+		float update_rate;
+		std::int32_t update_direction;
+		float current_time_of_day;
+		float sun_azimuth;
+		float latitude;
+		time_of_day_params_s current;
+		Vector4D some_color;
+		char pad_sunny[16];
+		char pad_dusk_sunny[16];
+		char pad_overcast[16];
+		char pad_dusk_overcast[16];
+		char pad_unk1[16];
+		char pad_unk2[16];
+		char pad_unk3[16];
+		char pad_unk4[16];
+		float cloud_intensity;
+		float cloud_desired;
+		std::int32_t pad[2];
+		Vector sun_position;
+		int pad_sun_pos;
+		Vector sun_direction;
+		int pad_sun_dir;
+	}; 
+	STATIC_ASSERT_OFFSET(time_of_day_s, cloud_intensity, 0x140);
+
+	struct time_of_day_ptr_s
+	{
+		time_of_day_s* tod;
+	};
 }

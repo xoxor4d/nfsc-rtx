@@ -372,6 +372,13 @@ public:
 		return false;
 	}
 
+	void Set(const float& in_x, const float& in_y, const float& in_z)
+	{
+		x = in_x;
+		y = in_y;
+		z = in_z;
+	}
+
 	float Length() const {
 		return sqrtf(x * x + y * y + z * z);
 	}

@@ -507,6 +507,64 @@ namespace comp
 				60
 			};
 
+			variable remix_sky_horizon_height_adjustment = {
+				"remix_sky_horizon_height_adjustment",
+				("Will adjust remix' atmosphere height setting based on camera height ('rtx.volumetrics.atmosphereHeightMeters').\n"
+				 "Fixes missing volumetric fog at higher altitudes."),
+				true
+			};
+
+			variable remix_sky_horizon_height_min = {
+				"remix_sky_horizon_height_min",
+				("Minimum height of remix' atmosphere @ game camera height"),
+				2.0f, 0.0f
+			};
+
+			variable remix_sky_horizon_height_max = {
+				"remix_sky_horizon_height_max",
+				("Maximum height of remix' atmosphere @ game camera height"),
+				10.0f, 800.0f
+			};
+
+
+			// ----------------------------------
+			// light related settings
+
+			variable light_sun_enable = {
+				"light_create_sun",
+				("Creates a distant light via the remixApi that can be controlled by the CompMod."),
+				true
+			};
+
+			variable light_sun_direction = {
+				"light_sun_direction",
+				("Direction for distant light created via the remixApi"),
+				0.46f, -0.35f, -0.198f
+			};
+
+			variable light_sun_intensity = {
+				"light_sun_intensity",
+				("Intensity for distant light created via the remixApi. Will me multiplied with light_sun_color"),
+				0.20f
+			};
+
+			variable light_sun_color = {
+				"light_sun_color",
+				("Color / radiance for distant light created via the remixApi. Will me multiplied by light_sun_intensity"),
+				0.7f, 0.8f, 0.92f
+			};
+
+			variable light_sun_volumetric_scale = {
+				"light_sun_volumetric_scale",
+				("Volumetric Influence for distant light created via the remixApi"),
+				0.0f
+			};
+
+			variable light_sun_diameter_degrees = {
+				"light_sun_diameter_degrees",
+				("Light diameter in degrees for distant light created via the remixApi"),
+				0.1f
+			};
 
 			// ----------------------------------
 			// culling related settings
@@ -514,7 +572,7 @@ namespace comp
 			variable nocull_distance = {
 				"nocull_distance",
 				("Distance (radius around player) where culling of objects is disabled"),
-				75.0f
+				140.0f
 			};
 
 
@@ -608,7 +666,7 @@ namespace comp
 			variable enable_camera_raindrops = {
 				"enable_camera_raindrops",
 				("Enable Raindrops on the Camera Lense. Does not look good until we have cutout translucents."),
-				true
+				false
 			};
 
 
@@ -976,21 +1034,6 @@ namespace comp
 			variable mat_chrome_view_primary_color_blend_scalar = {
 				"mat_chrome_view_primary_color_blend_scalar", ("Scales view depended primary color blending value"),
 				1.50f };
-
-			// ----------------------------------
-			// light translation related settings
-
-			
-
-			// ----------------------------------
-			// emissive related settings
-
-			
-
-			// ----------------------------------
-			// general rendering related settings
-
-
 
 		};
 	

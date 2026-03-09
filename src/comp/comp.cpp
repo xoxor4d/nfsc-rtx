@@ -11,6 +11,7 @@
 namespace comp
 {
 	freecam_t g_freecam = {};
+	remix_distant_light_def m_distant_light = {};
 
 	// ----
 
@@ -21,6 +22,7 @@ namespace comp
 		}
 
 		const auto im = imgui::get();
+		const auto& cs = comp_settings::get();
 
 		if (im->m_freecam_mode)
 		{
@@ -171,6 +173,71 @@ namespace comp
 		}
 #endif
 		renderer::get()->m_triggered_remix_injection = false;
+
+		if (cs->light_sun_enable._bool())
+		{
+			auto& api = shared::common::remix_api::get();
+			auto& l = m_distant_light;
+
+			if (l.m_handle)
+			{
+				api.m_bridge.DestroyLight(l.m_handle);
+				l.m_handle = nullptr;
+			}
+
+			l.m_ext.sType = REMIXAPI_STRUCT_TYPE_LIGHT_INFO_DISTANT_EXT;
+			l.m_ext.pNext = nullptr;
+
+			if (im->m_dbg_sun_time_of_day)
+			{
+				if (const auto tp = game::time_of_day_ptr; tp && tp->tod)
+				{
+					const auto& tod = tp->tod;
+
+					auto dir = tod->sun_direction;
+						 dir.z = dir.z - 1.0f;
+						 dir.Normalize();
+
+					l.m_ext.direction = dir.ToRemixFloat3D();
+
+					const auto& sun_col = tod->current.diffuse_color;
+					Vector rad = sun_col * cs->light_sun_intensity._float();
+					l.m_info.radiance = rad.ToRemixFloat3D();
+				}
+			}
+			else
+			{
+				auto dir = cs->light_sun_direction.get_as<Vector>(); dir.Normalize();
+				l.m_ext.direction = dir.ToRemixFloat3D();
+
+				const auto& sun_col = cs->light_sun_color.get_as<Vector>();
+				Vector rad = sun_col * cs->light_sun_intensity._float();
+				l.m_info.radiance = rad.ToRemixFloat3D();
+			}
+
+			l.m_ext.angularDiameterDegrees = cs->light_sun_diameter_degrees._float();
+			l.m_ext.volumetricRadianceScale = cs->light_sun_volumetric_scale._float();
+
+			l.m_info.sType = REMIXAPI_STRUCT_TYPE_LIGHT_INFO;
+			l.m_info.pNext = &l.m_ext;
+			l.m_info.hash = shared::utils::string_hash64("apilight_distant");
+
+			// TODO
+			//const auto weather_factor = 1.0f - timecycle::get_bad_weather_factor() * std::clamp(gs->translate_sunlight_intensity_bad_weather_influence._float(), 0.0f, 1.0f);
+			//rad *= weather_factor;
+
+			if (api.m_bridge.CreateLight(&l.m_info, &l.m_handle) == REMIXAPI_ERROR_CODE_SUCCESS && l.m_handle) {
+				api.m_bridge.DrawLightInstance(l.m_handle);
+			}
+		}
+		else
+		{
+			if (m_distant_light.m_handle)
+			{
+				shared::common::remix_api::get().m_bridge.DestroyLight(m_distant_light.m_handle);
+				m_distant_light.m_handle = nullptr;
+			}
+		}
 	}
 
 

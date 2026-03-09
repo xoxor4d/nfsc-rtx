@@ -210,7 +210,18 @@ namespace comp
 
 				// remix related settings
 				ASSIGN(remix_override_rtxdi_samplecount);
-				
+				ASSIGN(remix_sky_horizon_height_adjustment);
+				ASSIGN(remix_sky_horizon_height_min);
+				ASSIGN(remix_sky_horizon_height_max);
+
+				// light related settings
+				ASSIGN(light_sun_enable);
+				ASSIGN(light_sun_direction);
+				ASSIGN(light_sun_intensity);
+				ASSIGN(light_sun_color);
+				ASSIGN(light_sun_volumetric_scale);
+				ASSIGN(light_sun_diameter_degrees);
+
 				// culling related settings
 				ASSIGN(nocull_distance);
 
@@ -234,7 +245,6 @@ namespace comp
 				ASSIGN(enable_camera_raindrops);
 
 				// rain related settings
-
 				ASSIGN(rain_volumetric_fog_influence_enable);
 				ASSIGN(rain_volumetric_fog_influence_low_transmission_val);
 				ASSIGN(rain_volumetric_fog_influence_high_transmission_val);

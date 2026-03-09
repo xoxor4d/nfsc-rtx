@@ -60,6 +60,8 @@ namespace comp
 		bool m_freecam_mode = false;
 		bool m_freecam_mode_hint = true;
 
+		bool m_dbg_show_camera_info = false;
+
 		float m_freecam_fwd_speed = 0.5f;
 		float m_freecam_rt_speed = 0.5f;
 		float m_freecam_up_speed = 0.5f; 
@@ -89,6 +91,8 @@ namespace comp
 		// ---
 
 		float m_always_rain_wetness_value = 1.0f;
+
+		bool m_dbg_sun_time_of_day = false;
 
 		// ---
 

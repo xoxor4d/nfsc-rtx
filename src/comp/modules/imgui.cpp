@@ -6,11 +6,13 @@
 #include "imgui_internal.h"
 #include "map_settings.hpp"
 #include "rain.hpp"
+#include "remix_vars.hpp"
 #include "renderer.hpp"
 #include "shared/common/imgui_helper.hpp"
 #include "shared/common/font_awesome_solid_900.hpp"
 #include "shared/common/font_defines.hpp"
 #include "shared/common/font_opensans.hpp"
+#include "shared/common/remix_api.hpp"
 #include "shared/common/toml_ext.hpp"
 
 // Allow us to directly call the ImGui WndProc function.
@@ -208,6 +210,66 @@ namespace comp
 					ImGui::PopID();
 				});
 
+			SPACEY12;
+
+			ImGui::Widget_CategoryWithVerticalLabel("Time of Day", [&]()
+				{
+					ImGui::PushID("tod");
+
+					ImGui::Checkbox("Use Game Time of Day", &im->m_dbg_sun_time_of_day);
+					TT("Use game 'Time of Day' settings to adjust sun color and direction.");
+
+					const auto& cs = comp_settings::get();
+
+					if (ImGui::Button("Preset Mid-Day", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+					{
+						const auto dir = cs->light_sun_direction.get_as<Vector*>();
+						dir->Set(0.46f, -2.95f, -1.4f);
+
+						const auto col = cs->light_sun_color.get_as<Vector*>();
+						col->Set(0.93f, 0.91f, 0.85f);
+
+						cs->light_sun_intensity.set_var(1.6f, true);
+						cs->light_sun_volumetric_scale.set_var(0.5f, true);
+						cs->light_sun_diameter_degrees.set_var(1.0f, true);
+
+						const auto rtx_skyBrightness = remix_vars::get_option("rtx.skyBrightness");
+						const remix_vars::option_value val{ .value = 5.0f };
+						remix_vars::set_option(rtx_skyBrightness, val, false, true);
+					}
+
+					if (ImGui::Button("Preset Sunrise", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+					{
+						const auto dir = cs->light_sun_direction.get_as<Vector*>();
+						dir->Set(-6.4f, -8.3f, -2.85f);
+
+						const auto col = cs->light_sun_color.get_as<Vector*>();
+						col->Set(0.94f, 0.82f, 0.63f);
+
+						cs->light_sun_intensity.set_var(1.0f, true);
+						cs->light_sun_volumetric_scale.set_var(1.0f, true);
+						cs->light_sun_diameter_degrees.set_var(1.0f, true);
+
+						const auto rtx_skyBrightness = remix_vars::get_option("rtx.skyBrightness");
+						const remix_vars::option_value val{ .value = 1.5f };
+						remix_vars::set_option(rtx_skyBrightness, val, false, true);
+					}
+
+					if (ImGui::Button("Stock Night", ImVec2(ImGui::GetContentRegionAvail().x, 0)))
+					{
+						cs->light_sun_direction.reset();
+						cs->light_sun_color.reset();
+						cs->light_sun_intensity.reset();
+						cs->light_sun_volumetric_scale.reset();
+						cs->light_sun_diameter_degrees.reset();
+
+						const auto rtx_skyBrightness = remix_vars::get_option("rtx.skyBrightness");
+						remix_vars::reset_option(rtx_skyBrightness);
+					}
+
+					ImGui::PopID();
+				});
+
 			SPACEY4;
 		}
 
@@ -374,6 +436,15 @@ namespace comp
 			ImGui::DragInt("Debug Int 5", &im->m_dbg_int_05, 0.01f);
 			SPACEY8;
 		}
+
+		if (ImGui::CollapsingHeader("Debug Visualizations"))
+		{
+			SPACEY4;
+			ImGui::Checkbox("Show Camera Information", &im->m_dbg_show_camera_info);
+			SPACEY8;
+		}
+
+		// 
 
 		if (ImGui::CollapsingHeader("Statistics ..."))
 		{
@@ -934,6 +1005,29 @@ namespace comp
 		SPACEY4;
 	}
 
+	void compsettings_light_container()
+	{
+		const auto& cs = comp_settings::get();
+
+		SPACEY4;
+		ImGui::SeparatorText(" Distant Light ");
+		SPACEY4;
+
+		ImGui::Widget_CategoryWithVerticalLabel("Sun", [&]()
+			{
+				ImGui::PushID("sunlight");
+				compsettings_bool_widget("Enable Sun", cs->light_sun_enable);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_vec_widget("Direction", cs->light_sun_direction, 3, -360.0f, 360.0f, 0.05f); 
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Intensity", cs->light_sun_intensity, 0.0f, 100.0f, 0.01f);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_color_widget("Color", cs->light_sun_color, 3, ImGuiColorEditFlags_Float);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Volumetric Scale", cs->light_sun_volumetric_scale, 0.0f, 10.0f, 0.01f);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_float_widget("Diameter Deg", cs->light_sun_diameter_degrees, 0.0f, 180.0f, 0.01f);
+				ImGui::PopID();
+			});
+
+		SPACEY4;
+	}
+
 	void compsettings_rendering_container()
 	{
 		const auto& cs = comp_settings::get();
@@ -1039,7 +1133,7 @@ namespace comp
 			};
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(spacing.x, 0.0f));
-		if (ImGui::CollapsingHeader(" Remix Variables", ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader(" Remix Variables ", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::PopStyleVar();
 			ImGui::Widget_CategoryWithVerticalLabel("Remix Vars", [&]()
@@ -1499,6 +1593,19 @@ namespace comp
 			});
 
 		SPACEY4;
+		ImGui::SeparatorText(" Volumetric Related ");
+		SPACEY4;
+
+		ImGui::Widget_CategoryWithVerticalLabel("Atmosphere Height", [&]()
+			{
+				ImGui::PushID("atmosheight");
+				compsettings_bool_widget("Enable AtmosphereHeight Adjustment", cs->remix_sky_horizon_height_adjustment);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_vec_widget("Min Height", cs->remix_sky_horizon_height_min, 2, 0.0f, 2000.0f);
+				SET_CHILD_WIDGET_WIDTH_MAN(200.0f); compsettings_vec_widget("Max Height", cs->remix_sky_horizon_height_max, 2, 0.0f, 2000.0f);
+				ImGui::PopID();
+			});
+
+		SPACEY4;
 	}
 
 	void imgui::tab_compsettings()
@@ -1517,6 +1624,13 @@ namespace comp
 			static float cont_cs_culling_height = 0.0f;
 			cont_cs_culling_height = ImGui::Widget_ContainerWithCollapsingTitle("Culling Settings", cont_cs_culling_height,
 				compsettings_culling_container, false, ICON_FA_TV, &im->ImGuiCol_ContainerBackground, &im->ImGuiCol_ContainerBorder);
+		}
+
+		// light related
+		{
+			static float cont_cs_light_height = 0.0f;
+			cont_cs_light_height = ImGui::Widget_ContainerWithCollapsingTitle("Light Settings", cont_cs_light_height,
+				compsettings_light_container, false, ICON_FA_SUN, &im->ImGuiCol_ContainerBackground, &im->ImGuiCol_ContainerBorder);
 		}
 
 		// rendering related
@@ -2039,18 +2153,31 @@ namespace comp
 	{
 		const auto im = imgui::get();
 
+		//const float debug_text_line_height = 20.0f;
+		//const float debug_text_line_start_y = 20.0f;
+		uint32_t debug_text_curr_line = 0u;
+
+#define DEBUG_TEXT(STR) \
+	ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, 20.0f + ((float)debug_text_curr_line++ * 20.0f)), ImGui::GetColorU32(ImGuiCol_Text), STR);
+
 		if (m_freecam_mode && im->m_freecam_mode_hint && !m_screenshot_mode)
 		{
-			const float line_height = 20.0f;
-			const float line_start_y = 20.0f;
-			uint32_t curr_line = 0u;
+			DEBUG_TEXT("FreeCam Controls:");
+			DEBUG_TEXT("WASD:\t\t    Forward & Strafing");
+			DEBUG_TEXT("Space/C:\t     Up & Down");
+			DEBUG_TEXT("R/F:\t\t\t      Roll");
+			DEBUG_TEXT("Shift:\t\t\t    Speedup");
+			DEBUG_TEXT("Right Mouse:  Rotate");
+			(float)debug_text_curr_line++; // empty line
+		}
 
-			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "FreeCam Controls:");
-			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "WASD:\t\t    Forward & Strafing");
-			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "Space/C:\t     Up & Down");
-			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "R/F:\t\t\t      Roll");
-			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "Shift:\t\t\t    Speedup");
-			ImGui::GetBackgroundDrawList()->AddText(ImVec2(20.0f, line_start_y + ((float)curr_line++ * line_height)), ImGui::GetColorU32(ImGuiCol_Text), "Right Mouse:  Rotate");
+		if (m_dbg_show_camera_info)
+		{
+			std::string cam_str = std::format("Camera Pos: {:.2f}, {:.2f}, {:.2f}", game::the_camera->position.x, game::the_camera->position.y, game::the_camera->position.z);
+			DEBUG_TEXT(cam_str.c_str());
+
+			cam_str = std::format("Camera Dir: {:.2f}, {:.2f}, {:.2f}", game::the_camera->direction.x, game::the_camera->direction.y, game::the_camera->direction.z);
+			DEBUG_TEXT(cam_str.c_str());
 		}
 		
 		if (m_dbg_visualize_model_info)

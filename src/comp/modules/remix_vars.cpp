@@ -186,7 +186,7 @@ namespace comp
 			o->second.current = reset_to_level_state ? o->second.reset_level : o->second.reset;
 
 			// should reset modified
-			set_option(o, o->second.current);
+			set_option(o, o->second.current, false, true);
 
 			if (!o->second.modified) {
 				return true;
@@ -558,25 +558,64 @@ namespace comp
 	// Called on d3d9ex::D3D9Device::EndScene
 	void remix_vars::on_client_frame()
 	{
-		const auto gs = comp_settings::get();
+		const auto cs = comp_settings::get();
 		if (shared::common::remix_api::is_initialized())
 		{
 			if (g_rendered_first_primitive)
 			{
-				if (framecounter++ > 60)
-				{
+				if (framecounter++ > 60) {
 					framecounter = 0u;
+				}
 
-					//init_once_on_ingame_frame();
+				// set one option per frame
+				std::uint32_t cnt = 1;
 
+				if (framecounter == cnt++)
+				{
 					// Remix sets 'rtx.di.initialSampleCount' to hardcoded values on start
 					// and we def. need more then 3 samples to get somewhat good looking vehicle lights
-					const auto rtxdi_override_val = gs->remix_override_rtxdi_samplecount.get_as<int>();
+					const auto rtxdi_override_val = cs->remix_override_rtxdi_samplecount.get_as<int>();
 					if (rtxdi_override_val) // override if > 0
 					{
 						static auto rtxdi_samplecount = get_option("rtx.di.initialSampleCount");
-						remix_vars::option_value val { .value = (float)rtxdi_override_val };
+						const option_value val{ .value = (float)rtxdi_override_val };
 						set_option(rtxdi_samplecount, val, false, true);
+					}
+				}
+
+				static auto rtxVolumetricsAtmosphereHeightMeters = get_option("rtx.volumetrics.atmosphereHeightMeters");
+				if (framecounter == cnt++ && cs->remix_sky_horizon_height_adjustment._bool() && rtxVolumetricsAtmosphereHeightMeters)
+				{
+					if (game::the_camera)
+					{
+						const float cam_height = game::the_camera->position.z;
+						
+						const float atmos_height = shared::utils::map_range_clamped(cam_height,
+							cs->remix_sky_horizon_height_min._vec_y(), cs->remix_sky_horizon_height_max._vec_y(),  // game cam height range
+							cs->remix_sky_horizon_height_min._vec_x(), cs->remix_sky_horizon_height_max._vec_x()); // remix atmos range
+
+						const option_value val { .value = atmos_height };
+						set_option(rtxVolumetricsAtmosphereHeightMeters, val);
+					}
+				}
+
+				if (framecounter == cnt++)
+				{
+					static auto transmittance_dist = get_option("rtx.volumetrics.transmittanceMeasurementDistanceMeters");
+					
+					option_value val {};
+					bool wants_to_set = false;
+
+					if (cs->rain_volumetric_fog_influence_enable._bool())
+					{
+						val = { .value = get()->m_goal_transmittance_measurement_distance_meters };
+						wants_to_set = true;
+					}
+
+					// any other influencers ..
+					
+					if (wants_to_set) {
+						set_option(transmittance_dist, val, false, true);
 					}
 				}
 			}

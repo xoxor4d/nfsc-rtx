@@ -28,14 +28,15 @@ namespace comp::game
 	extern bool* cam_stop_updates;
 	extern camera_s* the_camera;
 
+	extern time_of_day_ptr_s* time_of_day_ptr;
+
 	// --------------
 	// game functions
 
 	typedef	bool(__cdecl* IsPaused_t)();
 		extern IsPaused_t IsPaused;
 
-
-	typedef	void(__stdcall* SetCameraMatrix_t)(D3DXMATRIX* mtx, float time);
+	typedef	void(__thiscall* SetCameraMatrix_t)(D3DXMATRIX* mtx, float time);
 		extern SetCameraMatrix_t SetCameraMatrix;
 
 	class camera_s
@@ -64,10 +65,8 @@ namespace comp::game
 		float sim_time_multiplier;
 		std::uint16_t horizontal_fov;
 
-		void set_camera_matrix(D3DXMATRIX* m, float fTime)
-		{
-			((void(__thiscall*)(camera_s*, D3DXMATRIX*, float))0x4822F0)(this, m, fTime);
-			//game::SetCameraMatrix(m, fTime);
+		void set_camera_matrix(D3DXMATRIX* m, float fTime) {
+			game::SetCameraMatrix(m, fTime); //((void(__thiscall*)(camera_s*, D3DXMATRIX*, float))0x4822F0)(this, m, fTime);
 		}
 	};
 

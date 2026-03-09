@@ -236,10 +236,11 @@ namespace comp
 						if (remix_vars::is_initialized() && cs->rain_volumetric_fog_influence_enable._bool())
 						{
 							const float transmission = shared::utils::map_range_clamped(r->rain_intensity, 0.0f, 1.0f, cs->rain_volumetric_fog_influence_high_transmission_val._float(), cs->rain_volumetric_fog_influence_low_transmission_val._float());
+							remix_vars::get()->set_transmittance_measurement_distance_meters_goal(transmission);
 
-							static auto transmittance_dist = remix_vars::get_option("rtx.volumetrics.transmittanceMeasurementDistanceMeters");
+							/*static auto transmittance_dist = remix_vars::get_option("rtx.volumetrics.transmittanceMeasurementDistanceMeters");
 							remix_vars::option_value val { .value = transmission };
-							remix_vars::set_option(transmittance_dist, val, false, true);
+							remix_vars::set_option(transmittance_dist, val, false, true);*/
 						}
 
 						// ---------------------

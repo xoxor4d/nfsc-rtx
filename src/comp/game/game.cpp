@@ -26,6 +26,8 @@ namespace comp::game
 	bool* cam_stop_updates = nullptr;
 	camera_s* the_camera = nullptr;
 
+	time_of_day_ptr_s* time_of_day_ptr = nullptr;
+
 	// --------------
 	// game functions
 
@@ -159,9 +161,11 @@ namespace comp::game
 		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(cam_stop_updates, bool*,
 			"A0 ? ? ? ? 84 C0 75 ? 8B 46 ? 8B 4E", 1, 0x47AC61);
 
-		if (const auto offset = shared::utils::mem::find_pattern("C7 05 ? ? ? ? ? ? ? ? 88 1D ? ? ? ? 89 15", 6, "the_camera", use_pattern, 0x710A72); offset) {
-			the_camera = (camera_s*) *(DWORD*)offset; found_pattern_count++;
-		} total_pattern_count++;
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(the_camera, camera_s*,
+			"C7 05 ? ? ? ? ? ? ? ? 88 1D ? ? ? ? 89 15", 6, 0x710A72);
+
+		PATTERN_OFFSET_DWORD_PTR_CAST_TYPE(time_of_day_ptr, time_of_day_ptr_s*,
+			"8B 0D ? ? ? ? 8D 44 24 ? 50 81 C1", 2, 0x71E90A);
 
 		// end GAME_VARIABLES
 #pragma endregion

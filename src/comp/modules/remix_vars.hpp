@@ -185,6 +185,14 @@ namespace comp
 			return shared::globals::frame_time_ms;
 		}
 
+		void set_transmittance_measurement_distance_meters_goal(const float& v) {
+			m_goal_transmittance_measurement_distance_meters = v;
+		}
+
+	private:
+		// variables that can be set by other modules 
+		float m_goal_transmittance_measurement_distance_meters = 0.0f;
+
 	private:
 		bool m_initialized = false;
 		bool m_init_once_on_ingame_frame = false;

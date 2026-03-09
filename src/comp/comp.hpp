@@ -25,6 +25,16 @@ namespace comp
 
 	extern freecam_t g_freecam;
 
+	struct remix_distant_light_def
+	{
+		remixapi_LightHandle m_handle = nullptr;
+		remixapi_LightInfoDistantEXT m_ext = {};
+		remixapi_LightInfo m_info = {};
+		uint64_t m_hash;
+	};
+
+	extern remix_distant_light_def m_distant_light;
+
 	void on_begin_scene_cb();
 	void main();
 
