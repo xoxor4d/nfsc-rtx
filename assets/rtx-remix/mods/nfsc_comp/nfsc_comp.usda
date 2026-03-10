@@ -7,8 +7,8 @@
                 double radius = 500
             }
             dictionary Perspective = {
-                double3 position = (107.36928558349608, 3.6388564109802317, 1.8524745702743495)
-                double3 target = (30.39812026312017, -64.4252135380956, -29.572969196111274)
+                double3 position = (99.80096650644752, 1.5624631600606458, 1.1319634193149064)
+                double3 target = (168.47740463891978, -77.78819818731097, -21.930035927988836)
             }
             dictionary Right = {
                 double3 position = (0, -500, 0)
@@ -24,7 +24,7 @@
         dictionary omni_layer = {
             string authoring_layer = "./comp_cars.usda"
             dictionary locked = {
-                bool "./deps/captures/1_car_caymans.usd" = 1
+                bool "./deps/captures/1_car_wrx.usd" = 1
                 bool "./deps/captures/aaaaaaa2026-02-26_19-36-27.usd" = 1
                 bool "./deps/captures/rain_2.usd" = 1
             }
@@ -37,7 +37,7 @@
     startTimeCode = 0
     subLayers = [
         @./mod.usda@,
-        @./deps/captures/1_car_caymans.usd@
+        @./deps/captures/1_car_wrx.usd@
     ]
     timeCodesPerSecond = 24
     upAxis = "Z"
